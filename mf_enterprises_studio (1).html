@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MF Enterprises Studio — SMB Storefront + Accounting Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .grid-bg {
+      background-image: linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .studio-modal-open {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-amber-200 selection:text-slate-900">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[76px] py-2 flex items-center justify-between gap-3">
+      <a href="#top" class="flex items-center gap-3.5 group min-w-0">
+        <div id="outer-header-logo-wrap" class="h-14 sm:h-16 min-w-[56px] max-w-[220px] rounded-xl bg-amber-600 text-white flex items-center justify-center font-extrabold text-base shadow-sm group-hover:bg-amber-700 transition overflow-hidden shrink-0 px-1.5">
+          <span id="outer-header-logo-fallback" class="px-2">MF</span>
+          <img id="outer-header-logo-img" alt="Business Logo" class="hidden h-full w-auto max-w-[210px] object-contain bg-white rounded-lg p-1" />
+        </div>
+        <div class="truncate">
+          <span class="font-bold text-slate-900 tracking-tight block leading-none truncate">MF Enterprises</span>
+          <span class="text-[11px] font-medium text-slate-500">Storefront + Double-Entry Studio</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+        <a href="#live-demo" class="hover:text-slate-900 transition">Live Demo</a>
+        <a href="#features" class="hover:text-slate-900 transition">Capabilities</a>
+        <a href="#workflow" class="hover:text-slate-900 transition">How It Works</a>
+        <a href="#insights-dashboard" class="hover:text-slate-900 transition">Margin &amp; Insights</a>
+      </nav>
+
+      <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        <button type="button" onclick="openDemoFrame()" class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-slate-900 text-white text-xs sm:text-sm font-semibold hover:bg-slate-800 transition shadow-sm">
+          <span>Enter Studio</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="top" class="relative overflow-hidden border-b border-slate-200 bg-white grid-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold mb-6">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>6 WordPress Storefront Templates • Custom Logo • Live Double-Entry ERP</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.1]">
+          One Connected System for Your <span class="text-amber-600">Storefront</span> &amp; <span class="text-slate-800">Books</span>.
+        </h1>
+
+        <p class="mt-6 text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+          Switch between 6 small-business presets with distinct WordPress-inspired storefront templates, adjust a live 5-step color scale, upload your brand logo across every screen, and watch orders post straight to double-entry accounting.
+        </p>
+
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+          <button type="button" onclick="openDemoFrame()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-amber-600 text-white font-bold text-base hover:bg-amber-700 transition shadow-lg shadow-amber-600/20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>See Live Demo</span>
+          </button>
+          <a href="#live-demo" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-100 text-slate-800 font-semibold text-base hover:bg-slate-200 transition">
+            <span>Preview Embedded Studio</span>
+          </a>
+        </div>
+
+        <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 text-left max-w-3xl mx-auto">
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Templates</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">6 WP Layouts</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Theme Engine</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">5-Step Color Scale</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Branding</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">Global Logo Upload</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+            <div class="text-xs font-semibold text-slate-400 uppercase">Ledger Engine</div>
+            <div class="text-sm font-bold text-emerald-700 mt-0.5">Debits = Credits</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Interactive Demo Showcase Window -->
+  <section id="live-demo" class="py-12 lg:py-16 bg-slate-100 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Interactive Live Sandbox</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Explore the Live MF Enterprises Studio</h2>
+          <p class="text-sm text-slate-600 mt-1">Switch business presets, preview 6 WordPress storefront layouts, tune the color scale, upload a logo, and run sales orders.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button type="button" onclick="hydrateEmbeddedDemo(true)" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition shadow-sm">
+            <span>Reload Demo</span>
+          </button>
+          <button type="button" onclick="openDemoFrame()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+            <span>Open Full-Screen Demo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Browser Window Frame -->
+      <div id="demo-frame-container" class="rounded-2xl border border-slate-300 bg-white shadow-2xl overflow-hidden transition-all">
+        <!-- Browser Top Chrome -->
+        <div class="bg-slate-900 text-slate-300 px-4 py-2.5 flex items-center justify-between border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+            <span class="ml-3 text-xs font-mono text-slate-400 hidden sm:inline">studio.mfenterprises.app/live-sandbox</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="demo-status-pill" class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-medium">● Live Interactive App</span>
+            <button type="button" id="toggle-fullscreen-btn" onclick="toggleDemoFullscreen()" class="text-xs bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg font-medium transition">
+              Expand Fullscreen
+            </button>
+          </div>
+        </div>
+
+        <!-- Always-Hydrated Interactive Application Frame -->
+        <div id="demo-viewport" class="relative w-full h-[780px] bg-slate-50">
+          <iframe id="mf-demo-iframe" title="MF Enterprises Live Studio Demo" class="w-full h-full border-0 bg-white"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Capabilities Section -->
+  <section id="features" class="py-16 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Platform Architecture</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Built for Real Operations, Not Spreadsheets</h2>
+        <p class="text-slate-600 mt-2 text-sm sm:text-base">Every customer order, inventory adjustment, and custom brand setting updates in real time across your entire stack.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold mb-4">1</div>
+          <h3 class="text-lg font-bold text-slate-900">6 WordPress Storefront Layouts</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Switch between Northwind Roasters (Astra), Candles (Kadence), Apparel (Flatsome), Farm (OceanWP), Crafts (Divi), and Bakery (Neve) with distinct layout architectures.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold mb-4">2</div>
+          <h3 class="text-lg font-bold text-slate-900">Dynamic 5-Step Color Scale</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Customize your primary brand hex color and tone intensity slider to generate a live 100–900 tint/shade ramp applied across headers, buttons, badges, and surfaces.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold mb-4">3</div>
+          <h3 class="text-lg font-bold text-slate-900">Global Custom Logo Upload</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Upload your PNG, JPG, SVG, or WebP logo once and immediately display it in the header of every storefront, admin screen, ledger view, and customer invoice.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold mb-4">4</div>
+          <h3 class="text-lg font-bold text-slate-900">Customer Invoices &amp; Email Dispatch</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Capture customer name and email at checkout to automatically generate a branded itemized Sales Invoice and thank-you confirmation modal.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center font-bold mb-4">5</div>
+          <h3 class="text-lg font-bold text-slate-900">Editable Chart of Accounts</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Edit account codes, names, account types, and balances inline—syncing immediately with the Balance Sheet, Profit &amp; Loss Statement, and Ask AI analyst.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold mb-4">6</div>
+          <h3 class="text-lg font-bold text-slate-900">Live Double-Entry Ledger</h3>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">Every sale posts balanced Debit and Credit journal entries for Revenue, Sales Tax Payable, Cash/AR, Cost of Goods Sold, and Finished Goods Inventory.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Workflow & Step 4 Margin Analysis Dashboard -->
+  <section id="workflow" class="py-16 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-5">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-700">End-to-End Flow</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 mt-1">How a Single Click Flows Through Your Business</h2>
+          <p class="text-slate-600 mt-3 text-sm leading-relaxed">
+            Test the full lifecycle inside the demo above—switch businesses, inspect the active WordPress template layout, adjust colors, upload a logo, and run a sale.
+          </p>
+
+          <div class="mt-6 space-y-4">
+            <div class="flex gap-3.5">
+              <div class="w-7 h-7 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</div>
+              <div>
+                <h4 class="font-bold text-slate-900 text-sm">Pick a Business Preset &amp; WP Template</h4>
+                <p class="text-xs text-slate-600 mt-0.5">Watch the storefront layout structure, typography, and color palette transform across 6 distinct WordPress themes.</p>
+              </div>
+            </div>
+            <div class="flex gap-3.5">
+              <div class="w-7 h-7 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</div>
+              <div>
+                <h4 class="font-bold text-slate-900 text-sm">Tune Your Color Scale &amp; Upload Your Logo</h4>
+                <p class="text-xs text-slate-600 mt-0.5">Adjust the 5-step color ramp and upload your logo so every page and customer invoice carries your brand identity.</p>
+              </div>
+            </div>
+            <div class="flex gap-3.5">
+              <div class="w-7 h-7 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</div>
+              <div>
+                <h4 class="font-bold text-slate-900 text-sm">Complete Customer Checkout &amp; Invoice</h4>
+                <p class="text-xs text-slate-600 mt-0.5">Generates an itemized invoice sent to the customer's email while posting double-entry revenue and COGS entries.</p>
+              </div>
+            </div>
+            <div class="flex gap-3.5">
+              <div class="w-7 h-7 rounded-full bg-amber-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</div>
+              <div>
+                <h4 class="font-bold text-slate-900 text-sm">Review Margin Analysis, Insights &amp; Predictions</h4>
+                <p class="text-xs text-slate-600 mt-0.5">Monitor real-time gross margin health, SKU profitability, and 30-day revenue &amp; restock forecasts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <button type="button" onclick="openDemoFrame()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-600 text-white text-sm font-bold hover:bg-amber-700 transition shadow-sm">
+              <span>Run Full Demo Now</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Margin Analysis, Insights & Predictions Dashboard -->
+        <div id="insights-dashboard" class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-md">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-wider">Step 4 Output</span>
+                <span class="text-xs text-slate-400 font-medium">Real-Time Financial Intelligence</span>
+              </div>
+              <h3 class="text-lg font-extrabold text-slate-900 mt-1">Margin Analysis, Insights &amp; Predictions</h3>
+            </div>
+            <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+              <button type="button" id="insight-tab-margin" onclick="switchInsightTab('margin')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-sm transition">Margin Analysis</button>
+              <button type="button" id="insight-tab-insights" onclick="switchInsightTab('insights')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">Insights</button>
+              <button type="button" id="insight-tab-predictions" onclick="switchInsightTab('predictions')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition">Predictions</button>
+            </div>
+          </div>
+
+          <!-- KPI Summary Strip -->
+          <div class="grid grid-cols-3 gap-3 mt-4">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3">
+              <div class="text-[11px] font-semibold text-slate-500">Blended Gross Margin</div>
+              <div class="text-xl font-extrabold text-emerald-700 mt-0.5">64.2%</div>
+              <div class="text-[11px] text-emerald-600 font-medium mt-0.5">+3.4% vs last 30d</div>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3">
+              <div class="text-[11px] font-semibold text-slate-500">Net Contribution / Order</div>
+              <div class="text-xl font-extrabold text-slate-900 mt-0.5">$31.80</div>
+              <div class="text-[11px] text-slate-500 font-medium mt-0.5">After COGS &amp; packaging</div>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3">
+              <div class="text-[11px] font-semibold text-slate-500">30-Day Forecast</div>
+              <div class="text-xl font-extrabold text-amber-700 mt-0.5">$18,450</div>
+              <div class="text-[11px] text-amber-600 font-medium mt-0.5">92% confidence band</div>
+            </div>
+          </div>
+
+          <!-- View 1: Margin Analysis -->
+          <div id="insight-panel-margin" class="mt-5 space-y-4">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Unit Economics &amp; SKU Margin Breakdown</div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-800">High-Margin Flagship SKUs (68% – 74% GM)</span>
+                  <span class="text-emerald-700">$12.40 Avg Profit / Unit</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full rounded-full" style="width: 72%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-800">Core Everyday Catalog (56% – 63% GM)</span>
+                  <span class="text-amber-700">$8.90 Avg Profit / Unit</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="bg-amber-500 h-full rounded-full" style="width: 60%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1">
+                  <span class="text-slate-800">Wholesale / Bulk Bundles (44% – 49% GM)</span>
+                  <span class="text-blue-700">$19.50 Avg Profit / Bundle</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="bg-blue-500 h-full rounded-full" style="width: 47%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3.5 text-xs text-emerald-950 flex items-start gap-2.5">
+              <span class="font-extrabold text-emerald-700">✓</span>
+              <span><strong>Margin Health Verified:</strong> Live FIFO cost tracking confirms COGS remains under 36% of net recognized revenue across active storefront channels.</span>
+            </div>
+          </div>
+
+          <!-- View 2: Insights -->
+          <div id="insight-panel-insights" class="hidden mt-5 space-y-3">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Automated Operational &amp; Ledger Insights</div>
+            <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-slate-800">
+              <div class="font-bold text-amber-900">1. Top Margin Driver Identified</div>
+              <p class="mt-1 text-slate-700">Bundles pairing a flagship item with an accessory increase Average Order Value by <strong>+28%</strong> while adding only $1.85 in incremental COGS.</p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200/80 text-xs text-slate-800">
+              <div class="font-bold text-blue-900">2. Working Capital Velocity</div>
+              <p class="mt-1 text-slate-700">Direct card checkout converts <strong>84% of revenue immediately into Cash (Acct 1010)</strong>, keeping Accounts Receivable turnover under 6.5 days.</p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800">
+              <div class="font-bold text-slate-900">3. Tax Liability Readiness</div>
+              <p class="mt-1 text-slate-700">Sales Tax Payable (Acct 2100) is automatically accrued per transaction, eliminating end-of-month reconciliation gaps.</p>
+            </div>
+          </div>
+
+          <!-- View 3: Predictions -->
+          <div id="insight-panel-predictions" class="hidden mt-5 space-y-3">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400">30-Day Revenue &amp; Inventory Restock Predictions</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50">
+                <div class="text-[11px] font-bold text-slate-500 uppercase">Projected Net Profit (30d)</div>
+                <div class="text-lg font-extrabold text-emerald-700 mt-1">$6,920.00</div>
+                <p class="text-[11px] text-slate-600 mt-1">Based on trailing 14-day order velocity and current 64.2% gross margin.</p>
+              </div>
+              <div class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/60">
+                <div class="text-[11px] font-bold text-amber-800 uppercase">Restock Lead-Time Alert</div>
+                <div class="text-lg font-extrabold text-slate-900 mt-1">9 Days Remaining</div>
+                <p class="text-[11px] text-slate-700 mt-1">Primary flagship SKU projected to hit reorder threshold next Thursday; PO recommended.</p>
+              </div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-900 text-slate-100 text-xs flex items-center justify-between gap-3">
+              <div>
+                <div class="font-bold text-amber-400">Cash Runway Projection</div>
+                <div class="text-slate-300 mt-0.5">Operating cash projected to grow +$4,850 net of vendor payables over the next 4 weeks.</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold shrink-0">Healthy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-400 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 rounded-lg bg-amber-600 text-white font-extrabold flex items-center justify-center">MF</div>
+        <span class="text-slate-200 font-semibold">MF Enterprises Studio</span>
+        <span>— Unified Storefront &amp; Accounting Demo</span>
+      </div>
+      <div>
+        <span>Double-Entry Verified • 6 WordPress Templates • Live Color Scale &amp; Logo Branding</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Full-Screen Overlay Modal for "Enter Studio" / "See Live Demo" -->
+  <div id="studio-fullscreen-modal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm flex-col">
+    <div class="bg-slate-900 text-white px-4 py-2.5 flex items-center justify-between border-b border-slate-800 shrink-0">
+      <div class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-xs sm:text-sm font-bold">MF Enterprises Studio — Full Interactive Workspace</span>
+      </div>
+      <button type="button" onclick="closeDemoModal()" class="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition">
+        Close Fullscreen ✕
+      </button>
+    </div>
+    <div id="modal-iframe-host" class="flex-1 w-full h-full bg-white"></div>
+  </div>
+
+  <!-- Safely Stored Embedded Studio HTML (type="text/plain" prevents premature script parsing) -->
+  <script type="text/plain" id="embedded-studio-source">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MF Enterprises Studio — Interactive Workspace</title>
+  <script src="https://cdn.tailwindcss.com"></scr` + `ipt>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></scr` + `ipt>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --scale-100: #fef3c7;
+      --scale-300: #fcd34d;
+      --scale-500: #b45309;
+      --scale-700: #78350f;
+      --scale-900: #451a03;
+      --surface-bg: #fffbeb;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    .font-editorial { font-family: 'Playfair Display', Georgia, serif; }
+    .font-geometric { font-family: 'Space Grotesk', sans-serif; }
+    .bg-s100 { background-color: var(--scale-100) !important; }
+    .bg-s300 { background-color: var(--scale-300) !important; }
+    .bg-s500 { background-color: var(--scale-500) !important; }
+    .bg-s700 { background-color: var(--scale-700) !important; }
+    .bg-s900 { background-color: var(--scale-900) !important; }
+    .bg-surface { background-color: var(--surface-bg) !important; }
+    .text-s500 { color: var(--scale-500) !important; }
+    .text-s700 { color: var(--scale-700) !important; }
+    .text-s900 { color: var(--scale-900) !important; }
+    .border-s300 { border-color: var(--scale-300) !important; }
+    .border-s500 { border-color: var(--scale-500) !important; }
+    .hover-bg-s700:hover { background-color: var(--scale-700) !important; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <div id="app" class="min-h-screen flex flex-col">
+
+    <!-- Top Studio Control Bar -->
+    <header class="bg-slate-900 text-white px-3 sm:px-5 py-3 border-b border-slate-800 sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+        <!-- Brand Identity with Larger Custom Logo Slot -->
+        <div class="flex items-center gap-3">
+          <div class="brand-logo-box h-12 sm:h-14 min-w-[52px] max-w-[200px] rounded-xl bg-s500 text-white font-extrabold text-sm flex items-center justify-center overflow-hidden shrink-0 border border-white/20 px-1.5">
+            <span class="brand-logo-fallback px-2">MF</span>
+            <img class="brand-logo-img hidden h-full w-auto max-w-[190px] object-contain bg-white rounded-lg p-1" alt="Logo" />
+          </div>
+          <div>
+            <div class="font-bold text-sm sm:text-base leading-tight flex flex-wrap items-center gap-2">
+              <span id="studio-brand-name">Northwind Roasters</span>
+              <span id="wp-template-pill" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/15 text-amber-300">WP Theme: Astra</span>
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">MF Enterprises Studio • Live Storefront + Double-Entry Ledger</div>
+          </div>
+        </div>
+
+        <!-- Business Preset Switcher + Logo Upload -->
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="text-[11px] text-slate-400 font-semibold hidden md:inline">Business:</label>
+          <select id="preset-selector" onchange="switchBusinessPreset(this.value)" class="bg-slate-800 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none">
+            <option value="roasters">1. Northwind Roasters (Astra)</option>
+            <option value="candles">2. Hearth &amp; Wick Candles (Kadence)</option>
+            <option value="apparel">3. Kestrel Workwear Apparel (Flatsome)</option>
+            <option value="farm">4. Red Barn Harvest Farm (OceanWP)</option>
+            <option value="crafts">5. Timber &amp; Loom Crafts (Divi)</option>
+            <option value="bakery">6. Brioche &amp; Crumb Bakery (Neve)</option>
+          </select>
+
+          <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-xs font-bold text-white transition shadow-xs">
+            <span>Upload Logo</span>
+            <input type="file" id="logo-file-input" accept="image/png,image/jpeg,image/svg+xml,image/webp" onchange="handleLogoUpload(event)" class="hidden" />
+          </label>
+          <button type="button" id="remove-logo-btn" onclick="removeCustomLogo()" class="hidden px-2.5 py-1.5 rounded-lg bg-rose-950/90 hover:bg-rose-900 border border-rose-700 text-[11px] font-semibold text-rose-200 transition">
+            Remove
+          </button>
+        </div>
+      </div>
+
+      <!-- Color Scale Adjuster & Template Bar -->
+      <div class="max-w-7xl mx-auto mt-2.5 pt-2 border-t border-slate-800/90 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-slate-400 font-semibold text-[11px]">Template Layout:</span>
+          <select id="template-selector" onchange="switchTemplateOverride(this.value)" class="bg-slate-800 text-amber-300 text-xs font-bold px-2.5 py-1 rounded-lg border border-slate-700">
+            <option value="astra">Astra — Artisan Split-Hero</option>
+            <option value="kadence">Kadence — Boutique Editorial</option>
+            <option value="flatsome">Flatsome — Modern Lookbook</option>
+            <option value="oceanwp">OceanWP — Organic Harvest</option>
+            <option value="divi">Divi — Makers Gallery</option>
+            <option value="neve">Neve — Patisserie Menu-Board</option>
+          </select>
+        </div>
+
+        <!-- 5-Step Live Color Scale Adjuster -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-400 text-[11px] font-semibold">Primary:</span>
+            <input type="color" id="primary-color-picker" value="#b45309" onchange="updatePrimaryColor(this.value)" oninput="updatePrimaryColor(this.value)" class="w-6 h-6 rounded cursor-pointer border border-slate-600 bg-transparent" />
+          </div>
+
+          <div class="flex items-center gap-1" title="Live 5-Step Tint & Shade Color Scale">
+            <span class="text-slate-400 text-[11px] font-semibold mr-0.5">Scale:</span>
+            <span id="swatch-100" class="w-5 h-5 rounded border border-white/20 text-[9px] font-bold text-slate-900 flex items-center justify-center" title="100 Light Tint">1</span>
+            <span id="swatch-300" class="w-5 h-5 rounded border border-white/20 text-[9px] font-bold text-slate-900 flex items-center justify-center" title="300 Soft Accent">3</span>
+            <span id="swatch-500" class="w-5 h-5 rounded border border-white/40 text-[9px] font-bold text-white flex items-center justify-center" title="500 Primary Brand">5</span>
+            <span id="swatch-700" class="w-5 h-5 rounded border border-white/20 text-[9px] font-bold text-white flex items-center justify-center" title="700 Deep Accent">7</span>
+            <span id="swatch-900" class="w-5 h-5 rounded border border-white/20 text-[9px] font-bold text-white flex items-center justify-center" title="900 Dark Surface">9</span>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-400 text-[11px] font-semibold">Tone:</span>
+            <input type="range" id="tone-slider" min="-25" max="25" value="0" oninput="updateToneShift(this.value)" class="w-20 accent-amber-400 cursor-pointer" />
+            <span id="tone-label" class="text-[11px] font-mono text-slate-300 w-14">Balanced</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Studio Navigation Tabs -->
+      <nav class="max-w-7xl mx-auto mt-2.5 pt-2 border-t border-slate-800 flex items-center gap-1.5 overflow-x-auto">
+        <button type="button" onclick="setActiveTab('storefront')" data-tab="storefront" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-s500 text-white transition whitespace-nowrap">1. Customer Storefront</button>
+        <button type="button" onclick="setActiveTab('admin')" data-tab="admin" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">2. Admin &amp; Invoices</button>
+        <button type="button" onclick="setActiveTab('inventory')" data-tab="inventory" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">3. Inventory &amp; FIFO</button>
+        <button type="button" onclick="setActiveTab('charts')" data-tab="charts" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">4. Sales Story &amp; Charts</button>
+        <button type="button" onclick="setActiveTab('statements')" data-tab="statements" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">5. Statements (BS &amp; P&amp;L) + AI</button>
+        <button type="button" onclick="setActiveTab('coa')" data-tab="coa" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">6. Chart of Accounts</button>
+        <button type="button" onclick="setActiveTab('audit')" data-tab="audit" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">7. Double-Entry Audit Log</button>
+      </nav>
+    </header>
+
+    <!-- Main Dynamic Workspace Container -->
+    <main id="workspace-main" class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-5 py-5"></main>
+
+    <!-- Thank You Order & Invoice Confirmation Modal -->
+    <div id="order-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-xs items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden">
+        <div class="bg-s700 text-white px-5 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="brand-logo-box h-12 min-w-[48px] max-w-[160px] rounded-xl bg-white/15 flex items-center justify-center font-extrabold text-xs overflow-hidden px-1">
+              <span class="brand-logo-fallback px-1.5">MF</span>
+              <img class="brand-logo-img hidden h-full w-auto max-w-[150px] object-contain bg-white rounded-lg p-1" alt="Logo" />
+            </div>
+            <div>
+              <h3 class="font-extrabold text-base">Thank You for Placing an Order!</h3>
+              <p class="text-[11px] text-white/90">Itemized Sales Invoice Generated &amp; Dispatched</p>
+            </div>
+          </div>
+          <button type="button" onclick="closeOrderModal()" class="text-white/80 hover:text-white text-sm font-bold px-2 py-1">✕</button>
+        </div>
+        <div id="order-modal-body" class="p-5 text-xs space-y-3 max-h-[75vh] overflow-y-auto"></div>
+        <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+          <button type="button" onclick="closeOrderModal(); setActiveTab('admin');" class="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs transition">View All Invoices</button>
+          <button type="button" onclick="closeOrderModal()" class="px-4 py-2 rounded-xl bg-s500 hover-bg-s700 text-white font-bold text-xs transition">Continue Shopping</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 6 Business Presets with 6 Distinct WordPress Template Layouts & Color Palettes
+    const BUSINESS_PRESETS = {
+      roasters: {
+        id: 'roasters',
+        name: 'Northwind Roasters',
+        tagline: 'Small-Batch Single-Origin Coffee & Espresso',
+        wpTemplate: 'astra',
+        wpTemplateLabel: 'Astra — Artisan Roastery',
+        primaryColor: '#b45309',
+        heroBadge: 'Small-Batch Roastery • Roasted Daily in Portland',
+        heroHeadline: 'Precision-Roasted Single-Origin Beans & Micro-Lots',
+        heroSub: 'Ethically sourced specialty harvests roasted to peak sweetness and shipped within 24 hours.',
+        taxRate: 0.08,
+        products: [
+          { sku: 'NWR-01', name: 'Cascade Espresso Blend (12oz)', category: 'Espresso', price: 18.50, cost: 5.80, stock: 42, note: 'Dark chocolate, toasted hazelnut, molasses' },
+          { sku: 'NWR-02', name: 'Ethiopia Yirgacheffe Washed (12oz)', category: 'Single Origin', price: 21.00, cost: 6.90, stock: 28, note: 'Bergamot, jasmine blossom, white peach' },
+          { sku: 'NWR-03', name: 'Colombia Huila Honey Process (12oz)', category: 'Single Origin', price: 20.00, cost: 6.40, stock: 34, note: 'Caramelized fig, blood orange, cacao nib' },
+          { sku: 'NWR-04', name: 'Cold Brew Reserve Concentrate (32oz)', category: 'Ready to Drink', price: 16.00, cost: 4.50, stock: 19, note: '18-hour steep, smooth velvet finish' }
+        ],
+        coa: [
+          { code: '1010', name: 'Operating Cash — Checking', type: 'Asset', balance: 24800.00 },
+          { code: '1200', name: 'Finished Goods Inventory', type: 'Asset', balance: 6850.00 },
+          { code: '2100', name: 'Sales Tax Payable', type: 'Liability', balance: 640.00 },
+          { code: '3010', name: 'Owner Capital & Retained Earnings', type: 'Equity', balance: 26410.00 },
+          { code: '4000', name: 'Storefront Product Revenue', type: 'Revenue', balance: 14200.00 },
+          { code: '5000', name: 'Cost of Goods Sold (COGS)', type: 'Expense', balance: 4850.00 },
+          { code: '6100', name: 'Roastery Packaging & Fulfillment', type: 'Expense', balance: 4750.00 }
+        ],
+        trendWeekly: {
+          labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8'],
+          sales: [2150, 2480, 2390, 3120, 2890, 3450, 3780, 4190],
+          profit: [1380, 1590, 1510, 2040, 1860, 2240, 2490, 2780]
+        },
+        trendMonthly: {
+          labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          sales: [9400, 10250, 11100, 12400, 13650, 14200],
+          profit: [6020, 6580, 7150, 8040, 8910, 9350]
+        },
+        targetRevenue: 18000,
+        budgetCap: 12000
+      },
+      candles: {
+        id: 'candles',
+        name: 'Hearth & Wick Candle Co.',
+        tagline: 'Hand-Poured Coconut Soy Wax & Botanical Fragrances',
+        wpTemplate: 'kadence',
+        wpTemplateLabel: 'Kadence — Boutique Editorial',
+        primaryColor: '#9a3412',
+        heroBadge: 'Hand-Poured Botanical Apothecary',
+        heroHeadline: 'Warm Ambient Scents Crafted for Slow Living',
+        heroSub: 'Clean-burning coconut-soy candles with braided cotton wicks and phthalate-free essential oils.',
+        taxRate: 0.075,
+        products: [
+          { sku: 'HWC-01', name: 'Smoked Cedar & Bergamot (9oz Amber)', category: 'Woodland', price: 28.00, cost: 7.40, stock: 36, note: '55-hour burn • Virginia cedar, wild bergamot' },
+          { sku: 'HWC-02', name: 'Fig Leaf & Warm Cardamom (9oz)', category: 'Botanical', price: 28.00, cost: 7.60, stock: 31, note: '55-hour burn • Crushed green fig, sweet spice' },
+          { sku: 'HWC-03', name: 'Sea Salt & Driftwood Reed Diffuser', category: 'Home Mist', price: 34.00, cost: 9.20, stock: 22, note: '4-month continuous coastal aroma' },
+          { sku: 'HWC-04', name: 'Apothecary Discovery Trio Gift Box', category: 'Gift Sets', price: 46.00, cost: 13.50, stock: 18, note: 'Three 4oz travel tins in linen gift box' }
+        ],
+        coa: [
+          { code: '1010', name: 'Operating Cash — Checking', type: 'Asset', balance: 19400.00 },
+          { code: '1200', name: 'Finished Goods Inventory', type: 'Asset', balance: 5420.00 },
+          { code: '2100', name: 'Sales Tax Payable', type: 'Liability', balance: 510.00 },
+          { code: '3010', name: 'Owner Capital & Retained Earnings', type: 'Equity', balance: 20110.00 },
+          { code: '4000', name: 'Storefront Product Revenue', type: 'Revenue', balance: 11800.00 },
+          { code: '5000', name: 'Cost of Goods Sold (COGS)', type: 'Expense', balance: 3600.00 },
+          { code: '6100', name: 'Studio Rent & Vessel Supplies', type: 'Expense', balance: 4000.00 }
+        ],
+        trendWeekly: {
+          labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8'],
+          sales: [1640, 1890, 2120, 2580, 2340, 2890, 3210, 3540],
+          profit: [1150, 1340, 1510, 1850, 1660, 2080, 2310, 2560]
+        },
+        trendMonthly: {
+          labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          sales: [7200, 7950, 8800, 9950, 10900, 11800],
+          profit: [5040, 5580, 6210, 7050, 7740, 8200]
+        },
+        targetRevenue: 15000,
+        budgetCap: 9500
+      },
+      apparel: {
+        id: 'apparel',
+        name: 'Kestrel Workwear Co.',
+        tagline: 'Heavyweight Organic Duck Canvas & Utility Goods',
+        wpTemplate: 'flatsome',
+        wpTemplateLabel: 'Flatsome — Modern Lookbook',
+        primaryColor: '#0f766e',
+        heroBadge: 'Autumn / Winter Utility Lookbook',
+        heroHeadline: 'Built for the Workshop, Field & Daily Grind',
+        heroSub: '14oz organic cotton canvas, triple-stitched seams, and solid brass hardware engineered to last decades.',
+        taxRate: 0.0825,
+        products: [
+          { sku: 'KWC-01', name: '14oz Waxed Canvas Chore Jacket', category: 'Outerwear', price: 148.00, cost: 48.00, stock: 16, note: 'Water-repellent Martexin wax finish, corduroy collar' },
+          { sku: 'KWC-02', name: 'Heavyweight Selvedge Carpenter Pant', category: 'Bottoms', price: 98.00, cost: 31.50, stock: 24, note: 'Double-knee reinforcement, utility tool loop' },
+          { sku: 'KWC-03', name: '320gsm Loopwheel Pocket Tee', category: 'Essentials', price: 42.00, cost: 12.00, stock: 45, note: 'Garment-dyed combed ring-spun cotton' },
+          { sku: 'KWC-04', name: 'Bridle Leather Shop Apron', category: 'Accessories', price: 76.00, cost: 24.00, stock: 14, note: 'Cross-back harness straps, solid brass rivets' }
+        ],
+        coa: [
+          { code: '1010', name: 'Operating Cash — Checking', type: 'Asset', balance: 42500.00 },
+          { code: '1200', name: 'Finished Goods Inventory', type: 'Asset', balance: 14900.00 },
+          { code: '2100', name: 'Sales Tax Payable', type: 'Liability', balance: 1250.00 },
+          { code: '3010', name: 'Owner Capital & Retained Earnings', type: 'Equity', balance: 46850.00 },
+          { code: '4000', name: 'Storefront Product Revenue', type: 'Revenue', balance: 28400.00 },
+          { code: '5000', name: 'Cost of Goods Sold (COGS)', type: 'Expense', balance: 9600.00 },
+          { code: '6100', name: 'Cut & Sew Production Overhead', type: 'Expense', balance: 9500.00 }
+        ],
+        trendWeekly: {
+          labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8'],
+          sales: [4100, 4650, 4420, 5890, 5410, 6320, 6850, 7420],
+          profit: [2720, 3110, 2940, 3960, 3610, 4240, 4620, 5010]
+        },
+        trendMonthly: {
+          labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          sales: [18900, 20400, 22100, 24800, 26900, 28400],
+          profit: [12500, 13600, 14800, 16650, 18100, 18800]
+        },
+        targetRevenue: 34000,
+        budgetCap: 22000
+      },
+      farm: {
+        id: 'farm',
+        name: 'Red Barn Harvest & CSA',
+        tagline: 'Regenerative Family Farm, Heirloom Produce & Pantry',
+        wpTemplate: 'oceanwp',
+        wpTemplateLabel: 'OceanWP — Organic Harvest',
+        primaryColor: '#15803d',
+        heroBadge: 'Certified Organic • Harvested This Morning',
+        heroHeadline: 'Farm-Stand Fresh Boxes & Small-Batch Pantry Goods',
+        heroSub: 'Grown in living soil without synthetic inputs. Picked at dawn for local pickup and doorstep delivery.',
+        taxRate: 0.04,
+        products: [
+          { sku: 'RBH-01', name: 'Weekly Family Heirloom Harvest Box', category: 'CSA Boxes', price: 44.00, cost: 15.00, stock: 30, note: '12 lbs seasonal greens, root crops, orchard fruit' },
+          { sku: 'RBH-02', name: 'Raw Wildflower Meadow Honey (16oz)', category: 'Apiary', price: 18.00, cost: 5.50, stock: 40, note: 'Unfiltered, cold-spun from clover & buckwheat' },
+          { sku: 'RBH-03', name: 'Pasture-Raised Heritage Eggs (2 Dozen)', category: 'Dairy & Eggs', price: 15.00, cost: 5.20, stock: 26, note: 'Deep golden yolks, soy-free organic feed' },
+          { sku: 'RBH-04', name: 'Heirloom Tomato & Basil Marinara (24oz)', category: 'Farm Pantry', price: 14.00, cost: 4.10, stock: 35, note: 'Kettle-simmered San Marzano & sweet basil' }
+        ],
+        coa: [
+          { code: '1010', name: 'Operating Cash — Checking', type: 'Asset', balance: 21600.00 },
+          { code: '1200', name: 'Finished Goods Inventory', type: 'Asset', balance: 4950.00 },
+          { code: '2100', name: 'Sales Tax Payable', type: 'Liability', balance: 320.00 },
+          { code: '3010', name: 'Owner Capital & Retained Earnings', type: 'Equity', balance: 22230.00 },
+          { code: '4000', name: 'Storefront Product Revenue', type: 'Revenue', balance: 15600.00 },
+          { code: '5000', name: 'Cost of Goods Sold (COGS)', type: 'Expense', balance: 5400.00 },
+          { code: '6100', name: 'Seed, Soil & Cold-Chain Operations', type: 'Expense', balance: 6200.00 }
+        ],
+        trendWeekly: {
+          labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8'],
+          sales: [2320, 2590, 2740, 3180, 2980, 3420, 3690, 3980],
+          profit: [1520, 1710, 1810, 2110, 1960, 2270, 2450, 2660]
+        },
+        trendMonthly: {
+          labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          sales: [10400, 11500, 12600, 13800, 14900, 15600],
+          profit: [6800, 7550, 8300, 9100, 9820, 10200]
+        },
+        targetRevenue: 19000,
+        budgetCap: 13000
+      },
+      crafts: {
+        id: 'crafts',
+        name: 'Timber & Loom Craft Co.',
+        tagline: 'Hand-Turned Walnut Woodware & Handwoven Textiles',
+        wpTemplate: 'divi',
+        wpTemplateLabel: 'Divi — Makers Gallery',
+        primaryColor: '#c2410c',
+        heroBadge: 'Artisan Studio Collective • Numbered Editions',
+        heroHeadline: 'Heirloom Woodcraft & Handwoven Loom Pieces',
+        heroSub: 'Every bowl, board, and merino throw is shaped by hand in our studio using sustainably felled hardwoods.',
+        taxRate: 0.07,
+        products: [
+          { sku: 'TLC-01', name: 'End-Grain Black Walnut Carving Board', category: 'Woodwork', price: 115.00, cost: 34.00, stock: 15, note: '18"x12"x1.75" • Conditioned with organic beeswax' },
+          { sku: 'TLC-02', name: 'Handwoven Merino & Linen Throw', category: 'Textiles', price: 135.00, cost: 42.00, stock: 12, note: 'Woven on 8-shaft floor loom, natural earth dyes' },
+          { sku: 'TLC-03', name: 'Spalted Maple Salad Bowl & Servers', category: 'Woodwork', price: 88.00, cost: 26.00, stock: 18, note: 'Lathe-turned from storm-salvaged Oregon maple' },
+          { sku: 'TLC-04', name: 'Stoneware Pour-Over Dripper & Carafe', category: 'Ceramics', price: 64.00, cost: 19.50, stock: 21, note: 'Wheel-thrown speckled clay with satin glaze' }
+        ],
+        coa: [
+          { code: '1010', name: 'Operating Cash — Checking', type: 'Asset', balance: 27900.00 },
+          { code: '1200', name: 'Finished Goods Inventory', type: 'Asset', balance: 8200.00 },
+          { code: '2100', name: 'Sales Tax Payable', type: 'Liability', balance: 710.00 },
+          { code: '3010', name: 'Owner Capital & Retained Earnings', type: 'Equity', balance: 30390.00 },
+          { code: '4000', name: 'Storefront Product Revenue', type: 'Revenue', balance: 17500.00 },
+          { code: '5000', name: 'Cost of Goods Sold (COGS)', type: 'Expense', balance: 5600.00 },
+          { code: '6100', name: 'Kiln, Lumber & Studio Workshop', type: 'Expense', balance: 6900.00 }
+        ],
+        trendWeekly: {
+          labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8'],
+          sales: [2650, 2940, 2810, 3620, 3490, 4120, 4480, 4890],
+          profit: [1810, 2020, 1910, 2490, 2390, 2840, 3090, 3380]
+        },
+        trendMonthly: {
+          labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          sales: [11800, 12900, 14100, 15400, 16600, 17500],
+          profit: [8050, 8820, 9650, 10550, 11380, 11900]
+        },
+        targetRevenue: 21000,
+        budgetCap: 14000
+      },
+      bakery: {
+        id: 'bakery',
+        name: 'Brioche & Crumb Bakehouse',
+        tagline: '72-Hour Naturally Leavened Sourdough & Viennoiserie',
+        wpTemplate: 'neve',
+        wpTemplateLabel: 'Neve — Patisserie & Cafe',
+        primaryColor: '#be123c',
+        heroBadge: 'Morning Bake Out of the Deck Oven at 6:30 AM',
+        heroHeadline: 'Laminated French Pastries & Hearth Sourdough',
+        heroSub: 'Stone-milled heirloom grains, cultured Normandy-style butter, and wild sourdough fermentation.',
+        taxRate: 0.065,
+        products: [
+          { sku: 'BCB-01', name: 'Cultured Butter Croissant 6-Pack', category: 'Viennoiserie', price: 27.00, cost: 7.80, stock: 32, note: '27 honeycomb layers, 84% butterfat' },
+          { sku: 'BCB-02', name: 'Country Tartine Sourdough Boule', category: 'Hearth Bread', price: 12.50, cost: 3.10, stock: 44, note: '36-hour cold fermentation, blistered crust' },
+          { sku: 'BCB-03', name: 'Cardamom & Brown Butter Kouign-Amann (4pk)', category: 'Patisserie', price: 22.00, cost: 6.20, stock: 25, note: 'Caramelized sugar crust, freshly ground pods' },
+          { sku: 'BCB-04', name: 'Weekend Brunch Pastry & Jam Box', category: 'Curated Boxes', price: 42.00, cost: 13.00, stock: 19, note: 'Assorted pastries + house raspberry vanilla jam' }
+        ],
+        coa: [
+          { code: '1010', name: 'Operating Cash — Checking', type: 'Asset', balance: 23100.00 },
+          { code: '1200', name: 'Finished Goods Inventory', type: 'Asset', balance: 4300.00 },
+          { code: '2100', name: 'Sales Tax Payable', type: 'Liability', balance: 590.00 },
+          { code: '3010', name: 'Owner Capital & Retained Earnings', type: 'Equity', balance: 22610.00 },
+          { code: '4000', name: 'Storefront Product Revenue', type: 'Revenue', balance: 16800.00 },
+          { code: '5000', name: 'Cost of Goods Sold (COGS)', type: 'Expense', balance: 4900.00 },
+          { code: '6100', name: 'Bakery Flour, Butter & Ovens', type: 'Expense', balance: 7700.00 }
+        ],
+        trendWeekly: {
+          labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6', 'Wk 7', 'Wk 8'],
+          sales: [2480, 2720, 2890, 3340, 3190, 3680, 3940, 4290],
+          profit: [1760, 1940, 2060, 2390, 2270, 2630, 2820, 3080]
+        },
+        trendMonthly: {
+          labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          sales: [11200, 12300, 13400, 14600, 15800, 16800],
+          profit: [7950, 8750, 9540, 10410, 11280, 11900]
+        },
+        targetRevenue: 20000,
+        budgetCap: 14500
+      }
+    };
+
+    const TEMPLATE_META = {
+      astra: { label: 'Astra — Artisan Split-Hero', layoutDesc: 'Asymmetric Split-Hero + Tasting Note Feature Bar + 2-Col Artisan Grid' },
+      kadence: { label: 'Kadence — Boutique Editorial', layoutDesc: 'Centered Editorial Serif Header + Soft Pastel Backdrop + Gallery Cards' },
+      flatsome: { label: 'Flatsome — Modern Lookbook', layoutDesc: 'Full-Bleed Lookbook Banner + Technical Spec Strips + Crisp Utility Grid' },
+      oceanwp: { label: 'OceanWP — Organic Harvest', layoutDesc: 'High-Contrast Cream & Sage Harvest Banner + Farm Pickup Window + Organic Cards' },
+      divi: { label: 'Divi — Makers Gallery', layoutDesc: 'Staggered Studio Showcase + Artisan Spotlight Card + Framed Gallery Grid' },
+      neve: { label: 'Neve — Patisserie Menu-Board', layoutDesc: 'Morning Batch Cafe Menu-Board + Daily Bake Timestamps + Pastry Cards' }
+    };
+
+    const CHART_COLOR_GROUPS = {
+      core: {
+        name: 'Core & Revenue (Cobalt & Teal)',
+        sales: '#1d4ed8',
+        salesFill: 'rgba(29, 78, 216, 0.14)',
+        profit: '#059669',
+        profitFill: 'rgba(5, 150, 105, 0.16)',
+        cogs: '#e11d48',
+        anomaly: '#f59e0b'
+      },
+      emerald: {
+        name: 'Emerald & Amber Harvest',
+        sales: '#047857',
+        salesFill: 'rgba(4, 120, 87, 0.15)',
+        profit: '#d97706',
+        profitFill: 'rgba(217, 119, 6, 0.16)',
+        cogs: '#be123c',
+        anomaly: '#4f46e5'
+      },
+      indigo: {
+        name: 'Indigo & Coral Studio',
+        sales: '#4338ca',
+        salesFill: 'rgba(67, 56, 202, 0.15)',
+        profit: '#ea580c',
+        profitFill: 'rgba(234, 88, 12, 0.16)',
+        cogs: '#64748b',
+        anomaly: '#10b981'
+      }
+    };
+
+    let chartInstances = { trend: null, cumulative: null, combo: null };
+
+    // Live Application State
+    let state = {
+      presetKey: 'roasters',
+      templateOverride: 'astra',
+      primaryColor: '#b45309',
+      toneShift: 0,
+      customLogo: null,
+      activeTab: 'storefront',
+      products: [],
+      coa: [],
+      cart: [],
+      invoices: [],
+      auditLog: [],
+      chartTimeframe: 'weekly',
+      chartPaletteKey: 'core',
+      customTargetRevenue: null,
+      customBudgetCap: null,
+      storyChapter: 0,
+      storyAiAnswer: 'Ask a question about sales velocity, cumulative profit, or which product drives the highest margin.',
+      aiAnswer: 'Ask a financial question about revenue, net profit, cash position, or margins based on your live Balance Sheet & P&L.'
+    };
+
+    // Color Scale Math Utilities (100, 300, 500, 700, 900)
+    function hexToRgb(hex) {
+      const clean = hex.replace('#', '');
+      const num = parseInt(clean, 16);
+      return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+    }
+    function rgbToHex(r, g, b) {
+      const clamp = (v) => Math.max(0, Math.min(255, Math.round(v)));
+      return '#' + [clamp(r), clamp(g), clamp(b)].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+    function mixColor(rgb, target, weight) {
+      return rgbToHex(
+        rgb.r + (target.r - rgb.r) * weight,
+        rgb.g + (target.g - rgb.g) * weight,
+        rgb.b + (target.b - rgb.b) * weight
+      );
+    }
+    function applyColorScale() {
+      const base = hexToRgb(state.primaryColor);
+      const shift = Number(state.toneShift) / 100;
+      const white = { r: 255, g: 255, b: 255 };
+      const black = { r: 12, g: 15, b: 24 };
+
+      const w100 = Math.max(0.74, Math.min(0.95, 0.86 - shift * 0.35));
+      const w300 = Math.max(0.35, Math.min(0.75, 0.55 - shift * 0.45));
+      const s500 = shift < 0 ? mixColor(base, white, Math.abs(shift) * 0.6) : mixColor(base, black, shift * 0.5);
+      const w700 = Math.max(0.18, Math.min(0.55, 0.32 + shift * 0.4));
+      const w900 = Math.max(0.45, Math.min(0.82, 0.62 + shift * 0.35));
+
+      const s100 = mixColor(base, white, w100);
+      const s300 = mixColor(base, white, w300);
+      const s700 = mixColor(base, black, w700);
+      const s900 = mixColor(base, black, w900);
+      const surface = mixColor(base, white, 0.94);
+
+      const root = document.documentElement.style;
+      root.setProperty('--scale-100', s100);
+      root.setProperty('--scale-300', s300);
+      root.setProperty('--scale-500', s500);
+      root.setProperty('--scale-700', s700);
+      root.setProperty('--scale-900', s900);
+      root.setProperty('--surface-bg', surface);
+
+      const sw1 = document.getElementById('swatch-100');
+      const sw3 = document.getElementById('swatch-300');
+      const sw5 = document.getElementById('swatch-500');
+      const sw7 = document.getElementById('swatch-700');
+      const sw9 = document.getElementById('swatch-900');
+      if (sw1) { sw1.style.backgroundColor = s100; sw1.title = '100 Light Tint: ' + s100; }
+      if (sw3) { sw3.style.backgroundColor = s300; sw3.title = '300 Soft Accent: ' + s300; }
+      if (sw5) { sw5.style.backgroundColor = s500; sw5.title = '500 Primary: ' + s500; }
+      if (sw7) { sw7.style.backgroundColor = s700; sw7.title = '700 Deep Accent: ' + s700; }
+      if (sw9) { sw9.style.backgroundColor = s900; sw9.title = '900 Dark Surface: ' + s900; }
+
+      const toneLabel = document.getElementById('tone-label');
+      if (toneLabel) {
+        toneLabel.textContent = state.toneShift < -6 ? 'Pastel' : (state.toneShift > 6 ? 'Rich/Dark' : 'Balanced');
+      }
+    }
+
+    function updatePrimaryColor(hex) {
+      state.primaryColor = hex;
+      applyColorScale();
+    }
+
+    function updateToneShift(val) {
+      state.toneShift = Number(val);
+      applyColorScale();
+    }
+
+    // Global Logo Upload & Sync Across All Pages + Parent Frame
+    function syncAllLogoSlots() {
+      const imgs = document.querySelectorAll('.brand-logo-img');
+      const fallbacks = document.querySelectorAll('.brand-logo-fallback');
+      const removeBtn = document.getElementById('remove-logo-btn');
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const initials = preset.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+
+      imgs.forEach(img => {
+        if (state.customLogo) {
+          img.src = state.customLogo;
+          img.classList.remove('hidden');
+        } else {
+          img.removeAttribute('src');
+          img.classList.add('hidden');
+        }
+      });
+      fallbacks.forEach(fb => {
+        fb.textContent = initials;
+        if (state.customLogo) fb.classList.add('hidden');
+        else fb.classList.remove('hidden');
+      });
+      if (removeBtn) {
+        if (state.customLogo) removeBtn.classList.remove('hidden');
+        else removeBtn.classList.add('hidden');
+      }
+
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'MF_LOGO_UPDATED', dataUrl: state.customLogo }, '*');
+        }
+      } catch (e) {}
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        state.customLogo = e.target.result;
+        syncAllLogoSlots();
+        renderCurrentTab();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeCustomLogo() {
+      state.customLogo = null;
+      const input = document.getElementById('logo-file-input');
+      if (input) input.value = '';
+      syncAllLogoSlots();
+      renderCurrentTab();
+    }
+
+    // Switch Business Preset & WordPress Template
+    function switchBusinessPreset(key) {
+      const preset = BUSINESS_PRESETS[key];
+      if (!preset) return;
+      state.presetKey = key;
+      state.templateOverride = preset.wpTemplate;
+      state.primaryColor = preset.primaryColor;
+      state.toneShift = 0;
+      state.products = JSON.parse(JSON.stringify(preset.products));
+      state.coa = JSON.parse(JSON.stringify(preset.coa));
+      state.cart = [{ sku: preset.products[0].sku, qty: 1 }];
+      state.invoices = [];
+      state.customTargetRevenue = preset.targetRevenue;
+      state.customBudgetCap = preset.budgetCap;
+      state.storyChapter = 0;
+      state.auditLog = [
+        {
+          id: 'JE-1001',
+          time: 'Opening Balance',
+          memo: 'Initial Double-Entry Trial Balance Loaded for ' + preset.name,
+          lines: [
+            { account: '1010 Operating Cash — Checking', debit: preset.coa[0].balance, credit: 0 },
+            { account: '1200 Finished Goods Inventory', debit: preset.coa[1].balance, credit: 0 },
+            { account: '3010 Owner Capital & Retained Earnings', debit: 0, credit: preset.coa[0].balance + preset.coa[1].balance }
+          ]
+        }
+      ];
+
+      document.getElementById('studio-brand-name').textContent = preset.name;
+      document.getElementById('wp-template-pill').textContent = 'WP Theme: ' + TEMPLATE_META[state.templateOverride].label;
+      document.getElementById('template-selector').value = state.templateOverride;
+      document.getElementById('primary-color-picker').value = state.primaryColor;
+      document.getElementById('tone-slider').value = 0;
+
+      applyColorScale();
+      syncAllLogoSlots();
+      renderCurrentTab();
+    }
+
+    function switchTemplateOverride(tplKey) {
+      state.templateOverride = tplKey;
+      document.getElementById('wp-template-pill').textContent = 'WP Theme: ' + TEMPLATE_META[tplKey].label;
+      renderCurrentTab();
+    }
+
+    function setActiveTab(tab) {
+      state.activeTab = tab;
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        if (btn.dataset.tab === tab) {
+          btn.classList.add('bg-s500', 'text-white', 'font-bold');
+          btn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'font-semibold');
+        } else {
+          btn.classList.remove('bg-s500', 'text-white', 'font-bold');
+          btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'font-semibold');
+        }
+      });
+      renderCurrentTab();
+    }
+
+    // Reusable Page Header Banner with Larger Custom Logo + Active WordPress Template Badge
+    function renderPageHeaderBanner(pageTitle, subtitle) {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const tpl = TEMPLATE_META[state.templateOverride];
+      const logoHtml = state.customLogo
+        ? `<img src="${state.customLogo}" alt="Business Logo" class="h-16 sm:h-20 w-auto max-w-[240px] rounded-2xl object-contain bg-white p-1.5 border border-s300 shadow-xs shrink-0" />`
+        : `<div class="h-16 sm:h-20 w-16 sm:w-20 rounded-2xl bg-s500 text-white font-extrabold text-xl flex items-center justify-center shrink-0 shadow-xs">${preset.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase()}</div>`;
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 mb-5 flex flex-wrap items-center justify-between gap-4 shadow-xs">
+          <div class="flex items-center gap-4">
+            ${logoHtml}
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <h2 class="text-base sm:text-xl font-extrabold text-slate-900">${preset.name} — ${pageTitle}</h2>
+                <span class="px-2.5 py-0.5 rounded-full bg-s100 text-s900 border border-s300 text-[11px] font-bold">Template: ${tpl.label}</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1">${subtitle}</p>
+            </div>
+          </div>
+          <div class="text-right text-[11px] text-slate-500">
+            <span class="font-semibold text-slate-700">Active Layout:</span> ${tpl.layoutDesc}
+          </div>
+        </div>
+      `;
+    }
+
+    // Cart & Checkout Logic
+    function addToCart(sku) {
+      const prod = state.products.find(p => p.sku === sku);
+      if (!prod || prod.stock <= 0) return;
+      const existing = state.cart.find(c => c.sku === sku);
+      if (existing) {
+        if (existing.qty < prod.stock) existing.qty += 1;
+      } else {
+        state.cart.push({ sku, qty: 1 });
+      }
+      renderCurrentTab();
+    }
+
+    function updateCartQty(sku, delta) {
+      const idx = state.cart.findIndex(c => c.sku === sku);
+      if (idx === -1) return;
+      const prod = state.products.find(p => p.sku === sku);
+      const next = state.cart[idx].qty + delta;
+      if (next <= 0) state.cart.splice(idx, 1);
+      else if (prod && next <= prod.stock) state.cart[idx].qty = next;
+      renderCurrentTab();
+    }
+
+    function completeCheckout() {
+      const nameInput = document.getElementById('checkout-customer-name');
+      const emailInput = document.getElementById('checkout-customer-email');
+      const errBox = document.getElementById('checkout-error');
+
+      const customerName = nameInput ? nameInput.value.trim() : '';
+      const customerEmail = emailInput ? emailInput.value.trim() : '';
+
+      if (!customerName || !customerEmail || !customerEmail.includes('@')) {
+        if (errBox) {
+          errBox.textContent = 'Please enter both Customer Name and a valid Customer Email before placing the order.';
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+      if (state.cart.length === 0) return;
+
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      let subtotal = 0;
+      let totalCogs = 0;
+      const items = [];
+
+      state.cart.forEach(item => {
+        const prod = state.products.find(p => p.sku === item.sku);
+        if (prod && prod.stock >= item.qty) {
+          prod.stock -= item.qty;
+          const lineTotal = prod.price * item.qty;
+          const lineCost = prod.cost * item.qty;
+          subtotal += lineTotal;
+          totalCogs += lineCost;
+          items.push({ sku: prod.sku, name: prod.name, qty: item.qty, unitPrice: prod.price, lineTotal });
+        }
+      });
+
+      const tax = Number((subtotal * preset.taxRate).toFixed(2));
+      const grandTotal = Number((subtotal + tax).toFixed(2));
+      totalCogs = Number(totalCogs.toFixed(2));
+      const invId = 'INV-' + (1040 + state.invoices.length + 1);
+      const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Post Double-Entry Accounting Entries
+      const cashAcct = state.coa.find(a => a.code === '1010');
+      const invAcct = state.coa.find(a => a.code === '1200');
+      const taxAcct = state.coa.find(a => a.code === '2100');
+      const revAcct = state.coa.find(a => a.code === '4000');
+      const cogsAcct = state.coa.find(a => a.code === '5000');
+
+      if (cashAcct) cashAcct.balance = Number((cashAcct.balance + grandTotal).toFixed(2));
+      if (revAcct) revAcct.balance = Number((revAcct.balance + subtotal).toFixed(2));
+      if (taxAcct) taxAcct.balance = Number((taxAcct.balance + tax).toFixed(2));
+      if (cogsAcct) cogsAcct.balance = Number((cogsAcct.balance + totalCogs).toFixed(2));
+      if (invAcct) invAcct.balance = Number(Math.max(0, invAcct.balance - totalCogs).toFixed(2));
+
+      const invoice = {
+        id: invId,
+        date: 'Today • ' + timestamp,
+        businessName: preset.name,
+        customerName,
+        customerEmail,
+        items,
+        subtotal,
+        tax,
+        grandTotal,
+        totalCogs,
+        status: 'Sent to ' + customerEmail
+      };
+      state.invoices.unshift(invoice);
+
+      state.auditLog.unshift({
+        id: 'JE-' + (1001 + state.auditLog.length),
+        time: timestamp,
+        memo: `Order ${invId} — Customer: ${customerName} (${customerEmail})`,
+        lines: [
+          { account: '1010 Operating Cash — Checking', debit: grandTotal, credit: 0 },
+          { account: '4000 Storefront Product Revenue', debit: 0, credit: subtotal },
+          { account: '2100 Sales Tax Payable', debit: 0, credit: tax },
+          { account: '5000 Cost of Goods Sold (COGS)', debit: totalCogs, credit: 0 },
+          { account: '1200 Finished Goods Inventory', debit: 0, credit: totalCogs }
+        ]
+      });
+
+      state.cart = [];
+      showOrderConfirmationModal(invoice);
+      renderCurrentTab();
+    }
+
+    function showOrderConfirmationModal(inv) {
+      const modal = document.getElementById('order-modal');
+      const body = document.getElementById('order-modal-body');
+      const logoMarkup = state.customLogo
+        ? `<img src="${state.customLogo}" alt="Logo" class="h-16 w-auto max-w-[220px] rounded-xl object-contain bg-white p-1.5 border border-slate-200" />`
+        : `<div class="h-16 w-16 rounded-xl bg-s500 text-white font-extrabold text-lg flex items-center justify-center">${inv.businessName.slice(0,2).toUpperCase()}</div>`;
+
+      body.innerHTML = `
+        <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-semibold flex items-center justify-between">
+          <span>✓ Sales Invoice <strong>${inv.id}</strong> sent to <strong>${inv.customerEmail}</strong></span>
+          <span class="px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px]">PAID</span>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3 gap-3">
+            <div class="flex items-center gap-3">
+              ${logoMarkup}
+              <div>
+                <div class="font-extrabold text-slate-900 text-sm">${inv.businessName}</div>
+                <div class="text-[11px] text-slate-500">Official Customer Sales Invoice</div>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="font-mono font-bold text-slate-900">${inv.id}</div>
+              <div class="text-[11px] text-slate-500">${inv.date}</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[11px] bg-slate-50 p-2.5 rounded-lg">
+            <div><span class="text-slate-400 block">Billed To:</span><strong class="text-slate-900">${inv.customerName}</strong></div>
+            <div><span class="text-slate-400 block">Email Receipt Sent:</span><strong class="text-s700">${inv.customerEmail}</strong></div>
+          </div>
+
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 text-[11px] text-slate-500">
+                <th class="py-1.5">Item</th>
+                <th class="py-1.5 text-center">Qty</th>
+                <th class="py-1.5 text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              ${inv.items.map(i => `
+                <tr>
+                  <td class="py-1.5 font-medium text-slate-800">${i.name}</td>
+                  <td class="py-1.5 text-center">${i.qty}</td>
+                  <td class="py-1.5 text-right font-semibold">$${i.lineTotal.toFixed(2)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div class="border-t border-slate-200 pt-2 space-y-1 text-right">
+            <div class="text-slate-500">Subtotal: <strong class="text-slate-800">$${inv.subtotal.toFixed(2)}</strong></div>
+            <div class="text-slate-500">Sales Tax: <strong class="text-slate-800">$${inv.tax.toFixed(2)}</strong></div>
+            <div class="text-sm font-extrabold text-s700">Total Paid: $${inv.grandTotal.toFixed(2)}</div>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeOrderModal() {
+      const modal = document.getElementById('order-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // 6 Distinct WordPress Template Storefront Renderers (All High-Contrast WCAG Compliant)
+    function renderStorefrontHeroAndGrid(preset, tpl) {
+      if (tpl === 'astra') {
+        // 1. ASTRA: Split-Hero Artisan Showcase + Tasting Strip + 2-Column Cards
+        return `
+          <div class="rounded-2xl overflow-hidden border border-s300 bg-white mb-5 shadow-xs">
+            <div class="grid grid-cols-1 md:grid-cols-12">
+              <div class="md:col-span-7 p-6 sm:p-7 bg-surface flex flex-col justify-center">
+                <span class="inline-block w-fit px-3 py-1 rounded-full bg-s100 text-s900 text-[11px] font-bold mb-3">${preset.heroBadge}</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-950 leading-tight">${preset.heroHeadline}</h1>
+                <p class="text-xs sm:text-sm text-slate-700 mt-2.5 leading-relaxed">${preset.heroSub}</p>
+                <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold text-s900">
+                  <span class="px-2.5 py-1 rounded-lg bg-white border border-s300">✓ Small-Batch Certified</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-white border border-s300">✓ Direct Farm Trade</span>
+                </div>
+              </div>
+              <div class="md:col-span-5 bg-s900 text-white p-6 flex flex-col justify-between">
+                <div>
+                  <div class="text-[10px] uppercase tracking-widest text-amber-300 font-bold">Astra Theme Feature</div>
+                  <div class="text-lg font-bold mt-1 text-white">Signature Tasting Flight</div>
+                  <p class="text-xs text-slate-200 mt-1.5">Compare washed floral notes against rich caramelized house roasts in one shipment.</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-white/15 flex items-center justify-between text-xs">
+                  <span class="text-amber-300 font-bold">Fresh Batch #418</span>
+                  <span class="px-2.5 py-1 rounded bg-s500 text-white font-bold">Ships Same Day</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${state.products.map(p => `
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col justify-between hover:border-s500 transition shadow-xs">
+                <div>
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="px-2 py-0.5 rounded-md bg-s100 text-s900 text-[10px] font-bold uppercase">${p.category}</span>
+                    <span class="text-[11px] font-semibold text-slate-600">${p.stock} in stock</span>
+                  </div>
+                  <h3 class="font-extrabold text-slate-900 text-base mt-2">${p.name}</h3>
+                  <p class="text-xs text-slate-600 mt-1">${p.note}</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span class="text-lg font-extrabold text-s700">$${p.price.toFixed(2)}</span>
+                  <button type="button" onclick="addToCart('${p.sku}')" ${p.stock <= 0 ? 'disabled' : ''} class="px-3.5 py-2 rounded-xl bg-s500 hover-bg-s700 disabled:opacity-40 text-white text-xs font-bold transition">
+                    + Add to Bag
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      if (tpl === 'kadence') {
+        // 2. KADENCE: Boutique Editorial Centered Serif Header + Soft Pastel Gallery Cards
+        return `
+          <div class="rounded-3xl bg-surface border border-s300 p-6 sm:p-8 text-center mb-6">
+            <span class="text-[11px] uppercase tracking-[0.2em] font-bold text-s700">${preset.heroBadge}</span>
+            <h1 class="font-editorial text-2xl sm:text-4xl font-bold text-slate-950 mt-2 max-w-2xl mx-auto leading-tight">${preset.heroHeadline}</h1>
+            <p class="text-xs sm:text-sm text-slate-700 mt-3 max-w-xl mx-auto">${preset.heroSub}</p>
+            <div class="mt-4 inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white border border-s300 text-[11px] font-semibold text-s900">
+              <span>Kadence Boutique Editorial</span> • <span>Complimentary Gift Wrapping</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${state.products.map(p => `
+              <div class="bg-white rounded-3xl border border-s300/70 p-5 text-center flex flex-col justify-between shadow-xs hover:shadow-md transition">
+                <div>
+                  <div class="w-12 h-12 mx-auto rounded-full bg-s100 text-s700 flex items-center justify-center font-editorial font-bold text-sm mb-3">
+                    ${p.category.slice(0,3).toUpperCase()}
+                  </div>
+                  <div class="text-[10px] uppercase tracking-widest text-s700 font-bold">${p.category}</div>
+                  <h3 class="font-editorial text-lg font-bold text-slate-900 mt-1">${p.name}</h3>
+                  <p class="text-xs text-slate-600 mt-1.5">${p.note}</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span class="text-xs text-slate-500 font-medium">Stock: ${p.stock}</span>
+                  <span class="text-base font-extrabold text-slate-900">$${p.price.toFixed(2)}</span>
+                  <button type="button" onclick="addToCart('${p.sku}')" ${p.stock <= 0 ? 'disabled' : ''} class="px-4 py-1.5 rounded-full bg-s500 hover-bg-s700 text-white text-xs font-bold transition">
+                    Select
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      if (tpl === 'flatsome') {
+        // 3. FLATSOME: Bold Full-Bleed Industrial Lookbook + Sharp Utility Grid
+        return `
+          <div class="rounded-xl bg-s900 text-white p-6 mb-5 border-l-8 border-s500">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 bg-s500 text-white text-[10px] font-extrabold uppercase tracking-wider">${preset.heroBadge}</span>
+              <span class="font-mono text-xs text-slate-200">FLATSOME LOOKBOOK EDITION // VOL. 04</span>
+            </div>
+            <h1 class="font-geometric text-2xl sm:text-3xl font-bold uppercase tracking-tight mt-3 text-white">${preset.heroHeadline}</h1>
+            <p class="text-xs sm:text-sm text-slate-200 mt-2 max-w-2xl">${preset.heroSub}</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            ${state.products.map(p => `
+              <div class="bg-white rounded-lg border-2 border-slate-200 hover:border-s500 p-4 flex flex-col justify-between transition">
+                <div>
+                  <div class="flex items-center justify-between text-[11px] font-mono border-b border-slate-100 pb-2">
+                    <span class="font-bold text-s700">${p.sku} // ${p.category.toUpperCase()}</span>
+                    <span class="bg-slate-100 px-2 py-0.5 rounded font-bold text-slate-700">QTY: ${p.stock}</span>
+                  </div>
+                  <h3 class="font-geometric font-bold text-slate-950 text-base mt-2.5">${p.name}</h3>
+                  <p class="text-xs text-slate-600 mt-1">${p.note}</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                  <span class="font-geometric text-lg font-extrabold text-slate-900">$${p.price.toFixed(2)}</span>
+                  <button type="button" onclick="addToCart('${p.sku}')" ${p.stock <= 0 ? 'disabled' : ''} class="px-4 py-2 rounded-md bg-s700 hover:bg-s900 text-white text-xs font-extrabold uppercase tracking-wider transition">
+                    Add Gear +
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      if (tpl === 'oceanwp') {
+        // 4. OCEANWP — ORGANIC HARVEST: High-Contrast Cream & Sage Canvas with Deep Forest Ink (#052e16)
+        return `
+          <div class="rounded-3xl bg-[#f3f7f0] border-2 border-emerald-700/30 p-6 sm:p-7 mb-5 shadow-xs">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="max-w-xl">
+                <span class="inline-block px-3 py-1 rounded-full bg-emerald-800 text-white text-[11px] font-extrabold tracking-wide mb-2.5">${preset.heroBadge}</span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-950 leading-tight">${preset.heroHeadline}</h1>
+                <p class="text-xs sm:text-sm text-stone-800 font-medium mt-2 leading-relaxed">${preset.heroSub}</p>
+              </div>
+              <div class="bg-white rounded-2xl p-4 text-xs border border-emerald-700/25 shadow-xs shrink-0">
+                <div class="font-extrabold text-emerald-900 uppercase tracking-wider text-[10px]">OceanWP Harvest Window</div>
+                <div class="text-stone-600 mt-1 font-medium">Next Farm-Stand Pickup:</div>
+                <div class="font-extrabold text-emerald-950 text-sm mt-0.5">Tomorrow • 8:00 AM – 6:00 PM</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${state.products.map(p => `
+              <div class="bg-[#fafcf8] rounded-2xl border border-emerald-700/25 p-4 flex flex-col justify-between shadow-xs hover:border-emerald-700 transition">
+                <div>
+                  <div class="flex items-center justify-between">
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-950 border border-emerald-700/20 text-[11px] font-bold">${p.category}</span>
+                    <span class="text-xs font-bold text-emerald-900">${p.stock} crates left</span>
+                  </div>
+                  <h3 class="font-extrabold text-emerald-950 text-base mt-2.5">${p.name}</h3>
+                  <p class="text-xs text-stone-700 mt-1">${p.note}</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-emerald-700/15 flex items-center justify-between">
+                  <span class="text-lg font-extrabold text-emerald-950">$${p.price.toFixed(2)}</span>
+                  <button type="button" onclick="addToCart('${p.sku}')" ${p.stock <= 0 ? 'disabled' : ''} class="px-4 py-2 rounded-full bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold transition">
+                    Add to Crate
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      if (tpl === 'divi') {
+        // 5. DIVI: Makers Gallery Staggered Showcase + Artisan Spotlight
+        return `
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-5">
+            <div class="md:col-span-8 bg-white rounded-2xl border-2 border-s300 p-6 flex flex-col justify-between">
+              <div>
+                <span class="text-[11px] font-extrabold uppercase tracking-widest text-s700">${preset.heroBadge}</span>
+                <h1 class="font-editorial text-2xl sm:text-3xl font-bold text-slate-950 mt-1.5">${preset.heroHeadline}</h1>
+                <p class="text-xs sm:text-sm text-slate-700 mt-2">${preset.heroSub}</p>
+              </div>
+              <div class="mt-4 flex items-center gap-2 text-[11px] font-bold text-s900">
+                <span class="px-2.5 py-1 rounded bg-s100">Divi Makers Gallery Layout</span>
+                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-800">Signed by Maker</span>
+              </div>
+            </div>
+            <div class="md:col-span-4 bg-s100 rounded-2xl border-2 border-s300 p-5 flex flex-col justify-center">
+              <div class="text-xs font-extrabold uppercase text-s900">Studio Craft Guarantee</div>
+              <p class="text-xs text-slate-800 mt-2 leading-relaxed">Each piece is individually numbered and includes lifetime wood &amp; textile care conditioning instructions.</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${state.products.map((p, idx) => `
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs ${idx % 2 === 1 ? 'sm:translate-y-1' : ''}">
+                <div class="bg-surface rounded-xl p-3 border border-s300/60 mb-3 flex items-center justify-between">
+                  <span class="text-[11px] font-bold text-s900 uppercase">${p.category}</span>
+                  <span class="text-[11px] font-mono text-slate-600">Edition Stock: ${p.stock}</span>
+                </div>
+                <h3 class="font-editorial font-bold text-lg text-slate-900">${p.name}</h3>
+                <p class="text-xs text-slate-600 mt-1">${p.note}</p>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span class="text-lg font-extrabold text-s700">$${p.price.toFixed(2)}</span>
+                  <button type="button" onclick="addToCart('${p.sku}')" ${p.stock <= 0 ? 'disabled' : ''} class="px-4 py-2 rounded-xl bg-s500 hover-bg-s700 text-white text-xs font-bold transition">
+                    Collect Piece
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      // 6. NEVE: Patisserie & Cafe Menu-Board Layout
+      return `
+        <div class="rounded-2xl bg-white border border-s300 p-6 mb-5 shadow-xs">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-dashed border-s300 pb-3 mb-3">
+            <span class="px-3 py-1 rounded-full bg-s100 text-s900 text-xs font-bold">${preset.heroBadge}</span>
+            <span class="text-xs font-bold text-s700">Neve Cafe Menu-Board • Fresh Daily</span>
+          </div>
+          <h1 class="font-editorial text-2xl sm:text-3xl font-bold text-slate-950">${preset.heroHeadline}</h1>
+          <p class="text-xs sm:text-sm text-slate-700 mt-1.5">${preset.heroSub}</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 divide-y divide-dashed divide-slate-200 overflow-hidden">
+          ${state.products.map(p => `
+            <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface/60 transition">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-s100 text-s900 text-[10px] font-bold uppercase">${p.category}</span>
+                  <span class="text-[11px] text-slate-500 font-medium">${p.stock} baked &amp; available</span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-base mt-1">${p.name}</h3>
+                <p class="text-xs text-slate-600 mt-0.5">${p.note}</p>
+              </div>
+              <div class="flex items-center gap-3 shrink-0">
+                <span class="text-lg font-extrabold text-s700">$${p.price.toFixed(2)}</span>
+                <button type="button" onclick="addToCart('${p.sku}')" ${p.stock <= 0 ? 'disabled' : ''} class="px-4 py-2 rounded-xl bg-s500 hover-bg-s700 text-white text-xs font-bold transition">
+                  + Order
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderStorefrontPage() {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      let subtotal = 0;
+      const cartRows = state.cart.map(item => {
+        const prod = state.products.find(p => p.sku === item.sku);
+        if (!prod) return '';
+        const line = prod.price * item.qty;
+        subtotal += line;
+        return `
+          <div class="flex items-center justify-between gap-2 py-2 border-b border-slate-100 text-xs">
+            <div class="min-w-0">
+              <div class="font-bold text-slate-800 truncate">${prod.name}</div>
+              <div class="text-[11px] text-slate-500">$${prod.price.toFixed(2)} each</div>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" onclick="updateCartQty('${prod.sku}', -1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 font-bold">-</button>
+              <span class="w-5 text-center font-bold">${item.qty}</span>
+              <button type="button" onclick="updateCartQty('${prod.sku}', 1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 font-bold">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const tax = subtotal * preset.taxRate;
+      const total = subtotal + tax;
+
+      return `
+        ${renderPageHeaderBanner('Customer Storefront', preset.tagline)}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div class="lg:col-span-8">
+            ${renderStorefrontHeroAndGrid(preset, state.templateOverride)}
+          </div>
+
+          <!-- Customer Order & Invoice Checkout Sidebar -->
+          <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm sticky top-36">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 class="font-extrabold text-slate-900 text-sm">Customer Bag &amp; Invoice Checkout</h3>
+              <span class="px-2 py-0.5 rounded-full bg-s100 text-s900 text-[11px] font-bold">${state.cart.reduce((s,c)=>s+c.qty,0)} items</span>
+            </div>
+
+            <div class="my-3 max-h-48 overflow-y-auto">
+              ${cartRows || '<p class="text-xs text-slate-400 py-4 text-center">Your bag is empty. Add items from the storefront.</p>'}
+            </div>
+
+            <div class="space-y-1 text-xs border-t border-slate-100 pt-3">
+              <div class="flex justify-between text-slate-500"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+              <div class="flex justify-between text-slate-500"><span>Sales Tax (${(preset.taxRate*100).toFixed(1)}%)</span><span>$${tax.toFixed(2)}</span></div>
+              <div class="flex justify-between text-sm font-extrabold text-slate-900 pt-1"><span>Total Due</span><span class="text-s700">$${total.toFixed(2)}</span></div>
+            </div>
+
+            <!-- Required Customer Details for Invoice Generation -->
+            <div class="mt-4 pt-3 border-t border-slate-100 space-y-2.5">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Customer Invoice Details (Required)</div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Customer Full Name *</label>
+                <input type="text" id="checkout-customer-name" placeholder="e.g., Jordan Vance" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-s500" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 mb-1">Customer Email Address *</label>
+                <input type="email" id="checkout-customer-email" placeholder="e.g., jordan@example.com" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-s500" />
+              </div>
+              <div id="checkout-error" class="hidden text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg p-2"></div>
+              <button type="button" onclick="completeCheckout()" ${state.cart.length === 0 ? 'disabled' : ''} class="w-full py-3 rounded-xl bg-s500 hover-bg-s700 disabled:opacity-40 text-white font-extrabold text-xs shadow-sm transition">
+                Place Order &amp; Email Invoice ($${total.toFixed(2)})
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Tab 2: Admin Console & Customer Sales Invoices
+    function renderAdminPage() {
+      return `
+        ${renderPageHeaderBanner('Admin Console & Sales Invoices', 'Manage customer orders, emailed sales invoices, and storefront operations')}
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-extrabold text-slate-900 text-sm">Generated Customer Sales Invoices (${state.invoices.length})</h3>
+            <button type="button" onclick="setActiveTab('storefront')" class="px-3 py-1.5 rounded-lg bg-s500 text-white text-xs font-bold">+ New Storefront Order</button>
+          </div>
+          ${state.invoices.length === 0 ? `
+            <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-300 text-xs text-slate-500">
+              No storefront orders placed yet in this session. Go to <strong>1. Customer Storefront</strong>, enter a Customer Name &amp; Email, and complete checkout to generate an itemized Sales Invoice.
+            </div>
+          ` : `
+            <div class="space-y-3">
+              ${state.invoices.map(inv => `
+                <div class="border border-slate-200 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 bg-slate-50/60">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-mono font-extrabold text-xs text-s700">${inv.id}</span>
+                      <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">${inv.status}</span>
+                    </div>
+                    <div class="font-bold text-slate-900 text-sm mt-1">${inv.customerName} <span class="text-slate-400 font-normal">(${inv.customerEmail})</span></div>
+                    <div class="text-[11px] text-slate-500 mt-0.5">${inv.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-base font-extrabold text-slate-900">$${inv.grandTotal.toFixed(2)}</div>
+                    <div class="text-[11px] text-slate-400">${inv.date}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    // Tab 3: Inventory & FIFO
+    function restockSku(sku, qty) {
+      const prod = state.products.find(p => p.sku === sku);
+      if (!prod) return;
+      prod.stock += qty;
+      const addedVal = Number((prod.cost * qty).toFixed(2));
+      const invAcct = state.coa.find(a => a.code === '1200');
+      const cashAcct = state.coa.find(a => a.code === '1010');
+      if (invAcct) invAcct.balance = Number((invAcct.balance + addedVal).toFixed(2));
+      if (cashAcct) cashAcct.balance = Number((cashAcct.balance - addedVal).toFixed(2));
+
+      state.auditLog.unshift({
+        id: 'JE-' + (1001 + state.auditLog.length),
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        memo: `Inventory Restock (+${qty} units ${prod.sku})`,
+        lines: [
+          { account: '1200 Finished Goods Inventory', debit: addedVal, credit: 0 },
+          { account: '1010 Operating Cash — Checking', debit: 0, credit: addedVal }
+        ]
+      });
+      renderCurrentTab();
+    }
+
+    function renderInventoryPage() {
+      return `
+        ${renderPageHeaderBanner('Inventory & FIFO Valuation', 'Real-time SKU stock levels, unit costs, retail margins, and one-click restock')}
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-slate-100 text-slate-600 uppercase text-[11px]">
+                <tr>
+                  <th class="p-3.5">SKU</th>
+                  <th class="p-3.5">Product</th>
+                  <th class="p-3.5 text-right">Unit Cost</th>
+                  <th class="p-3.5 text-right">Retail Price</th>
+                  <th class="p-3.5 text-right">Gross Margin</th>
+                  <th class="p-3.5 text-center">On Hand</th>
+                  <th class="p-3.5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                ${state.products.map(p => {
+                  const gm = (((p.price - p.cost) / p.price) * 100).toFixed(1);
+                  return `
+                    <tr>
+                      <td class="p-3.5 font-mono font-bold text-slate-700">${p.sku}</td>
+                      <td class="p-3.5 font-bold text-slate-900">${p.name}</td>
+                      <td class="p-3.5 text-right text-slate-600">$${p.cost.toFixed(2)}</td>
+                      <td class="p-3.5 text-right font-bold text-slate-900">$${p.price.toFixed(2)}</td>
+                      <td class="p-3.5 text-right font-bold text-emerald-700">${gm}%</td>
+                      <td class="p-3.5 text-center">
+                        <span class="px-2.5 py-0.5 rounded-full font-bold ${p.stock < 15 ? 'bg-rose-100 text-rose-700' : 'bg-s100 text-s900'}">${p.stock} units</span>
+                      </td>
+                      <td class="p-3.5 text-right">
+                        <button type="button" onclick="restockSku('${p.sku}', 10)" class="px-3 py-1.5 rounded-lg bg-s500 hover-bg-s700 text-white font-bold text-[11px]">+ Restock 10</button>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // Tab 4: FULL RESTORED SALES STORY & INTERACTIVE CHARTS PAGE
+    function setChartTimeframe(tf) {
+      state.chartTimeframe = tf;
+      renderCurrentTab();
+    }
+
+    function setChartPalette(paletteKey) {
+      state.chartPaletteKey = paletteKey;
+      renderCurrentTab();
+    }
+
+    function updateRevenueGaugeTargets() {
+      const tInput = document.getElementById('gauge-target-input');
+      const bInput = document.getElementById('gauge-budget-input');
+      if (tInput) {
+        const val = parseFloat(tInput.value);
+        if (!isNaN(val) && val > 0) state.customTargetRevenue = val;
+      }
+      if (bInput) {
+        const val = parseFloat(bInput.value);
+        if (!isNaN(val) && val > 0) state.customBudgetCap = val;
+      }
+      renderCurrentTab();
+    }
+
+    function stepStoryChapter(delta) {
+      state.storyChapter = (state.storyChapter + delta + 3) % 3;
+      renderCurrentTab();
+    }
+
+    function askStorytellerAi(customQ) {
+      const input = document.getElementById('story-ai-input');
+      const q = (customQ || (input ? input.value : '')).trim();
+      if (!q) return;
+      if (input) input.value = q;
+
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const topSku = [...state.products].sort((a, b) => (b.price - b.cost) - (a.price - a.cost))[0];
+      const rev = state.coa.filter(a => a.type === 'Revenue').reduce((s, a) => s + a.balance, 0);
+      const exp = state.coa.filter(a => a.type === 'Expense').reduce((s, a) => s + a.balance, 0);
+      const profit = rev - exp;
+
+      state.storyAiAnswer = `For ${preset.name}, recognized revenue is $${rev.toFixed(2)} with net profit of $${profit.toFixed(2)}. Your highest unit-profit item is "${topSku.name}" generating $${(topSku.price - topSku.cost).toFixed(2)} profit per sale (${Math.round(((topSku.price - topSku.cost)/topSku.price)*100)}% margin).`;
+      renderCurrentTab();
+    }
+
+    function buildSemiCircularGaugeSvg(currentRev, targetRev, budgetCap, palette) {
+      const pct = Math.min(1.25, Math.max(0, currentRev / Math.max(1, targetRev)));
+      const clampedAngle = Math.min(180, pct * 180);
+      const rad = (Math.PI * (180 - clampedAngle)) / 180;
+      const cx = 130, cy = 115, r = 85;
+      const nx = cx + r * Math.cos(rad);
+      const ny = cy - r * Math.sin(rad);
+
+      // Arc endpoint for active progress
+      const largeArc = 0;
+      const endX = cx + r * Math.cos(rad);
+      const endY = cy - r * Math.sin(rad);
+      const startX = cx - r;
+      const startY = cy;
+
+      return `
+        <svg viewBox="0 0 260 140" class="w-full max-w-[260px] mx-auto overflow-visible">
+          <!-- Background Track -->
+          <path d="M ${startX} ${startY} A ${r} ${r} 0 0 1 ${cx + r} ${cy}" fill="none" stroke="#e2e8f0" stroke-width="18" stroke-linecap="round" />
+          <!-- Active Progress Arc -->
+          <path d="M ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)}" fill="none" stroke="${palette.sales}" stroke-width="18" stroke-linecap="round" />
+          <!-- Needle -->
+          <line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="#0f172a" stroke-width="3" stroke-linecap="round" />
+          <circle cx="${cx}" cy="${cy}" r="6" fill="#0f172a" />
+          <text x="${cx}" y="${cy - 24}" text-anchor="middle" font-size="18" font-weight="800" fill="#0f172a">${Math.round(pct * 100)}%</text>
+          <text x="${cx}" y="${cy - 8}" text-anchor="middle" font-size="9.5" font-weight="600" fill="#64748b">of $${targetRev.toLocaleString()} Target</text>
+          <text x="28" y="133" font-size="9" font-weight="700" fill="#64748b">$0</text>
+          <text x="130" y="133" text-anchor="middle" font-size="9" font-weight="700" fill="${palette.profit}">Budget Cap: $${budgetCap.toLocaleString()}</text>
+          <text x="235" y="133" text-anchor="end" font-size="9" font-weight="700" fill="#64748b">$${targetRev.toLocaleString()}</text>
+        </svg>
+      `;
+    }
+
+    function renderChartsPage() {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const palette = CHART_COLOR_GROUPS[state.chartPaletteKey] || CHART_COLOR_GROUPS.core;
+      const rev = state.coa.filter(a => a.type === 'Revenue').reduce((s, a) => s + a.balance, 0);
+      const exp = state.coa.filter(a => a.type === 'Expense').reduce((s, a) => s + a.balance, 0);
+      const net = rev - exp;
+      const targetRev = state.customTargetRevenue || preset.targetRevenue;
+      const budgetCap = state.customBudgetCap || preset.budgetCap;
+
+      const chapters = [
+        {
+          badge: 'Chapter 1 of 3 • Revenue Momentum',
+          title: 'Top-Line Sales Acceleration & Anomaly Detection',
+          body: `${preset.name} shows steady upward trajectory across the ${state.chartTimeframe} window. Peak spike periods align with bundled orders and weekend storefront promotions.`
+        },
+        {
+          badge: 'Chapter 2 of 3 • Cumulative Profit Compounding',
+          title: 'Gross Profit vs. Cumulative Revenue Spread',
+          body: `Every storefront sale immediately deducts FIFO inventory cost (Acct 1200) and posts COGS (Acct 5000), keeping cumulative gross profit compounding cleanly alongside top-line sales.`
+        },
+        {
+          badge: 'Chapter 3 of 3 • Offering Unit Economics',
+          title: 'Compare Sales Revenue, COGS & Sum of Profit by SKU',
+          body: `Comparing Sales vs. Cost of Goods Sold across your active catalog highlights which SKUs generate the highest contribution dollars per transaction.`
+        }
+      ];
+      const ch = chapters[state.storyChapter];
+
+      return `
+        ${renderPageHeaderBanner('Sales Story & Interactive Financial Charts', 'Live Chart.js visual analytics, Revenue Target Gauge, Color Groups & AI Storyteller')}
+
+        <!-- Top Controls: Timeframe Switcher & Named Color Groups -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-5 flex flex-wrap items-center justify-between gap-3 shadow-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-600">Trend Window:</span>
+            <div class="inline-flex bg-slate-100 p-1 rounded-xl">
+              <button type="button" onclick="setChartTimeframe('weekly')" class="px-3 py-1 rounded-lg text-xs font-bold transition ${state.chartTimeframe === 'weekly' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'}">Weekly</button>
+              <button type="button" onclick="setChartTimeframe('monthly')" class="px-3 py-1 rounded-lg text-xs font-bold transition ${state.chartTimeframe === 'monthly' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'}">Monthly</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-bold text-slate-600">Chart Color Group:</span>
+            ${Object.entries(CHART_COLOR_GROUPS).map(([k, grp]) => `
+              <button type="button" onclick="setChartPalette('${k}')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition ${state.chartPaletteKey === k ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'}">
+                <span class="w-2.5 h-2.5 rounded-full" style="background:${grp.sales}"></span>
+                <span class="w-2.5 h-2.5 rounded-full" style="background:${grp.profit}"></span>
+                <span>${grp.name.split('(')[0].trim()}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- KPI Summary Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+            <div class="text-xs text-slate-500 font-semibold">Total Recognized Revenue</div>
+            <div class="text-2xl font-extrabold mt-1" style="color:${palette.sales}">$${rev.toLocaleString('en-US', {minimumFractionDigits:2})}</div>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+            <div class="text-xs text-slate-500 font-semibold">Total COGS &amp; Operating Exp</div>
+            <div class="text-2xl font-extrabold text-rose-700 mt-1">$${exp.toLocaleString('en-US', {minimumFractionDigits:2})}</div>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+            <div class="text-xs text-slate-500 font-semibold">Net Operating Income</div>
+            <div class="text-2xl font-extrabold mt-1" style="color:${palette.profit}">$${net.toLocaleString('en-US', {minimumFractionDigits:2})}</div>
+          </div>
+        </div>
+
+        <!-- Row 1: Chart 1 (Revenue & Gross Profit Trend) + Semi-Circular Revenue Target Gauge -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5">
+          <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div>
+                <h3 class="font-extrabold text-sm text-slate-900">1. Revenue &amp; Gross Profit Trend (${state.chartTimeframe === 'weekly' ? '8-Week' : '6-Month'})</h3>
+                <p class="text-[11px] text-slate-500">Multi-line &amp; filled area trend with peak anomaly point highlights</p>
+              </div>
+              <div class="flex items-center gap-3 text-[11px] font-bold">
+                <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full" style="background:${palette.sales}"></span> Sales Revenue</span>
+                <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full" style="background:${palette.profit}"></span> Gross Profit</span>
+              </div>
+            </div>
+            <div class="relative w-full h-64">
+              <canvas id="chart-trend-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Semi-Circular Revenue Target Gauge -->
+          <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900">Revenue Target &amp; Budget Gauge</h3>
+              <p class="text-[11px] text-slate-500">Live progress against your period revenue goal</p>
+            </div>
+
+            <div class="my-2">
+              ${buildSemiCircularGaugeSvg(rev, targetRev, budgetCap, palette)}
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-xs">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Revenue Target ($)</label>
+                <input type="number" id="gauge-target-input" value="${targetRev}" onchange="updateRevenueGaugeTargets()" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-mono font-bold text-slate-900" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Expense Cap ($)</label>
+                <input type="number" id="gauge-budget-input" value="${budgetCap}" onchange="updateRevenueGaugeTargets()" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-mono font-bold text-slate-900" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Chart 2 (Cumulative Sum of Profit & Sales) + Chart 3 (Compare Sales vs Profit by Offering) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div class="mb-3">
+              <h3 class="font-extrabold text-sm text-slate-900">2. Cumulative Sum of Profit &amp; Sum of Sales</h3>
+              <p class="text-[11px] text-slate-500">Running cumulative revenue vs. compounded gross profit</p>
+            </div>
+            <div class="relative w-full h-64">
+              <canvas id="chart-cumulative-canvas"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div class="mb-3">
+              <h3 class="font-extrabold text-sm text-slate-900">3. Compare Sales vs. Profit by Offering</h3>
+              <p class="text-[11px] text-slate-500">Combo bar + line chart: Retail Price, Unit COGS &amp; Unit Profit</p>
+            </div>
+            <div class="relative w-full h-64">
+              <canvas id="chart-combo-canvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: Interactive Storyteller Chapters + Ask AI Story Q&A -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div class="lg:col-span-6 bg-surface border border-s300 rounded-2xl p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-s100 text-s900 text-[11px] font-extrabold">${ch.badge}</span>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="stepStoryChapter(-1)" class="px-2.5 py-1 rounded-lg bg-white border border-s300 text-xs font-bold text-s900 hover:bg-s100">← Prev</button>
+                  <button type="button" onclick="stepStoryChapter(1)" class="px-2.5 py-1 rounded-lg bg-s500 text-white text-xs font-bold hover-bg-s700">Next →</button>
+                </div>
+              </div>
+              <h4 class="font-extrabold text-base text-slate-900 mt-3">${ch.title}</h4>
+              <p class="text-xs text-slate-700 mt-1.5 leading-relaxed">${ch.body}</p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">✦ Ask AI About Your Sales Charts</span>
+              <button type="button" onclick="askStorytellerAi('Which offering has the highest profit margin?')" class="px-2.5 py-1 rounded-lg bg-s100 text-s900 text-[11px] font-bold">Top Profit SKU?</button>
+            </div>
+            <div class="flex gap-2">
+              <input type="text" id="story-ai-input" placeholder="Ask about trends, margins, or cumulative profit..." class="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none" />
+              <button type="button" onclick="askStorytellerAi()" class="px-4 py-2 rounded-xl bg-s500 hover-bg-s700 text-white text-xs font-bold">Ask</button>
+            </div>
+            <div class="mt-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 leading-relaxed">
+              ${state.storyAiAnswer}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function mountChartsOnCanvas() {
+      if (state.activeTab !== 'charts') return;
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const palette = CHART_COLOR_GROUPS[state.chartPaletteKey] || CHART_COLOR_GROUPS.core;
+      const series = state.chartTimeframe === 'weekly' ? preset.trendWeekly : preset.trendMonthly;
+
+      // Destroy previous instances cleanly
+      Object.keys(chartInstances).forEach(k => {
+        if (chartInstances[k]) {
+          chartInstances[k].destroy();
+          chartInstances[k] = null;
+        }
+      });
+
+      if (typeof Chart === 'undefined') return;
+
+      // 1. Revenue & Gross Profit Trend
+      const trendCtx = document.getElementById('chart-trend-canvas');
+      if (trendCtx) {
+        const maxSale = Math.max(...series.sales);
+        const pointRadii = series.sales.map(v => (v === maxSale ? 7 : 4));
+        const pointColors = series.sales.map(v => (v === maxSale ? palette.anomaly : palette.sales));
+
+        chartInstances.trend = new Chart(trendCtx, {
+          type: 'line',
+          data: {
+            labels: series.labels,
+            datasets: [
+              {
+                label: 'Sales Revenue ($)',
+                data: series.sales,
+                borderColor: palette.sales,
+                backgroundColor: palette.salesFill,
+                fill: true,
+                tension: 0.35,
+                borderWidth: 2.5,
+                pointRadius: pointRadii,
+                pointBackgroundColor: pointColors
+              },
+              {
+                label: 'Gross Profit ($)',
+                data: series.profit,
+                borderColor: palette.profit,
+                backgroundColor: palette.profitFill,
+                fill: true,
+                tension: 0.35,
+                borderWidth: 2.5,
+                pointRadius: 4,
+                pointBackgroundColor: palette.profit
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+
+      // 2. Cumulative Sum of Profit & Sum of Sales
+      const cumCtx = document.getElementById('chart-cumulative-canvas');
+      if (cumCtx) {
+        let runSales = 0;
+        let runProfit = 0;
+        const cumSales = series.sales.map(v => (runSales += v));
+        const cumProfit = series.profit.map(v => (runProfit += v));
+
+        chartInstances.cumulative = new Chart(cumCtx, {
+          type: 'line',
+          data: {
+            labels: series.labels,
+            datasets: [
+              {
+                label: 'Cumulative Sales ($)',
+                data: cumSales,
+                borderColor: palette.sales,
+                backgroundColor: palette.salesFill,
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2.5
+              },
+              {
+                label: 'Cumulative Profit ($)',
+                data: cumProfit,
+                borderColor: palette.profit,
+                backgroundColor: palette.profitFill,
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2.5
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+
+      // 3. Compare Sales vs. Profit by Offering (Combo Bar + Line)
+      const comboCtx = document.getElementById('chart-combo-canvas');
+      if (comboCtx) {
+        const skuLabels = state.products.map(p => p.sku);
+        const prices = state.products.map(p => p.price);
+        const costs = state.products.map(p => p.cost);
+        const profits = state.products.map(p => Number((p.price - p.cost).toFixed(2)));
+
+        chartInstances.combo = new Chart(comboCtx, {
+          data: {
+            labels: skuLabels,
+            datasets: [
+              {
+                type: 'bar',
+                label: 'Retail Price ($)',
+                data: prices,
+                backgroundColor: palette.sales,
+                borderRadius: 6
+              },
+              {
+                type: 'bar',
+                label: 'Unit COGS ($)',
+                data: costs,
+                backgroundColor: palette.cogs,
+                borderRadius: 6
+              },
+              {
+                type: 'line',
+                label: 'Unit Profit ($)',
+                data: profits,
+                borderColor: palette.profit,
+                backgroundColor: palette.profit,
+                borderWidth: 3,
+                pointRadius: 5,
+                tension: 0.25
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+    }
+
+    // Tab 5: Financial Statements (BS & P&L) + Ask AI Analyst
+    function askFinancialAi(customPrompt) {
+      const input = document.getElementById('ai-question-input');
+      const q = (customPrompt || (input ? input.value : '')).trim();
+      if (!q) return;
+      if (input) input.value = q;
+
+      const assets = state.coa.filter(a => a.type === 'Asset').reduce((s, a) => s + a.balance, 0);
+      const liabilities = state.coa.filter(a => a.type === 'Liability').reduce((s, a) => s + a.balance, 0);
+      const equity = state.coa.filter(a => a.type === 'Equity').reduce((s, a) => s + a.balance, 0);
+      const revenue = state.coa.filter(a => a.type === 'Revenue').reduce((s, a) => s + a.balance, 0);
+      const expenses = state.coa.filter(a => a.type === 'Expense').reduce((s, a) => s + a.balance, 0);
+      const netIncome = revenue - expenses;
+      const netMargin = revenue > 0 ? ((netIncome / revenue) * 100).toFixed(1) : '0.0';
+      const cash = (state.coa.find(a => a.code === '1010') || { balance: 0 }).balance;
+
+      const lower = q.toLowerCase();
+      if (lower.includes('margin') || lower.includes('profit') || lower.includes('net')) {
+        state.aiAnswer = `Based on your live P&L for ${BUSINESS_PRESETS[state.presetKey].name}, Total Revenue is $${revenue.toFixed(2)} and Total Expenses are $${expenses.toFixed(2)}, yielding a Net Income of $${netIncome.toFixed(2)} (${netMargin}% net profit margin).`;
+      } else if (lower.includes('cash') || lower.includes('asset') || lower.includes('balance')) {
+        state.aiAnswer = `Your Balance Sheet shows Total Assets of $${assets.toFixed(2)} (including $${cash.toFixed(2)} in Operating Cash), Total Liabilities of $${liabilities.toFixed(2)}, and Total Equity + Net Income of $${(equity + netIncome).toFixed(2)}.`;
+      } else {
+        state.aiAnswer = `Summary for ${BUSINESS_PRESETS[state.presetKey].name}: Assets = $${assets.toFixed(2)}, Liabilities = $${liabilities.toFixed(2)}, Revenue = $${revenue.toFixed(2)}, Net Income = $${netIncome.toFixed(2)} (${netMargin}% margin). Any edits in Chart of Accounts update these figures immediately.`;
+      }
+      renderCurrentTab();
+    }
+
+    function renderStatementsPage() {
+      const assets = state.coa.filter(a => a.type === 'Asset');
+      const liabilities = state.coa.filter(a => a.type === 'Liability');
+      const equity = state.coa.filter(a => a.type === 'Equity');
+      const revenues = state.coa.filter(a => a.type === 'Revenue');
+      const expenses = state.coa.filter(a => a.type === 'Expense');
+
+      const totalAssets = assets.reduce((s, a) => s + a.balance, 0);
+      const totalLiab = liabilities.reduce((s, a) => s + a.balance, 0);
+      const totalEq = equity.reduce((s, a) => s + a.balance, 0);
+      const totalRev = revenues.reduce((s, a) => s + a.balance, 0);
+      const totalExp = expenses.reduce((s, a) => s + a.balance, 0);
+      const netIncome = totalRev - totalExp;
+
+      return `
+        ${renderPageHeaderBanner('Financial Statements (Balance Sheet & P&L)', 'Real-time double-entry statements synced with Chart of Accounts + Ask AI Financial Analyst')}
+
+        <!-- Ask AI Interactive Financial Analyst Panel -->
+        <div class="bg-surface border border-s300 rounded-2xl p-4 mb-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-extrabold text-s900 uppercase tracking-wider">✦ Ask AI Financial Analyst (Live BS &amp; P&amp;L)</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="askFinancialAi('What is my current net profit margin?')" class="px-2.5 py-1 rounded-lg bg-white border border-s300 text-[11px] font-semibold text-s900 hover:bg-s100">Net Profit Margin?</button>
+              <button type="button" onclick="askFinancialAi('Summarize my cash and Balance Sheet health')" class="px-2.5 py-1 rounded-lg bg-white border border-s300 text-[11px] font-semibold text-s900 hover:bg-s100">Cash &amp; Balance Sheet?</button>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="ai-question-input" placeholder="Ask about net income, cash runway, liabilities, or margins..." class="flex-1 px-3 py-2 rounded-xl border border-s300 bg-white text-xs focus:outline-none" />
+            <button type="button" onclick="askFinancialAi()" class="px-4 py-2 rounded-xl bg-s500 hover-bg-s700 text-white text-xs font-bold">Ask AI</button>
+          </div>
+          <div class="mt-2.5 p-3 rounded-xl bg-white border border-s300/80 text-xs text-slate-800 leading-relaxed">
+            ${state.aiAnswer}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Balance Sheet -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <h3 class="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2.5 mb-3">Balance Sheet</h3>
+            <div class="space-y-3 text-xs">
+              <div>
+                <div class="font-bold text-slate-500 uppercase text-[11px] mb-1">Assets</div>
+                ${assets.map(a => `<div class="flex justify-between py-1"><span>${a.code} ${a.name}</span><span class="font-semibold">$${a.balance.toFixed(2)}</span></div>`).join('')}
+                <div class="flex justify-between py-1.5 border-t border-slate-200 font-extrabold text-slate-900"><span>Total Assets</span><span>$${totalAssets.toFixed(2)}</span></div>
+              </div>
+              <div>
+                <div class="font-bold text-slate-500 uppercase text-[11px] mb-1">Liabilities &amp; Equity</div>
+                ${liabilities.map(a => `<div class="flex justify-between py-1"><span>${a.code} ${a.name}</span><span class="font-semibold">$${a.balance.toFixed(2)}</span></div>`).join('')}
+                ${equity.map(a => `<div class="flex justify-between py-1"><span>${a.code} ${a.name}</span><span class="font-semibold">$${a.balance.toFixed(2)}</span></div>`).join('')}
+                <div class="flex justify-between py-1 text-emerald-700 font-semibold"><span>Current Period Net Income</span><span>$${netIncome.toFixed(2)}</span></div>
+                <div class="flex justify-between py-1.5 border-t border-slate-200 font-extrabold text-slate-900"><span>Total Liabilities &amp; Equity</span><span>$${(totalLiab + totalEq + netIncome).toFixed(2)}</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profit & Loss Statement -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <h3 class="font-extrabold text-slate-900 text-sm border-b border-slate-100 pb-2.5 mb-3">Profit &amp; Loss (Income Statement)</h3>
+            <div class="space-y-3 text-xs">
+              <div>
+                <div class="font-bold text-slate-500 uppercase text-[11px] mb-1">Revenue</div>
+                ${revenues.map(a => `<div class="flex justify-between py-1"><span>${a.code} ${a.name}</span><span class="font-semibold">$${a.balance.toFixed(2)}</span></div>`).join('')}
+                <div class="flex justify-between py-1.5 border-t border-slate-200 font-bold"><span>Total Revenue</span><span>$${totalRev.toFixed(2)}</span></div>
+              </div>
+              <div>
+                <div class="font-bold text-slate-500 uppercase text-[11px] mb-1">Expenses</div>
+                ${expenses.map(a => `<div class="flex justify-between py-1"><span>${a.code} ${a.name}</span><span class="font-semibold">$${a.balance.toFixed(2)}</span></div>`).join('')}
+                <div class="flex justify-between py-1.5 border-t border-slate-200 font-bold"><span>Total Expenses</span><span>$${totalExp.toFixed(2)}</span></div>
+              </div>
+              <div class="p-3 rounded-xl bg-s100 text-s900 flex justify-between items-center font-extrabold text-sm">
+                <span>Net Operating Income</span>
+                <span>$${netIncome.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Tab 6: Inline Editable Chart of Accounts
+    function updateCoaField(idx, field, value) {
+      if (!state.coa[idx]) return;
+      if (field === 'balance') {
+        const parsed = parseFloat(value);
+        state.coa[idx].balance = isNaN(parsed) ? 0 : Number(parsed.toFixed(2));
+      } else {
+        state.coa[idx][field] = value;
+      }
+    }
+
+    function addCoaAccount() {
+      state.coa.push({
+        code: String(6200 + state.coa.length * 10),
+        name: 'New Custom Ledger Account',
+        type: 'Expense',
+        balance: 0.00
+      });
+      renderCurrentTab();
+    }
+
+    function renderCoaPage() {
+      return `
+        ${renderPageHeaderBanner('Editable Chart of Accounts', 'Edit Code, Account Name, Type, or Balance ($) inline — changes sync automatically to BS & P&L')}
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold text-slate-600">Inline Ledger Editor (${state.coa.length} Accounts)</span>
+            <button type="button" onclick="addCoaAccount()" class="px-3 py-1.5 rounded-lg bg-s500 hover-bg-s700 text-white text-xs font-bold">+ Add Account</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-slate-100 text-slate-600 uppercase text-[11px]">
+                <tr>
+                  <th class="p-2.5 w-28">Code</th>
+                  <th class="p-2.5">Account Name</th>
+                  <th class="p-2.5 w-36">Account Type</th>
+                  <th class="p-2.5 w-36 text-right">Balance ($)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                ${state.coa.map((acct, idx) => `
+                  <tr>
+                    <td class="p-2">
+                      <input type="text" value="${acct.code}" onchange="updateCoaField(${idx}, 'code', this.value)" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-mono font-bold text-slate-800" />
+                    </td>
+                    <td class="p-2">
+                      <input type="text" value="${acct.name}" onchange="updateCoaField(${idx}, 'name', this.value)" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-semibold text-slate-900" />
+                    </td>
+                    <td class="p-2">
+                      <select onchange="updateCoaField(${idx}, 'type', this.value)" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 font-semibold text-slate-800 bg-white">
+                        ${['Asset', 'Liability', 'Equity', 'Revenue', 'Expense'].map(t => `<option value="${t}" ${acct.type === t ? 'selected' : ''}>${t}</option>`).join('')}
+                      </select>
+                    </td>
+                    <td class="p-2">
+                      <input type="number" step="0.01" value="${acct.balance.toFixed(2)}" onchange="updateCoaField(${idx}, 'balance', this.value)" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-right font-mono font-bold text-slate-900" />
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // Tab 7: Double-Entry Audit Log
+    function renderAuditPage() {
+      return `
+        ${renderPageHeaderBanner('Double-Entry General Ledger Audit Log', 'Every storefront order and restock posts balanced Debits = Credits')}
+        <div class="space-y-3">
+          ${state.auditLog.map(entry => {
+            const totalDr = entry.lines.reduce((s, l) => s + l.debit, 0);
+            const totalCr = entry.lines.reduce((s, l) => s + l.credit, 0);
+            return `
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs text-xs">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
+                  <div>
+                    <span class="font-mono font-extrabold text-s700 mr-2">${entry.id}</span>
+                    <span class="font-bold text-slate-900">${entry.memo}</span>
+                  </div>
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Balanced ($${totalDr.toFixed(2)} = $${totalCr.toFixed(2)})</span>
+                </div>
+                <table class="w-full mt-2 text-left">
+                  <thead>
+                    <tr class="text-[11px] text-slate-400">
+                      <th class="py-1">Account</th>
+                      <th class="py-1 text-right">Debit</th>
+                      <th class="py-1 text-right">Credit</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    ${entry.lines.map(l => `
+                      <tr>
+                        <td class="py-1 font-medium text-slate-800">${l.account}</td>
+                        <td class="py-1 text-right font-mono">${l.debit > 0 ? '$' + l.debit.toFixed(2) : '—'}</td>
+                        <td class="py-1 text-right font-mono">${l.credit > 0 ? '$' + l.credit.toFixed(2) : '—'}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderCurrentTab() {
+      const main = document.getElementById('workspace-main');
+      if (!main) return;
+      if (state.activeTab === 'storefront') main.innerHTML = renderStorefrontPage();
+      else if (state.activeTab === 'admin') main.innerHTML = renderAdminPage();
+      else if (state.activeTab === 'inventory') main.innerHTML = renderInventoryPage();
+      else if (state.activeTab === 'charts') {
+        main.innerHTML = renderChartsPage();
+        requestAnimationFrame(mountChartsOnCanvas);
+      }
+      else if (state.activeTab === 'statements') main.innerHTML = renderStatementsPage();
+      else if (state.activeTab === 'coa') main.innerHTML = renderCoaPage();
+      else if (state.activeTab === 'audit') main.innerHTML = renderAuditPage();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      switchBusinessPreset('roasters');
+    });
+  </scr` + `ipt>
+</body>
+</html>
+  </script>
+
+  <!-- Outer Page Controller Script (Never-Blank Demo Hydration + Fullscreen + Insights Tabs) -->
+  <script>
+    let cachedDemoHtml = '';
+
+    function getEmbeddedStudioHtml() {
+      if (cachedDemoHtml) return cachedDemoHtml;
+      const sourceEl = document.getElementById('embedded-studio-source');
+      if (!sourceEl) return '';
+      // Reconstruct split closing script tags cleanly
+      cachedDemoHtml = sourceEl.textContent.replace(/<\/scr`\s*\+\s*`ipt>/g, '</scr' + 'ipt>');
+      return cachedDemoHtml;
+    }
+
+    function hydrateEmbeddedDemo(forceReload) {
+      const iframe = document.getElementById('mf-demo-iframe');
+      if (!iframe) return;
+      const html = getEmbeddedStudioHtml();
+      if (!html) return;
+      if (forceReload || !iframe.getAttribute('data-hydrated')) {
+        iframe.srcdoc = html;
+        iframe.setAttribute('data-hydrated', 'true');
+      }
+    }
+
+    function openDemoFrame() {
+      hydrateEmbeddedDemo(false);
+      const modal = document.getElementById('studio-fullscreen-modal');
+      const host = document.getElementById('modal-iframe-host');
+      if (!modal || !host) return;
+
+      // Ensure modal always has a live, non-blank iframe
+      let modalIframe = document.getElementById('mf-modal-iframe');
+      if (!modalIframe) {
+        modalIframe = document.createElement('iframe');
+        modalIframe.id = 'mf-modal-iframe';
+        modalIframe.title = 'MF Enterprises Full-Screen Studio';
+        modalIframe.className = 'w-full h-full border-0 bg-white';
+        host.appendChild(modalIframe);
+      }
+      if (!modalIframe.getAttribute('data-hydrated')) {
+        modalIframe.srcdoc = getEmbeddedStudioHtml();
+        modalIframe.setAttribute('data-hydrated', 'true');
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.classList.add('studio-modal-open');
+    }
+
+    function closeDemoModal() {
+      const modal = document.getElementById('studio-fullscreen-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.classList.remove('studio-modal-open');
+    }
+
+    function toggleDemoFullscreen() {
+      openDemoFrame();
+    }
+
+    function switchInsightTab(tabName) {
+      ['margin', 'insights', 'predictions'].forEach(t => {
+        const btn = document.getElementById('insight-tab-' + t);
+        const panel = document.getElementById('insight-panel-' + t);
+        if (!btn || !panel) return;
+        if (t === tabName) {
+          btn.classList.add('bg-white', 'text-slate-900', 'font-bold', 'shadow-sm');
+          btn.classList.remove('text-slate-600', 'font-semibold');
+          panel.classList.remove('hidden');
+        } else {
+          btn.classList.remove('bg-white', 'text-slate-900', 'font-bold', 'shadow-sm');
+          btn.classList.add('text-slate-600', 'font-semibold');
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    // Sync custom logo uploaded inside the studio iframe to the outer landing header
+    window.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'MF_LOGO_UPDATED') {
+        const img = document.getElementById('outer-header-logo-img');
+        const fallback = document.getElementById('outer-header-logo-fallback');
+        if (event.data.dataUrl) {
+          img.src = event.data.dataUrl;
+          img.classList.remove('hidden');
+          fallback.classList.add('hidden');
+        } else {
+          img.removeAttribute('src');
+          img.classList.add('hidden');
+          fallback.classList.remove('hidden');
+        }
+      }
+    });
+
+    // Immediately pre-hydrate the live demo iframe on DOMContentLoaded so it is never blank
+    window.addEventListener('DOMContentLoaded', function() {
+      hydrateEmbeddedDemo(true);
+    });
+  </script>
+</body>
+</html>
