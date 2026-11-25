@@ -523,6 +523,8 @@
         <button type="button" onclick="setActiveTab('coa')" data-tab="coa" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">6. Chart of Accounts</button>
         <button type="button" onclick="setActiveTab('audit')" data-tab="audit" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">7. Double-Entry Audit Log</button>
         <button type="button" onclick="setActiveTab('vendor')" data-tab="vendor" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">8. Vendor</button>
+        <button type="button" onclick="setActiveTab('apar')" data-tab="apar" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">9. A/P &amp; A/R Reports</button>
+        <button type="button" onclick="setActiveTab('rules')" data-tab="rules" class="nav-tab px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-800 transition whitespace-nowrap">10. Receipts &amp; Rules</button>
       </nav>
     </header>
 
@@ -950,7 +952,20 @@
       storyAiAnswer: 'Ask a question about sales velocity, margin by SKU, stock/inventory, or revenue vs. profit—I will update the chart axes and chart type (bar, line, or circle/doughnut) to answer directly.',
       aiAnswer: 'Ask a financial question about revenue, net profit, cash position, or margins based on your live Balance Sheet & P&L.',
       expandedAcctTypes: { Asset: true, Liability: true, Equity: true, Revenue: true, Expense: true },
-      drilldownAccount: null
+      drilldownAccount: null,
+      aparReportType: 'ar-aging',
+      aparStartDate: '2026-11-01',
+      aparEndDate: '2026-11-30',
+      aparAsOfDate: '2026-11-25',
+      aparPartyFilter: 'all',
+      transactionRules: [
+        { id: 'RULE-001', merchant: 'AT&T', match: 'contains', category: 'Telephone & Internet', action: 'suggest', enabled: true },
+        { id: 'RULE-002', merchant: 'Evergy', match: 'contains', category: 'Utilities', action: 'suggest', enabled: true },
+        { id: 'RULE-003', merchant: 'Adobe', match: 'contains', category: 'Software Subscriptions', action: 'suggest', enabled: true },
+        { id: 'RULE-004', merchant: 'Amazon', match: 'contains', category: 'Review Required', action: 'review', enabled: true }
+      ],
+      receiptDraft: null,
+      receiptHistory: []
     };
 
     // Color Scale Math Utilities (100, 300, 500, 700, 900)
@@ -1833,15 +1848,16 @@
       if (!parsed) return;
 
       state.sheetSyncStatus = 'syncing';
-      state.sheetSyncMessage = 'Syncing Products, Transactions, Customers & Chart of Accounts from Google Sheets...';
+      state.sheetSyncMessage = 'Syncing Products, Transactions, Customers, Vendors & Chart of Accounts from Google Sheets...';
       renderCurrentTab();
 
       try {
-        const [prodRows, txnRows, coaRows, custRows, defaultRows] = await Promise.all([
+        const [prodRows, txnRows, coaRows, custRows, vendorRows, defaultRows] = await Promise.all([
           fetchSheetTabRows(parsed.sheetId, 'Products', parsed.gid).catch(() => []),
           fetchSheetTabRows(parsed.sheetId, 'Transactions', parsed.gid).catch(() => []),
           fetchSheetTabRows(parsed.sheetId, 'Chart_of_Accounts', parsed.gid).catch(() => []),
           fetchSheetTabRows(parsed.sheetId, 'Customers', parsed.gid).catch(() => []),
+          fetchSheetTabRows(parsed.sheetId, 'Vendors', parsed.gid).catch(() => []),
           fetchSheetTabRows(parsed.sheetId, null, parsed.gid).catch(() => [])
         ]);
 
@@ -1894,6 +1910,57 @@
         if (syncedProducts.length > 0) {
           state.products = syncedProducts;
           state.cart = [{ sku: syncedProducts[0].sku, qty: 1 }];
+        }
+
+        // 1B. Parse Vendors tab and connect it to Vendor Management
+        const syncedVendors = [];
+        if (vendorRows.length >= 2) {
+          const vHeaders = vendorRows[0].map(h => h.toLowerCase());
+          const vendorIdIdx = findCol(vHeaders, ['vendor_id', 'vendor id', 'id']);
+          const vendorNameIdx = findCol(vHeaders, ['vendor_name', 'name', 'vendor', 'company']);
+          const contactIdx = findCol(vHeaders, ['contact', 'contact_name', 'representative']);
+          const emailIdx = findCol(vHeaders, ['email', 'vendor_email']);
+          const categoryIdx = findCol(vHeaders, ['category', 'vendor_category', 'type']);
+          const termsIdx = findCol(vHeaders, ['terms', 'payment_terms', 'payment terms']);
+          const leadTimeIdx = findCol(vHeaders, ['lead_time_days', 'lead time days', 'lead_time', 'lead time']);
+          const balanceIdx = findCol(vHeaders, ['open_balance', 'open balance', 'balance']);
+          const onTimeIdx = findCol(vHeaders, ['on_time_rate', 'on time rate', 'on_time', 'on time']);
+          const statusIdx = findCol(vHeaders, ['status', 'vendor_status']);
+
+          vendorRows.slice(1).forEach((r, i) => {
+            const vendorName = vendorNameIdx !== -1 ? String(r[vendorNameIdx] || '').trim() : '';
+            if (!vendorName) return;
+            const leadTime = leadTimeIdx !== -1 ? parseMoney(r[leadTimeIdx]) : 5;
+            const onTime = onTimeIdx !== -1 ? parseMoney(r[onTimeIdx]) : 0;
+            syncedVendors.push({
+              id: vendorIdIdx !== -1 && r[vendorIdIdx] ? String(r[vendorIdIdx]).trim() : ('VND-' + String(i + 1).padStart(3, '0')),
+              name: vendorName,
+              contact: contactIdx !== -1 ? String(r[contactIdx] || '').trim() : '',
+              email: emailIdx !== -1 ? String(r[emailIdx] || '').trim() : '',
+              category: categoryIdx !== -1 && r[categoryIdx] ? String(r[categoryIdx]).trim() : 'General Supplies',
+              terms: termsIdx !== -1 && r[termsIdx] ? String(r[termsIdx]).trim() : 'Net 30',
+              leadTimeDays: Math.max(0, Math.round(leadTime)),
+              openBalance: balanceIdx !== -1 ? parseMoney(r[balanceIdx]) : 0,
+              onTimeRate: Math.max(0, Math.min(100, onTime)),
+              status: statusIdx !== -1 && r[statusIdx] ? String(r[statusIdx]).trim() : 'Active'
+            });
+          });
+        }
+
+        if (syncedVendors.length > 0) {
+          ensureVendorState();
+          state.vendorsByPreset[state.presetKey] = syncedVendors;
+
+          // Keep preferred-vendor assignments valid after replacing the vendor list.
+          const validVendorIds = new Set(syncedVendors.map(v => v.id));
+          const preferredMap = state.preferredVendorBySku[state.presetKey] || {};
+          Object.keys(preferredMap).forEach(sku => {
+            if (!validVendorIds.has(preferredMap[sku])) delete preferredMap[sku];
+          });
+          (state.products || []).forEach((product, idx) => {
+            if (!preferredMap[product.sku]) preferredMap[product.sku] = syncedVendors[idx % syncedVendors.length].id;
+          });
+          state.preferredVendorBySku[state.presetKey] = preferredMap;
         }
 
         // Map Customers by ID for readable invoice names
@@ -2072,13 +2139,14 @@
         const txnDataRowCount = txnRows.length > 1 ? txnRows.length - 1 : 0;
         const custDataRowCount = custRows.length > 1 ? custRows.length - 1 : 0;
         const coaDataRowCount = coaRows.length > 1 ? coaRows.length - 1 : 0;
-        const totalSyncedRows = prodDataRowCount + txnDataRowCount + custDataRowCount + coaDataRowCount;
+        const vendorDataRowCount = vendorRows.length > 1 ? vendorRows.length - 1 : 0;
+        const totalSyncedRows = prodDataRowCount + txnDataRowCount + custDataRowCount + coaDataRowCount + vendorDataRowCount;
 
         const mappedProductsCount = syncedProducts.length;
         const mappedInvoicesCount = syncedInvoices.length > 0 ? syncedInvoices.length : txnDataRowCount;
 
         state.sheetSyncStatus = 'synced';
-        state.sheetSyncMessage = `Synced ${totalSyncedRows.toLocaleString()} rows (${mappedProductsCount} products, ${mappedInvoicesCount.toLocaleString()} invoices) across all tabs.`;
+        state.sheetSyncMessage = `Synced ${totalSyncedRows.toLocaleString()} rows (${mappedProductsCount} products, ${mappedInvoicesCount.toLocaleString()} invoices, ${syncedVendors.length} vendors) across all tabs.`;
         renderCurrentTab();
       } catch (err) {
         state.sheetSyncStatus = 'error';
@@ -2950,6 +3018,35 @@
             </div>
           </div>
         `;
+      } else if (subTab === "statements") {
+        const fromDate = state.inventoryStatementFrom || '';
+        const toDate = state.inventoryStatementTo || '';
+        const statementRows = logs.filter(l => (!fromDate || String(l.date || '') >= fromDate) && (!toDate || String(l.date || '') <= toDate));
+        const statementUnitsIn = statementRows.filter(l => /add|restock|receive/i.test(l.action)).reduce((n,l) => n + Number(l.qty || 0), 0);
+        const statementUnitsOut = statementRows.filter(l => /sale|donation|expired|remove/i.test(l.action)).reduce((n,l) => n + Number(l.qty || 0), 0);
+        const statementValueIn = statementRows.filter(l => /add|restock|receive/i.test(l.action)).reduce((n,l) => n + Number(l.qty || 0) * Number(l.unitCost || 0), 0);
+        const statementValueOut = statementRows.filter(l => /sale|donation|expired|remove/i.test(l.action)).reduce((n,l) => n + Number(l.qty || 0) * Number(l.unitCost || 0), 0);
+        subTabBodyHtml = `
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+            <div class="p-4 border-b border-slate-100 flex flex-wrap items-end justify-between gap-3">
+              <div><h3 class="font-extrabold text-slate-900 text-sm">Inventory Activity Statement</h3><p class="text-[11px] text-slate-500">Dated stock receipts, sales, donations, expirations, quantities, and FIFO cost basis.</p></div>
+              <div class="flex flex-wrap items-end gap-2">
+                <label class="text-[11px] font-semibold text-slate-600">From<input type="date" value="${fromDate}" onchange="state.inventoryStatementFrom=this.value;renderCurrentTab()" class="block mt-1 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs"></label>
+                <label class="text-[11px] font-semibold text-slate-600">Through<input type="date" value="${toDate}" onchange="state.inventoryStatementTo=this.value;renderCurrentTab()" class="block mt-1 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs"></label>
+                <button type="button" onclick="state.inventoryStatementFrom='';state.inventoryStatementTo='';renderCurrentTab()" class="px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold">Clear dates</button>
+                <button type="button" onclick="window.print()" class="px-3 py-2 rounded-lg bg-slate-900 text-white text-xs font-bold">Print</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 p-4 bg-slate-50 border-b border-slate-100">
+              <div><div class="text-[10px] uppercase font-bold text-slate-500">Activity lines</div><div class="text-lg font-extrabold text-slate-900">${statementRows.length}</div></div>
+              <div><div class="text-[10px] uppercase font-bold text-slate-500">Units received</div><div class="text-lg font-extrabold text-emerald-700">${statementUnitsIn}</div></div>
+              <div><div class="text-[10px] uppercase font-bold text-slate-500">Units removed</div><div class="text-lg font-extrabold text-slate-900">${statementUnitsOut}</div></div>
+              <div><div class="text-[10px] uppercase font-bold text-slate-500">Net unit movement</div><div class="text-lg font-extrabold text-slate-900">${statementUnitsIn - statementUnitsOut}</div></div>
+            </div>
+            <div class="overflow-x-auto"><table class="w-full text-left text-xs"><thead class="bg-slate-100 text-slate-600 uppercase text-[10px]"><tr><th class="p-3">Date</th><th class="p-3">Reference</th><th class="p-3">SKU / Product</th><th class="p-3">Activity</th><th class="p-3 text-right">Qty</th><th class="p-3 text-right">Unit FIFO Cost</th><th class="p-3 text-right">Extended FIFO Cost</th><th class="p-3">Recipient / Notes</th></tr></thead><tbody class="divide-y divide-slate-100">${statementRows.length ? statementRows.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).map(l=>{const detail=fifoData.logFifoDetails[l.logId]||{};const unit=Number(detail.effectiveUnitCost ?? l.unitCost ?? 0);return `<tr><td class="p-3 whitespace-nowrap">${l.date || '—'}</td><td class="p-3 font-mono">${l.receiptRef || l.logId}</td><td class="p-3"><strong>${l.sku || ''}</strong><div class="text-slate-500">${l.productName || ''}</div></td><td class="p-3">${l.action || ''}</td><td class="p-3 text-right font-mono">${Number(l.qty || 0)}</td><td class="p-3 text-right font-mono">${moneyFmt(unit)}</td><td class="p-3 text-right font-mono font-bold">${moneyFmt(unit * Number(l.qty || 0))}</td><td class="p-3">${l.recipient || ''}<div class="text-slate-500">${l.notes || ''}</div></td></tr>`}).join('') : '<tr><td colspan="8" class="p-6 text-center text-slate-500">No inventory activity matches this date range.</td></tr>'}</tbody><tfoot class="bg-slate-50 border-t"><tr><td colspan="4" class="p-3 font-bold">Filtered activity totals</td><td class="p-3 text-right font-bold">${statementUnitsIn - statementUnitsOut} net units</td><td></td><td class="p-3 text-right font-bold">${moneyFmt(statementValueIn - statementValueOut)}</td><td class="p-3 text-[10px] text-slate-500">Net FIFO movement estimate</td></tr></tfoot></table></div>
+          </div>
+          <div class="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-950"><strong>Accounting note:</strong> This activity statement summarizes recorded inventory movements. The ending inventory valuation should be reconciled to FIFO lot layers; this movement summary is not a substitute for a perpetual inventory valuation report.</div>
+        `;
       } else if (subTab === "donations") {
         // Recipient breakdown summary
         const byRecipient = {};
@@ -3145,6 +3242,7 @@
             <button type="button" onclick="setFifoSubTab('summary')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${subTab === "summary" ? "bg-s500 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}">FIFO Summary</button>
             <button type="button" onclick="setFifoSubTab('lots')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${subTab === "lots" ? "bg-s500 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}">FIFO Batch Lots (${fifoData.allLots.length})</button>
             <button type="button" onclick="setFifoSubTab('donations')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${subTab === "donations" ? "bg-emerald-700 text-white" : "bg-emerald-50 text-emerald-900 border border-emerald-200 hover:bg-emerald-100"}">Donation Tracker (${donationLogs.length})</button>
+            <button type="button" onclick="setFifoSubTab('statements')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${subTab === "statements" ? "bg-s500 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}">Inventory Statements</button>
             <button type="button" onclick="setFifoSubTab('log')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${subTab === "log" ? "bg-s500 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}">FIFO Audit Log (${logs.length})</button>
           </div>
 
@@ -5799,6 +5897,9 @@
           subtotal,
           tax,
           grandTotal,
+          invoiceDate: ['2026-11-25', '2026-11-24', '2026-11-23'][sampleOrders.indexOf(o)] || '2026-11-23',
+          dueDate: ['2026-12-25', '2026-12-24', '2026-12-23'][sampleOrders.indexOf(o)] || '2026-12-23',
+          amountPaid: 0,
           totalCogs: o.cogs,
           status: o.status
         };
@@ -5967,6 +6068,169 @@
       ];
     }
 
+    // =======================================================================
+    // A/P & A/R REPORTING CENTER — date-range statements + as-of aging
+    // Educational notes are contextual; report values are based on demo records.
+    // =======================================================================
+    function moneyFmt(value) {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(value || 0));
+    }
+    function safeDate(value) {
+      if (!value) return null;
+      const d = new Date(String(value) + 'T12:00:00');
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+    function daysBetween(later, earlier) {
+      return Math.floor((Date.UTC(later.getFullYear(), later.getMonth(), later.getDate()) - Date.UTC(earlier.getFullYear(), earlier.getMonth(), earlier.getDate())) / 86400000);
+    }
+    function getAparRecords(kind) {
+      if (kind === 'ap') {
+        return (getCurrentVendorBills() || []).map(b => {
+          const paid = String(b.status || '').toLowerCase() === 'paid' ? Number(b.amount || 0) : Number(b.amountPaid || 0);
+          return { id: b.billId, reference: b.billNumber || b.billId, party: b.vendorName || 'Vendor', date: b.billDate, dueDate: b.dueDate, amount: Number(b.amount || 0), paid, balance: Math.max(0, Number(b.amount || 0) - paid), notes: b.notes || '' };
+        });
+      }
+      return (state.invoices || []).map(inv => {
+        const total = Number(inv.grandTotal || inv.total || inv.amount || 0);
+        const paid = Number(inv.amountPaid || 0);
+        return { id: inv.id, reference: inv.id, party: inv.customerName || 'Customer', date: inv.invoiceDate || inv.date, dueDate: inv.dueDate, amount: total, paid, balance: Math.max(0, total - paid), notes: inv.status || '' };
+      });
+    }
+    function getAgingBucket(daysPastDue) {
+      if (daysPastDue <= 0) return 'Current';
+      if (daysPastDue <= 30) return '1–30';
+      if (daysPastDue <= 60) return '31–60';
+      if (daysPastDue <= 90) return '61–90';
+      return '90+';
+    }
+    function renderAparPage() {
+      const type = state.aparReportType || 'ar-aging';
+      const isAp = type.startsWith('ap-');
+      const isAging = type.endsWith('aging');
+      const kind = isAp ? 'ap' : 'ar';
+      const title = `${isAp ? 'Accounts Payable' : 'Accounts Receivable'} ${isAging ? 'Aging' : 'Statement'}`;
+      const records = getAparRecords(kind);
+      const start = safeDate(state.aparStartDate);
+      const end = safeDate(state.aparEndDate);
+      const asOf = safeDate(state.aparAsOfDate) || new Date();
+      const partyNames = [...new Set(records.map(r => r.party))].sort();
+      const filtered = records.filter(r => state.aparPartyFilter === 'all' || r.party === state.aparPartyFilter);
+      const rows = isAging
+        ? filtered.filter(r => r.balance > 0 && safeDate(r.date) && safeDate(r.date) <= asOf).map(r => {
+            const due = safeDate(r.dueDate);
+            const days = due ? Math.max(0, daysBetween(asOf, due)) : 0;
+            return { ...r, daysPastDue: days, bucket: getAgingBucket(days) };
+          })
+        : filtered.filter(r => { const d = safeDate(r.date); return d && (!start || d >= start) && (!end || d <= end); });
+      const buckets = ['Current', '1–30', '31–60', '61–90', '90+'];
+      const total = rows.reduce((sum, r) => sum + (isAging ? r.balance : r.amount), 0);
+      const tableRows = rows.map(r => `<tr class="border-t border-slate-100"><td class="p-3 font-mono text-xs">${r.reference}</td><td class="p-3">${r.party}</td><td class="p-3 font-mono text-xs">${r.date || '—'}</td><td class="p-3 font-mono text-xs">${r.dueDate || '—'}</td>${isAging ? `<td class="p-3 text-right">${r.daysPastDue === 0 ? 'Current' : r.daysPastDue + ' days'}</td><td class="p-3">${r.bucket}</td><td class="p-3 text-right font-semibold">${moneyFmt(r.balance)}</td>` : `<td class="p-3 text-right">${moneyFmt(r.amount)}</td><td class="p-3 text-right">${moneyFmt(r.paid)}</td><td class="p-3 text-right font-semibold">${moneyFmt(r.balance)}</td>`}</tr>`).join('');
+      const summary = isAging ? buckets.map(b => `<div class="rounded-xl bg-slate-50 border border-slate-200 p-3"><div class="text-xs text-slate-500">${b === 'Current' ? 'Current' : b + ' days'}</div><div class="text-lg font-extrabold text-slate-900">${moneyFmt(rows.filter(r => r.bucket === b).reduce((s,r) => s+r.balance,0))}</div></div>`).join('') : '';
+      return `
+        ${renderPageHeaderBanner('A/P & A/R Reporting Center', 'Customer and vendor statements, aging snapshots, and accounting guidance')}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+          <section class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h2 class="font-extrabold text-slate-900 text-lg">${title}</h2><p class="text-xs text-slate-500">${isAging ? 'Outstanding balances as of a selected date' : 'Transactions recorded within the selected date range'}</p></div><button type="button" onclick="window.print()" class="px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold">Print report</button></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 mb-4">
+              <label class="text-xs font-semibold text-slate-600">Report type<select onchange="state.aparReportType=this.value;renderCurrentTab()" class="mt-1 w-full rounded-lg border border-slate-300 p-2 text-sm"><option value="ar-statement" ${type==='ar-statement'?'selected':''}>A/R Statement</option><option value="ar-aging" ${type==='ar-aging'?'selected':''}>A/R Aging</option><option value="ap-statement" ${type==='ap-statement'?'selected':''}>A/P Statement</option><option value="ap-aging" ${type==='ap-aging'?'selected':''}>A/P Aging</option></select></label>
+              ${isAging ? `<label class="text-xs font-semibold text-slate-600">Aging as of date<input type="date" value="${state.aparAsOfDate}" onchange="state.aparAsOfDate=this.value;renderCurrentTab()" class="mt-1 w-full rounded-lg border border-slate-300 p-2 text-sm"></label>` : `<label class="text-xs font-semibold text-slate-600">From date<input type="date" value="${state.aparStartDate}" onchange="state.aparStartDate=this.value;renderCurrentTab()" class="mt-1 w-full rounded-lg border border-slate-300 p-2 text-sm"></label><label class="text-xs font-semibold text-slate-600">Through date<input type="date" value="${state.aparEndDate}" onchange="state.aparEndDate=this.value;renderCurrentTab()" class="mt-1 w-full rounded-lg border border-slate-300 p-2 text-sm"></label>`}
+              <label class="text-xs font-semibold text-slate-600">${isAp ? 'Vendor' : 'Customer'}<select onchange="state.aparPartyFilter=this.value;renderCurrentTab()" class="mt-1 w-full rounded-lg border border-slate-300 p-2 text-sm"><option value="all">All ${isAp?'vendors':'customers'}</option>${partyNames.map(n=>`<option value="${String(n).replace(/"/g,'&quot;')}" ${state.aparPartyFilter===n?'selected':''}>${n}</option>`).join('')}</select></label>
+            </div>
+            <div class="flex items-center justify-between rounded-xl bg-slate-50 border border-slate-200 p-3 mb-4"><div><div class="text-xs text-slate-500">${isAging?'Total outstanding':'Transaction total'}</div><div class="text-2xl font-extrabold text-slate-900">${moneyFmt(total)}</div></div><div class="text-right text-xs text-slate-500">${rows.length} record(s)<br>${isAging?'Snapshot report':'Date-range report'}</div></div>
+            ${isAging ? `<div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4">${summary}</div>` : ''}
+            <div class="overflow-x-auto"><table class="w-full text-xs text-left"><thead class="bg-slate-50 text-slate-600"><tr><th class="p-3">Reference</th><th class="p-3">${isAp?'Vendor':'Customer'}</th><th class="p-3">Date</th><th class="p-3">Due date</th>${isAging?'<th class="p-3 text-right">Past due</th><th class="p-3">Bucket</th><th class="p-3 text-right">Open balance</th>':'<th class="p-3 text-right">Amount</th><th class="p-3 text-right">Paid</th><th class="p-3 text-right">Open balance</th>'}</tr></thead><tbody>${tableRows || `<tr><td colspan="8" class="p-6 text-center text-slate-500">No records match these filters. Check the selected dates or party.</td></tr>`}</tbody></table></div>
+            <p class="text-[11px] text-slate-500 mt-3">Demo note: historical aging requires dated payment and credit records. This preview uses available invoice/bill data and does not yet reconstruct past payment activity.</p>
+          </section>
+          <aside class="space-y-4">
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4"><div class="font-extrabold text-amber-950 text-sm mb-2">Accounting best practice</div><p class="text-xs leading-relaxed text-amber-950">Statements use a beginning and ending transaction date. Aging reports are snapshots as of one date and group unpaid balances by how far the due date has passed. Payments and credits should reduce the open balance.</p><div class="mt-3 text-[11px] text-amber-900"><strong>Why it matters:</strong> A statement explains activity; an aging report helps prioritize collections or vendor payments.</div></div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-4"><div class="font-extrabold text-slate-900 text-sm mb-2">Learn as you go</div><details class="text-xs border-t border-slate-100 py-2"><summary class="font-bold cursor-pointer">What does Current mean?</summary><p class="mt-2 text-slate-600">The invoice or bill is not past its due date as of the report date.</p></details><details class="text-xs border-t border-slate-100 py-2"><summary class="font-bold cursor-pointer">Why use the due date?</summary><p class="mt-2 text-slate-600">The due date determines when an amount becomes overdue. The invoice date alone does not tell you whether payment is late.</p></details><details class="text-xs border-t border-slate-100 py-2"><summary class="font-bold cursor-pointer">What is a partial payment?</summary><p class="mt-2 text-slate-600">A payment for less than the full invoice or bill. Only the remaining unpaid amount belongs in aging.</p></details></div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-4"><div class="font-extrabold text-slate-900 text-sm mb-2">Ask the accounting coach</div><p class="text-xs text-slate-500 mb-2">Try a guided question about this report.</p><input id="apar-ai-question" class="w-full border border-slate-300 rounded-lg p-2 text-xs" placeholder="e.g. Why is this invoice overdue?"><button onclick="askAccountingCoach()" class="mt-2 w-full rounded-lg bg-slate-900 text-white py-2 text-xs font-bold">Ask question</button><div id="apar-ai-answer" class="hidden mt-3 rounded-lg bg-slate-50 p-3 text-xs text-slate-700"></div><p class="text-[10px] text-slate-400 mt-2">Guided demo answers are built in. Open-ended AI requires connecting an AI service.</p></div>
+          </aside>
+        </div>`;
+    }
+    function askAccountingCoach() {
+      const q = (document.getElementById('apar-ai-question')?.value || '').toLowerCase();
+      let answer = 'A statement shows transactions over a selected period. An aging report is a snapshot of unpaid balances as of one date. Check the due date, remaining balance, and any payments or credits.';
+      if (q.includes('current')) answer = 'Current means the invoice or bill has not passed its due date as of the aging report date.';
+      else if (q.includes('partial')) answer = 'A partial payment reduces the open balance. The aging report should include only the remaining unpaid amount.';
+      else if (q.includes('due date') || q.includes('overdue')) answer = 'An amount becomes overdue after its due date. Aging is calculated from the due date, not simply from the day the invoice was created.';
+      else if (q.includes('historical') || q.includes('past')) answer = 'A true historical aging report reconstructs what was open on the selected date. It needs dated invoices, bills, payments, and credits so later activity is not incorrectly included.';
+      const box = document.getElementById('apar-ai-answer'); if (box) { box.textContent = answer; box.classList.remove('hidden'); }
+    }
+
+    // =======================================================================
+    // RECEIPT INTAKE & USER-DEFINED TRANSACTION CATEGORIZATION RULES
+    // =======================================================================
+    function ruleMatches(rule, merchant) {
+      const a = String(merchant || '').toLowerCase(), b = String(rule.merchant || '').toLowerCase();
+      if (!rule.enabled || !a || !b) return false;
+      return rule.match === 'exact' ? a === b : rule.match === 'starts' ? a.startsWith(b) : a.includes(b);
+    }
+    function suggestReceiptCategory(merchant) {
+      const rule = (state.transactionRules || []).find(r => ruleMatches(r, merchant));
+      return rule ? { category: rule.category, ruleId: rule.id, action: rule.action } : { category: 'Review Required', ruleId: null, action: 'review' };
+    }
+    function handleReceiptUpload(input) {
+      const file = input && input.files && input.files[0]; if (!file) return;
+      state.receiptDraft = { fileName: file.name, merchant: '', amount: '', date: '', notes: '' };
+      renderCurrentTab();
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = typeof reader.result === 'string' ? reader.result : '';
+        const lines = text.split(/\r?\n/).filter(Boolean);
+        if (file.name.toLowerCase().endsWith('.csv') && lines.length > 1) {
+          const cells = lines[1].split(',').map(v => v.replace(/^"|"$/g, '').trim());
+          state.receiptDraft.merchant = cells[0] || '';
+          state.receiptDraft.date = cells[1] || '';
+          state.receiptDraft.amount = (cells[2] || '').replace(/[^0-9.\-]/g, '');
+        }
+        renderCurrentTab();
+      };
+      if (file.name.toLowerCase().endsWith('.csv') || file.type.startsWith('text/')) reader.readAsText(file);
+      else notify('Receipt attached', 'The file is attached to this draft. Enter or verify the receipt details; image/PDF OCR is not connected in this demo.', 'info');
+    }
+    function saveReceiptDraft() {
+      const merchant = (document.getElementById('receipt-merchant')?.value || '').trim();
+      const amount = Number(document.getElementById('receipt-amount')?.value || 0);
+      const date = document.getElementById('receipt-date')?.value || '';
+      const notes = (document.getElementById('receipt-notes')?.value || '').trim();
+      if (!merchant || !(amount > 0)) { notify('More information needed', 'Enter a merchant and a positive amount before saving.', 'warning'); return; }
+      const suggestion = suggestReceiptCategory(merchant);
+      state.receiptHistory = state.receiptHistory || [];
+      state.receiptHistory.unshift({ id: 'REC-' + Date.now(), fileName: state.receiptDraft?.fileName || 'Manual entry', merchant, amount, date, notes, category: suggestion.category, ruleId: suggestion.ruleId, status: suggestion.action === 'suggest' ? 'Pending approval' : 'Review required' });
+      state.receiptDraft = null;
+      notify('Receipt added to review queue', `Suggested category: ${suggestion.category}. Review before posting.`, 'success');
+      renderCurrentTab();
+    }
+    function addTransactionRule() {
+      const merchant = (document.getElementById('rule-merchant')?.value || '').trim();
+      const category = document.getElementById('rule-category')?.value || 'Review Required';
+      const match = document.getElementById('rule-match')?.value || 'contains';
+      if (!merchant) { notify('Merchant is required', 'Enter a merchant or description pattern for this rule.', 'warning'); return; }
+      state.transactionRules = state.transactionRules || [];
+      state.transactionRules.unshift({ id: 'RULE-' + Date.now(), merchant, category, match, action: 'suggest', enabled: true });
+      notify('Rule saved', `Future matching receipts will suggest ${category}.`, 'success');
+      renderCurrentTab();
+    }
+    function toggleTransactionRule(id) {
+      const rule = (state.transactionRules || []).find(r => r.id === id); if (rule) rule.enabled = !rule.enabled;
+      renderCurrentTab();
+    }
+    function renderRulesPage() {
+      const draft = state.receiptDraft || {};
+      const history = state.receiptHistory || [];
+      return `${renderPageHeaderBanner('Receipt Uploads & Transaction Rules', 'Capture supporting documents, suggest categories, and review transactions before posting')}
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4">
+          <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm"><h2 class="font-extrabold text-slate-900">Receipt intake</h2><p class="text-xs text-slate-500 mt-1">Upload a receipt file, verify the extracted details, and review the suggested category.</p><label class="mt-4 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-xl p-6 cursor-pointer hover:border-amber-500"><span class="text-2xl">⇧</span><strong class="text-sm mt-2">Choose receipt file</strong><span class="text-xs text-slate-500">PDF, JPG, PNG, CSV or text</span><input type="file" accept=".pdf,.jpg,.jpeg,.png,.csv,.txt,image/*,application/pdf" onchange="handleReceiptUpload(this)" class="hidden"></label>
+          ${draft.fileName ? `<div class="mt-3 rounded-lg bg-slate-50 border border-slate-200 p-3 text-xs"><strong>Attached:</strong> ${draft.fileName}<div class="text-slate-500 mt-1">Image/PDF text recognition is not connected in this demo; verify the fields below.</div></div>` : ''}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4"><label class="text-xs font-semibold text-slate-600">Merchant<input id="receipt-merchant" value="${draft.merchant || ''}" class="mt-1 w-full border border-slate-300 rounded-lg p-2" placeholder="e.g. AT&amp;T"></label><label class="text-xs font-semibold text-slate-600">Amount<input id="receipt-amount" type="number" min="0" step="0.01" value="${draft.amount || ''}" class="mt-1 w-full border border-slate-300 rounded-lg p-2" placeholder="0.00"></label><label class="text-xs font-semibold text-slate-600">Receipt date<input id="receipt-date" type="date" value="${draft.date || ''}" class="mt-1 w-full border border-slate-300 rounded-lg p-2"></label><label class="text-xs font-semibold text-slate-600">Notes<input id="receipt-notes" value="${draft.notes || ''}" class="mt-1 w-full border border-slate-300 rounded-lg p-2" placeholder="Items or business purpose"></label></div>
+          <button onclick="saveReceiptDraft()" class="mt-4 rounded-lg bg-slate-900 text-white px-4 py-2.5 text-xs font-bold">Save to review queue</button></section>
+          <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm"><h2 class="font-extrabold text-slate-900">Categorization rules</h2><p class="text-xs text-slate-500 mt-1">Create reusable merchant matching rules. Suggestions require review before posting.</p><div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-4"><input id="rule-merchant" class="border border-slate-300 rounded-lg p-2 text-xs" placeholder="Merchant / text"><select id="rule-match" class="border border-slate-300 rounded-lg p-2 text-xs"><option value="contains">Contains</option><option value="exact">Exact match</option><option value="starts">Starts with</option></select><select id="rule-category" class="border border-slate-300 rounded-lg p-2 text-xs"><option>Office Supplies</option><option>Telephone &amp; Internet</option><option>Utilities</option><option>Vehicle Expense</option><option>Software Subscriptions</option><option>Meals</option><option>Inventory / COGS</option><option>Review Required</option></select></div><button onclick="addTransactionRule()" class="mt-2 rounded-lg bg-amber-700 text-white px-4 py-2 text-xs font-bold">+ Add rule</button><div class="mt-4 space-y-2">${(state.transactionRules || []).map(r=>`<div class="flex items-center justify-between gap-3 rounded-lg border border-slate-200 p-3"><div class="min-w-0"><div class="text-xs font-bold text-slate-800">${r.merchant} <span class="font-normal text-slate-400">(${r.match})</span></div><div class="text-[11px] text-slate-500">Suggests: ${r.category}</div></div><button onclick="toggleTransactionRule('${r.id}')" class="shrink-0 rounded-lg border px-2.5 py-1.5 text-[11px] font-bold ${r.enabled?'text-emerald-700 border-emerald-200':'text-slate-500 border-slate-200'}">${r.enabled?'Enabled':'Disabled'}</button></div>`).join('')}</div></section>
+        </div>
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 mt-4 shadow-sm"><div class="flex items-center justify-between gap-3"><div><h2 class="font-extrabold text-slate-900">Receipt review queue</h2><p class="text-xs text-slate-500">Suggested categories are not posted automatically.</p></div><span class="text-xs font-bold text-slate-500">${history.length} item(s)</span></div><div class="overflow-x-auto mt-3"><table class="w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="p-3">Receipt</th><th class="p-3">Merchant</th><th class="p-3">Date</th><th class="p-3 text-right">Amount</th><th class="p-3">Suggested category</th><th class="p-3">Status</th></tr></thead><tbody>${history.map(r=>`<tr class="border-t border-slate-100"><td class="p-3">${r.fileName}</td><td class="p-3">${r.merchant}</td><td class="p-3">${r.date || '—'}</td><td class="p-3 text-right">${moneyFmt(r.amount)}</td><td class="p-3">${r.category}</td><td class="p-3">${r.status}</td></tr>`).join('') || '<tr><td colspan="6" class="p-5 text-center text-slate-500">No receipts awaiting review yet.</td></tr>'}</tbody></table></div></section>
+        <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-950"><strong>Accounting safeguard:</strong> A merchant name alone does not prove the business purpose. Review the receipt, split mixed purchases when needed, retain the original attachment, and avoid recording an uploaded receipt twice if the bank transaction has already been imported.</div>`;
+    }
+
         function renderCurrentTab() {
       const main = document.getElementById('workspace-main');
       if (!main) return;
@@ -5981,6 +6245,8 @@
       else if (state.activeTab === 'coa') main.innerHTML = renderCoaPage();
       else if (state.activeTab === 'audit') main.innerHTML = renderAuditPage();
       else if (state.activeTab === 'vendor') main.innerHTML = renderVendorPage();
+      else if (state.activeTab === 'apar') main.innerHTML = renderAparPage();
+      else if (state.activeTab === 'rules') main.innerHTML = renderRulesPage();
     }
 
     window.addEventListener('DOMContentLoaded', () => {
