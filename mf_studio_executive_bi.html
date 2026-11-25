@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MF Studio — Executive BI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --mf-accent: #f59e0b;
+      --mf-accent-soft: rgba(245, 158, 11, 0.16);
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .mf-accent-bg {
+      background-color: var(--mf-accent);
+    }
+
+    .mf-accent-text {
+      color: var(--mf-accent);
+    }
+
+    .mf-accent-border {
+      border-color: var(--mf-accent);
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+      }
+      .print-card {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-amber-400 selection:text-slate-950 overflow-x-hidden">
+
+  <!-- TOP EXECUTIVE HEADER -->
+  <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 py-3.5 no-print">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <!-- Brand Identity + Logo + Avatar + FK Status -->
+      <div class="flex items-center gap-3">
+        <div
+          id="logo-box"
+          class="w-11 h-11 rounded-2xl mf-accent-bg text-slate-950 font-black text-base flex items-center justify-center overflow-hidden shadow-lg shrink-0 transition-colors"
+          title="Custom Brand Logo"
+        >
+          MF
+        </div>
+
+        <div
+          class="w-9 h-9 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-200 font-bold text-xs flex items-center justify-center shrink-0"
+          title="Marlainna The Analyst — BYOB BI Model"
+        >
+          MA
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 id="biz-title" class="font-bold text-base sm:text-lg text-white tracking-tight">
+              MF Studio — Executive BI
+            </h1>
+            <span
+              id="fk-badge"
+              class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30"
+            >
+              Verifying FK Integrity...
+            </span>
+          </div>
+          <p id="biz-subtitle" class="text-xs text-slate-400">
+            BYOB Google Sheets N:1 Relational Model • Interactive Cross-Filtering &amp; ML Forecasting
+          </p>
+        </div>
+      </div>
+
+      <!-- Preset Switcher + Controls + Actions -->
+      <div class="flex flex-wrap items-center gap-2">
+        <select
+          id="preset-selector"
+          onchange="switchBusinessPreset(this.value)"
+          aria-label="Select BYOB Store Preset"
+          class="rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/15 px-3 py-1.5 text-xs font-semibold text-white cursor-pointer"
+        >
+          <option value="northwind">Northwind Roasters (Astra)</option>
+          <option value="hearth">Hearth &amp; Wick Candle Co. (Kadence)</option>
+          <option value="kestrel">Kestrel Workwear Co. (Flatsome)</option>
+          <option value="redbarn">Red Barn Harvest &amp; CSA (OceanWP)</option>
+          <option value="timber">Timber &amp; Loom Craft Co. (Divi)</option>
+          <option value="brioche">Brioche &amp; Crumb Bakehouse (Neve)</option>
+        </select>
+
+        <!-- Theme Accent Switcher -->
+        <div class="flex items-center gap-1 bg-slate-900 border border-white/10 rounded-xl p-1" title="Theme Accent">
+          <button type="button" onclick="setAccent('#f59e0b')" aria-label="Amber Accent" class="w-5 h-5 rounded-lg bg-amber-500 cursor-pointer"></button>
+          <button type="button" onclick="setAccent('#10b981')" aria-label="Emerald Accent" class="w-5 h-5 rounded-lg bg-emerald-500 cursor-pointer"></button>
+          <button type="button" onclick="setAccent('#6366f1')" aria-label="Indigo Accent" class="w-5 h-5 rounded-lg bg-indigo-500 cursor-pointer"></button>
+          <button type="button" onclick="setAccent('#f43f5e')" aria-label="Rose Accent" class="w-5 h-5 rounded-lg bg-rose-500 cursor-pointer"></button>
+        </div>
+
+        <!-- Logo Upload -->
+        <label class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/10 text-xs font-semibold cursor-pointer">
+          Logo
+          <input type="file" accept="image/*" onchange="uploadLogo(event)" class="sr-only" />
+        </label>
+
+        <!-- View Switcher -->
+        <div class="inline-flex rounded-xl bg-slate-900 border border-white/10 p-0.5 text-xs font-bold">
+          <button type="button" onclick="switchView('analytics')" id="tab-analytics" class="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 cursor-pointer">
+            Analytics
+          </button>
+          <button type="button" onclick="switchView('coa')" id="tab-coa" class="px-3 py-1 rounded-lg text-slate-300 hover:text-white cursor-pointer">
+            COA &amp; Tie-Out
+          </button>
+          <button type="button" onclick="switchView('ledger')" id="tab-ledger" class="px-3 py-1 rounded-lg text-slate-300 hover:text-white cursor-pointer">
+            Ledger
+          </button>
+        </div>
+
+        <button type="button" onclick="openDataModal()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold cursor-pointer">
+          Load Data
+        </button>
+        <button type="button" onclick="exportFilteredCsv()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold cursor-pointer">
+          CSV
+        </button>
+        <button type="button" onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold cursor-pointer">
+          Print
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- STATUS BANNER FOR NON-INTRUSIVE NOTIFICATIONS -->
+  <div id="status-toast" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pt-4 no-print">
+    <div class="flex items-center justify-between gap-3 bg-indigo-950/70 border border-indigo-400/30 text-indigo-100 rounded-2xl px-4 py-2.5 text-xs">
+      <span id="status-toast-text"></span>
+      <button type="button" onclick="hideToast()" class="text-indigo-300 hover:text-white font-bold cursor-pointer">Dismiss</button>
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE -->
+  <main id="app" class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- DYNAMIC FILTER BAR -->
+    <section class="bg-slate-900/90 border border-white/10 rounded-2xl p-4 space-y-3 no-print print-card">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 text-xs">
+        <div>
+          <label for="f-from" class="block text-slate-400 font-semibold mb-1">From Date</label>
+          <input id="f-from" type="date" onchange="applyFilters()" class="w-full rounded-xl bg-slate-800 border border-white/10 px-2.5 py-1.5 text-white" />
+        </div>
+        <div>
+          <label for="f-to" class="block text-slate-400 font-semibold mb-1">To Date</label>
+          <input id="f-to" type="date" onchange="applyFilters()" class="w-full rounded-xl bg-slate-800 border border-white/10 px-2.5 py-1.5 text-white" />
+        </div>
+        <div>
+          <label for="f-product" class="block text-slate-400 font-semibold mb-1">Product</label>
+          <select id="f-product" onchange="applyFilters()" class="w-full rounded-xl bg-slate-800 border border-white/10 px-2.5 py-1.5 text-white">
+            <option value="ALL">All Products</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-segment" class="block text-slate-400 font-semibold mb-1">Customer Segment</label>
+          <select id="f-segment" onchange="applyFilters()" class="w-full rounded-xl bg-slate-800 border border-white/10 px-2.5 py-1.5 text-white">
+            <option value="ALL">All Segments</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-tier" class="block text-slate-400 font-semibold mb-1">Pricing Tier</label>
+          <select id="f-tier" onchange="applyFilters()" class="w-full rounded-xl bg-slate-800 border border-white/10 px-2.5 py-1.5 text-white">
+            <option value="ALL">Retail + Bulk</option>
+            <option value="RETAIL">Retail Only</option>
+            <option value="BULK">Bulk Only</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-status" class="block text-slate-400 font-semibold mb-1">Order Status</label>
+          <select id="f-status" onchange="applyFilters()" class="w-full rounded-xl bg-slate-800 border border-white/10 px-2.5 py-1.5 text-white">
+            <option value="ALL">All Statuses</option>
+            <option value="Completed">Completed</option>
+            <option value="Refunded">Refunded</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-search" class="block text-slate-400 font-semibold mb-1">Quick Search</label>
+          <input id="f-search" type="text" oninput="applyFilters()" placeholder="TXN, customer, SKU..." class="w-full rounded-xl bg-slate-800 border border-white/10 px-2.5 py-1.5 text-white" />
+        </div>
+        <div class="flex items-end">
+          <button type="button" onclick="resetFilters()" class="w-full py-1.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/15 font-bold text-amber-300 cursor-pointer">
+            Reset All
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Cross-Filter Pill -->
+      <div id="cross-filter-bar" class="hidden flex items-center justify-between gap-3 bg-amber-400/10 border border-amber-400/30 rounded-xl px-3.5 py-2 text-xs">
+        <span id="cross-filter-label" class="text-amber-200 font-semibold"></span>
+        <button type="button" onclick="clearCrossFilter()" class="text-amber-300 hover:underline font-bold cursor-pointer">
+          Clear Chart Filter &times;
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VIEW 1: ANALYTICS, JOURNEY TIMELINE & ML FORECASTING       -->
+    <!-- ========================================================== -->
+    <div id="view-analytics" class="space-y-6">
+
+      <!-- KPI STRIP WITH (i) INFO POPOVERS -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="bg-slate-900 border border-white/10 rounded-2xl p-4 print-card">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Net Revenue</p>
+            <button type="button" onclick="toggleInfo('info-rev')" aria-label="Net Revenue Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer">i</button>
+          </div>
+          <p id="kpi-rev" class="text-2xl font-extrabold text-white mt-1">$0.00</p>
+          <p id="kpi-orders" class="text-xs text-slate-400 mt-1">0 completed orders</p>
+          <p id="info-rev" class="hidden mt-2 text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2">
+            Sum of Debit_Amount across Completed orders (excludes Refunded rows so top-line sales stay honest).
+          </p>
+        </div>
+
+        <div class="bg-slate-900 border border-white/10 rounded-2xl p-4 print-card">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Gross Profit</p>
+            <button type="button" onclick="toggleInfo('info-gp')" aria-label="Gross Profit Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer">i</button>
+          </div>
+          <p id="kpi-gp" class="text-2xl font-extrabold text-emerald-400 mt-1">$0.00</p>
+          <p id="kpi-margin" class="text-xs text-emerald-300 mt-1">0.0% gross margin</p>
+          <p id="info-gp" class="hidden mt-2 text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2">
+            Calculated as Net Revenue minus COGS_Amount on completed orders. Margin % = Gross Profit / Net Revenue.
+          </p>
+        </div>
+
+        <div class="bg-slate-900 border border-white/10 rounded-2xl p-4 print-card">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Total COGS</p>
+            <button type="button" onclick="toggleInfo('info-cogs')" aria-label="Total COGS Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer">i</button>
+          </div>
+          <p id="kpi-cogs" class="text-2xl font-extrabold text-amber-300 mt-1">$0.00</p>
+          <p id="kpi-units" class="text-xs text-slate-400 mt-1">0 units sold</p>
+          <p id="info-cogs" class="hidden mt-2 text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2">
+            Direct Cost of Goods Sold tied to completed unit volume and seasonal cost shifts.
+          </p>
+        </div>
+
+        <div class="bg-slate-900 border border-white/10 rounded-2xl p-4 print-card">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Avg Order Value</p>
+            <button type="button" onclick="toggleInfo('info-aov')" aria-label="Avg Order Value Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer">i</button>
+          </div>
+          <p id="kpi-aov" class="text-2xl font-extrabold text-indigo-300 mt-1">$0.00</p>
+          <p id="kpi-customers" class="text-xs text-slate-400 mt-1">0 active buyers</p>
+          <p id="info-aov" class="hidden mt-2 text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2">
+            Average completed order revenue per transaction alongside distinct Customer_ID buyers in selection.
+          </p>
+        </div>
+
+        <div class="bg-slate-900 border border-white/10 rounded-2xl p-4 print-card">
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Refund Rate</p>
+            <button type="button" onclick="toggleInfo('info-refund')" aria-label="Refund Rate Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer">i</button>
+          </div>
+          <p id="kpi-refund" class="text-2xl font-extrabold text-rose-400 mt-1">0.0%</p>
+          <p id="kpi-refund-amt" class="text-xs text-slate-400 mt-1">$0.00 refunded</p>
+          <p id="info-refund" class="hidden mt-2 text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2">
+            Share of filtered transactions marked Refunded. High refund rates warrant SKU or fulfillment review.
+          </p>
+        </div>
+      </section>
+
+      <!-- LIVE ANALYST INSIGHTS BANNER -->
+      <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950/50 border border-white/10 rounded-2xl p-4 sm:p-5 print-card">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Live Analyst Insights &amp; Owner Answers</span>
+            <button type="button" onclick="toggleInfo('info-insights')" aria-label="Insights Methodology Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer no-print">i</button>
+          </div>
+          <span class="text-[11px] font-mono text-slate-400">Partial trailing months normalized to full-month pace</span>
+        </div>
+        <p id="info-insights" class="hidden mb-3 text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2.5">
+          If the latest month in the dataset has fewer days than a full calendar month, run-rate projections scale daily pace to a full month so incomplete periods do not look like a sudden sales drop.
+        </p>
+        <ul id="insights-list" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs text-slate-200"></ul>
+      </section>
+
+      <!-- TABLEAU-INSPIRED JOURNEY TIMELINE & CLICKABLE SWATCH LEGEND -->
+      <section class="bg-slate-900 border border-white/10 rounded-2xl p-4 sm:p-5 space-y-4 print-card">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <h2 class="font-bold text-sm sm:text-base text-white">Journey Timeline Bars &amp; Swatch Legend</h2>
+            <button type="button" onclick="toggleInfo('info-journey')" aria-label="Journey Timeline Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer no-print">i</button>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 no-print">
+            <div class="inline-flex rounded-lg bg-slate-800 p-0.5 text-[11px] font-bold">
+              <button type="button" onclick="setJourneyMode('product')" id="jmode-product" class="px-2.5 py-1 rounded-md bg-white text-slate-950 cursor-pointer">
+                Products Over Months
+              </button>
+              <button type="button" onclick="setJourneyMode('customer')" id="jmode-customer" class="px-2.5 py-1 rounded-md text-slate-300 cursor-pointer">
+                Top Customers Over Months
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p id="info-journey" class="hidden text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2.5">
+          Inspired by timeline range bars and color-coded legends: each row shows monthly momentum bars across the timeline. Click any color swatch chip below to cross-filter by that item.
+        </p>
+
+        <!-- Clickable Color Swatch Legend -->
+        <div id="swatch-legend" class="flex flex-wrap items-center gap-2"></div>
+
+        <!-- Timeline Matrix -->
+        <div id="journey-matrix" class="overflow-x-auto space-y-2 text-xs"></div>
+      </section>
+
+      <!-- CHARTS ROW 1: TIMELINE + REVENUE BY PRODUCT -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 bg-slate-900 border border-white/10 rounded-2xl p-5 print-card">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h2 class="font-bold text-sm text-white">Revenue, COGS &amp; Gross Profit Trend</h2>
+            <div class="inline-flex rounded-lg bg-slate-800 p-0.5 text-[11px] font-bold no-print">
+              <button type="button" onclick="setGranularity('month')" id="gran-month" class="px-2.5 py-1 rounded-md bg-white text-slate-950 cursor-pointer">Monthly</button>
+              <button type="button" onclick="setGranularity('week')" id="gran-week" class="px-2.5 py-1 rounded-md text-slate-300 cursor-pointer">Weekly</button>
+              <button type="button" onclick="setGranularity('day')" id="gran-day" class="px-2.5 py-1 rounded-md text-slate-300 cursor-pointer">Daily</button>
+            </div>
+          </div>
+          <canvas id="chart-timeline" height="145"></canvas>
+        </div>
+
+        <div class="lg:col-span-5 bg-slate-900 border border-white/10 rounded-2xl p-5 print-card">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-bold text-sm text-white">Revenue by Product</h2>
+            <span class="text-[10px] text-slate-400">Click bar to cross-filter</span>
+          </div>
+          <canvas id="chart-products" height="185"></canvas>
+        </div>
+      </section>
+
+      <!-- CHARTS ROW 2: TIER DOUGHNUT + SEGMENT BAR + TOP CUSTOMERS -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 bg-slate-900 border border-white/10 rounded-2xl p-5 print-card">
+          <h2 class="font-bold text-sm text-white mb-3">Retail vs. Bulk Revenue</h2>
+          <canvas id="chart-tier" height="195"></canvas>
+        </div>
+
+        <div class="lg:col-span-4 bg-slate-900 border border-white/10 rounded-2xl p-5 print-card">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-bold text-sm text-white">Revenue by Segment</h2>
+            <span class="text-[10px] text-slate-400">Click bar to cross-filter</span>
+          </div>
+          <canvas id="chart-segment" height="195"></canvas>
+        </div>
+
+        <div class="lg:col-span-4 bg-slate-900 border border-white/10 rounded-2xl p-5 overflow-y-auto max-h-80 print-card">
+          <h2 class="font-bold text-sm text-white mb-3">Top 10 Customers (N:1 Join)</h2>
+          <div id="top-customers" class="space-y-2 text-xs"></div>
+        </div>
+      </section>
+
+      <!-- MACHINE LEARNING PRODUCT DEMAND & SEASONAL COGS FORECAST PANEL -->
+      <section class="bg-slate-900 border border-white/10 rounded-2xl p-4 sm:p-5 space-y-4 print-card">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <h2 class="font-bold text-sm sm:text-base text-white">ML Product Trajectory &amp; Seasonal COGS Forecast</h2>
+            <button type="button" onclick="toggleInfo('info-ml')" aria-label="ML Forecast Info" class="w-5 h-5 rounded-full bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300 cursor-pointer no-print">i</button>
+          </div>
+          <span class="text-[11px] font-mono text-emerald-300">Seasonal + Trend Ridge Regressor (3-Month Horizon)</span>
+        </div>
+
+        <p id="info-ml" class="hidden text-[11px] text-amber-200/90 bg-slate-950/70 rounded-lg p-2.5">
+          Fits a regularized seasonal harmonic + trend model (sin/cos monthly cycles + linear trend) across normalized monthly series to classify products as RISE (&gt;+5%), FALL (&lt;-5%), or STEADY, while mapping peak/low COGS across Winter, Spring, Summer, and Fall.
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-white/10 text-slate-400">
+                <th class="py-2 px-2">Product</th>
+                <th class="py-2 px-2">Demand Signal</th>
+                <th class="py-2 px-2 text-right">3M Pace Delta</th>
+                <th class="py-2 px-2 text-right">Proj. Avg Rev / Mo</th>
+                <th class="py-2 px-2 text-right">Proj. Avg COGS / Mo</th>
+                <th class="py-2 px-2">Peak COGS Season</th>
+                <th class="py-2 px-2">Lowest COGS Season</th>
+                <th class="py-2 px-2">Unit COGS Driver</th>
+              </tr>
+            </thead>
+            <tbody id="ml-table-body" class="divide-y divide-white/5"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- VIEW 2: COA & DOUBLE-ENTRY TIE-OUT                        -->
+    <!-- ========================================================== -->
+    <div id="view-coa" class="hidden space-y-6">
+      <section class="bg-slate-900 border border-white/10 rounded-2xl p-5 space-y-4 print-card">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-base text-white">Chart of Accounts &amp; Double-Entry Tie-Out</h2>
+            <p class="text-xs text-slate-400">Human-readable account names with live Debit_Amount vs. Credit_Amount tie-out verification.</p>
+          </div>
+          <div id="tieout-pill" class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div class="bg-slate-800/70 rounded-xl p-4">
+            <p class="text-slate-400">Total Debits (Filtered)</p>
+            <p id="tie-debits" class="text-xl font-extrabold text-white font-mono mt-1">$0.00</p>
+          </div>
+          <div class="bg-slate-800/70 rounded-xl p-4">
+            <p class="text-slate-400">Total Credits (Filtered)</p>
+            <p id="tie-credits" class="text-xl font-extrabold text-white font-mono mt-1">$0.00</p>
+          </div>
+          <div class="bg-slate-800/70 rounded-xl p-4">
+            <p class="text-slate-400">Variance</p>
+            <p id="tie-var" class="text-xl font-extrabold text-emerald-400 font-mono mt-1">$0.00</p>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-white/10 text-slate-400">
+                <th class="py-2 px-2">Account Name</th>
+                <th class="py-2 px-2">Account Code</th>
+                <th class="py-2 px-2">Type</th>
+                <th class="py-2 px-2">Statement</th>
+                <th class="py-2 px-2 text-right">Debits</th>
+                <th class="py-2 px-2 text-right">Credits</th>
+                <th class="py-2 px-2 text-right">Net Activity</th>
+              </tr>
+            </thead>
+            <tbody id="coa-table-body" class="divide-y divide-white/5"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- VIEW 3: FILTERED TRANSACTIONS LEDGER                       -->
+    <!-- ========================================================== -->
+    <div id="view-ledger" class="hidden space-y-6">
+      <section class="bg-slate-900 border border-white/10 rounded-2xl p-5 space-y-3 print-card">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 class="font-bold text-sm sm:text-base text-white">
+            Filtered Transactions Ledger <span id="table-count" class="text-slate-400 font-normal"></span>
+          </h2>
+          <span class="text-[11px] text-slate-400">Showing human-readable Debit &amp; Credit Account Names</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-white/10 text-slate-400">
+                <th class="py-2 px-2">TXN ID</th>
+                <th class="py-2 px-2">Date</th>
+                <th class="py-2 px-2">Customer</th>
+                <th class="py-2 px-2">Product</th>
+                <th class="py-2 px-2">Debit Account</th>
+                <th class="py-2 px-2">Credit Account</th>
+                <th class="py-2 px-2 text-right">Qty</th>
+                <th class="py-2 px-2 text-right">Amount</th>
+                <th class="py-2 px-2 text-right">COGS</th>
+                <th class="py-2 px-2">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tx-table-body" class="divide-y divide-white/5"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- CUSTOM DATA LOADER MODAL (JSON OR CSV) -->
+  <div id="data-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+    <div class="bg-slate-900 border border-white/15 rounded-2xl max-w-2xl w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-base text-white">Load Custom Store JSON or Transactions CSV</h3>
+        <button type="button" onclick="closeDataModal()" class="text-slate-400 hover:text-white font-bold text-lg cursor-pointer">&times;</button>
+      </div>
+      <p class="text-xs text-slate-400">
+        Paste a JSON object containing <code class="text-amber-300">transactions</code>, <code class="text-amber-300">products</code>, <code class="text-amber-300">customers</code>, and <code class="text-amber-300">coa</code>—or paste CSV rows with columns like <code class="text-amber-300">Transaction_ID,Transaction_Date,Customer_Name,Segment,Product_Name,Quantity,Debit_Amount,COGS_Amount,Order_Status,Tier</code>.
+      </p>
+      <textarea id="custom-data-input" rows="9" placeholder="Paste JSON or CSV here..." class="w-full rounded-xl bg-slate-950 border border-white/10 p-3 text-xs font-mono text-slate-200"></textarea>
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span id="modal-error" class="text-xs text-rose-400"></span>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeDataModal()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold cursor-pointer">
+            Cancel
+          </button>
+          <button type="button" onclick="applyCustomData()" class="px-4 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+            Apply Dataset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Shared Chart of Accounts dictionary mapping account IDs to human-readable names.
+     */
+    const STANDARD_COA = [
+      { id: "COA-1010", name: "Operating Cash — Checking", type: "Asset", normalBalance: "Debit", statement: "Balance Sheet" },
+      { id: "COA-1200", name: "Finished Goods Inventory", type: "Asset", normalBalance: "Debit", statement: "Balance Sheet" },
+      { id: "COA-2100", name: "Sales Tax Payable", type: "Liability", normalBalance: "Credit", statement: "Balance Sheet" },
+      { id: "COA-3000", name: "Owner's Starting Capital", type: "Equity", normalBalance: "Credit", statement: "Balance Sheet" },
+      { id: "COA-4000", name: "Storefront Product Revenue", type: "Revenue", normalBalance: "Credit", statement: "Profit & Loss" },
+      { id: "COA-4010", name: "Bulk & Wholesale Revenue", type: "Revenue", normalBalance: "Credit", statement: "Profit & Loss" },
+      { id: "COA-5000", name: "Direct Cost of Goods Sold (COGS)", type: "COGS", normalBalance: "Debit", statement: "Profit & Loss" },
+      { id: "COA-6100", name: "Packaging & Fulfillment Expense", type: "Expense", normalBalance: "Debit", statement: "Profit & Loss" }
+    ];
+
+    /**
+     * Six BYOB store presets matching the studio models.
+     */
+    const BUSINESS_PRESETS = {
+      northwind: {
+        key: "northwind",
+        name: "Northwind Roasters",
+        theme: "Astra Theme",
+        accent: "#f59e0b",
+        products: [
+          { id: "PROD-001", sku: "NWR-01", name: "Highland Reserve Whole Bean (12oz)", cost: 5.20, retailPrice: 21.00, bulkPrice: 15.50, bulkMin: 12 },
+          { id: "PROD-002", sku: "NWR-02", name: "Cold Brew Pitcher Pack (4-Pack)", cost: 6.40, retailPrice: 24.00, bulkPrice: 17.00, bulkMin: 10 },
+          { id: "PROD-003", sku: "NWR-03", name: "Cascade Espresso Blend (12oz)", cost: 5.80, retailPrice: 22.50, bulkPrice: 16.25, bulkMin: 12 },
+          { id: "PROD-004", sku: "NWR-04", name: "Ethiopia Yirgacheffe Washed (12oz)", cost: 6.90, retailPrice: 25.00, bulkPrice: 18.00, bulkMin: 10 },
+          { id: "PROD-005", sku: "NWR-05", name: "Cafe Tasting Flight Box (3x8oz)", cost: 8.50, retailPrice: 32.00, bulkPrice: 24.50, bulkMin: 8 },
+          { id: "PROD-006", sku: "NWR-06", name: "Morning Espresso Blend (2lb Bag)", cost: 9.80, retailPrice: 38.00, bulkPrice: 29.00, bulkMin: 6 }
+        ],
+        segments: ["Cafe Partners", "Boutique Grocers", "Office Coffee", "Direct Subscribers"],
+        customers: [
+          "Clara Bennett", "Devon Brooks", "Elena Morales", "Marcus Sterling", "Hannah Lindqvist",
+          "Tariq Al-Mansoor", "Sora Takahashi", "Nadia Kowalski", "Julian Mercer", "Priya Nair",
+          "Caleb Whitaker", "Camille Laurent"
+        ],
+        seasonWeights: { Winter: 1.12, Spring: 0.98, Summer: 1.04, Fall: 1.18 },
+        trendFactor: 0.015
+      },
+      hearth: {
+        key: "hearth",
+        name: "Hearth & Wick Candle Co.",
+        theme: "Kadence Theme",
+        accent: "#10b981",
+        products: [
+          { id: "PROD-001", sku: "HWC-01", name: "Cedar & Ember Soy Jar (10oz)", cost: 4.50, retailPrice: 26.00, bulkPrice: 18.00, bulkMin: 12 },
+          { id: "PROD-002", sku: "HWC-02", name: "Fig Leaf & Vetiver Pillar", cost: 4.10, retailPrice: 22.00, bulkPrice: 15.50, bulkMin: 12 },
+          { id: "PROD-003", sku: "HWC-03", name: "Bergamot Mist Wax Melts", cost: 2.60, retailPrice: 14.00, bulkPrice: 9.50, bulkMin: 20 },
+          { id: "PROD-004", sku: "HWC-04", name: "Warm Amber Gift Trio", cost: 9.20, retailPrice: 48.00, bulkPrice: 35.00, bulkMin: 8 },
+          { id: "PROD-005", sku: "HWC-05", name: "Smoked Vanilla Tin Candle", cost: 3.40, retailPrice: 18.00, bulkPrice: 12.50, bulkMin: 15 },
+          { id: "PROD-006", sku: "HWC-06", name: "Botanical Room Spray (4oz)", cost: 3.80, retailPrice: 20.00, bulkPrice: 14.00, bulkMin: 12 }
+        ],
+        segments: ["Home Decor Boutiques", "Spa & Wellness", "Gift Buyers", "Seasonal Pop-Ups"],
+        customers: [
+          "Audrey Callahan", "Nolan Vance", "Mei-Ling Zhou", "Gideon Park", "Tessa Holloway",
+          "Mateo Delgado", "Simone Baptiste", "Owen Gallagher", "Linnea Berg", "Darius Boone",
+          "Rhea Kulkarni", "Finnian Doyle"
+        ],
+        seasonWeights: { Winter: 1.24, Spring: 0.92, Summer: 0.85, Fall: 1.32 },
+        trendFactor: 0.022
+      },
+      kestrel: {
+        key: "kestrel",
+        name: "Kestrel Workwear Co.",
+        theme: "Flatsome Theme",
+        accent: "#6366f1",
+        products: [
+          { id: "PROD-001", sku: "KWK-01", name: "Ridgeway Canvas Field Jacket", cost: 28.00, retailPrice: 96.00, bulkPrice: 72.00, bulkMin: 6 },
+          { id: "PROD-002", sku: "KWK-02", name: "Double-Knee Utility Pant", cost: 19.50, retailPrice: 68.00, bulkPrice: 51.00, bulkMin: 8 },
+          { id: "PROD-003", sku: "KWK-03", name: "Heavyweight Thermal Henley", cost: 11.20, retailPrice: 42.00, bulkPrice: 31.00, bulkMin: 12 },
+          { id: "PROD-004", sku: "KWK-04", name: "Merino Crew Work Sock (3-Pack)", cost: 7.40, retailPrice: 28.00, bulkPrice: 20.50, bulkMin: 15 },
+          { id: "PROD-005", sku: "KWK-05", name: "Waxed Tool Roll & Apron", cost: 16.00, retailPrice: 58.00, bulkPrice: 43.00, bulkMin: 8 },
+          { id: "PROD-006", sku: "KWK-06", name: "Storm-Shell Chore Coat", cost: 31.00, retailPrice: 108.00, bulkPrice: 80.00, bulkMin: 6 }
+        ],
+        segments: ["Trade Contractors", "Field Crews", "Outdoor Outfitters", "Direct Buyers"],
+        customers: [
+          "Wyatt McAllister", "Keiko Watanabe", "Hector Villalobos", "Fiona MacLeod", "Zane Okafor",
+          "Paige Lindholm", "Cesar Montoya", "Amara Mensah", "Trevor Halvorsen", "Noor Haddad",
+          "Garrett Kowalczyk", "Talia Benitez"
+        ],
+        seasonWeights: { Winter: 1.26, Spring: 1.05, Summer: 0.82, Fall: 1.28 },
+        trendFactor: 0.018
+      },
+      redbarn: {
+        key: "redbarn",
+        name: "Red Barn Harvest & CSA",
+        theme: "OceanWP Theme",
+        accent: "#10b981",
+        products: [
+          { id: "PROD-001", sku: "RBH-01", name: "Weekly Harvest CSA Basket", cost: 11.00, retailPrice: 36.00, bulkPrice: 29.00, bulkMin: 8 },
+          { id: "PROD-002", sku: "RBH-02", name: "Raw Wildflower Honey (16oz)", cost: 4.80, retailPrice: 16.50, bulkPrice: 12.00, bulkMin: 12 },
+          { id: "PROD-003", sku: "RBH-03", name: "Heirloom Orchard Jam Duo", cost: 5.20, retailPrice: 18.00, bulkPrice: 13.00, bulkMin: 12 },
+          { id: "PROD-004", sku: "RBH-04", name: "Farmstead Salsa & Pickle Crate", cost: 7.50, retailPrice: 26.00, bulkPrice: 19.50, bulkMin: 10 },
+          { id: "PROD-005", sku: "RBH-05", name: "Stone-Ground Heirloom Flour (5lb)", cost: 3.90, retailPrice: 14.00, bulkPrice: 10.00, bulkMin: 15 },
+          { id: "PROD-006", sku: "RBH-06", name: "Seasonal Pantry Reserve Box", cost: 14.50, retailPrice: 46.00, bulkPrice: 36.00, bulkMin: 6 }
+        ],
+        segments: ["CSA Members", "Local Co-Ops", "Farm-to-Table Chefs", "Weekend Market"],
+        customers: [
+          "Miriam Lind", "Bram Van Der Berg", "Celine Moreau", "Jude Castellanos", "Amina Diallo",
+          "Kieran Walsh", "Yuki Takahashi", "Lydia Novak", "Rami Khoury", "Hazel Pemberton",
+          "Mateusz Zielinski", "Solange Deschamps"
+        ],
+        seasonWeights: { Winter: 0.78, Spring: 1.08, Summer: 1.35, Fall: 1.18 },
+        trendFactor: 0.012
+      },
+      timber: {
+        key: "timber",
+        name: "Timber & Loom Craft Co.",
+        theme: "Divi Theme",
+        accent: "#f59e0b",
+        products: [
+          { id: "PROD-001", sku: "TLC-01", name: "Hand-Woven Linen Throw Blanket", cost: 22.00, retailPrice: 78.00, bulkPrice: 56.00, bulkMin: 6 },
+          { id: "PROD-002", sku: "TLC-02", name: "Walnut End-Grain Cutting Board", cost: 18.50, retailPrice: 66.00, bulkPrice: 48.00, bulkMin: 6 },
+          { id: "PROD-003", sku: "TLC-03", name: "Indigo Dyed Table Runner", cost: 10.50, retailPrice: 38.00, bulkPrice: 27.50, bulkMin: 10 },
+          { id: "PROD-004", sku: "TLC-04", name: "Turned Maple Serving Bowls (Set)", cost: 15.00, retailPrice: 54.00, bulkPrice: 39.00, bulkMin: 8 },
+          { id: "PROD-005", sku: "TLC-05", name: "Woven Wall Tapestry & Rod", cost: 19.00, retailPrice: 68.00, bulkPrice: 49.00, bulkMin: 6 },
+          { id: "PROD-006", sku: "TLC-06", name: "Ash Wood Desk Catchall Tray", cost: 8.20, retailPrice: 30.00, bulkPrice: 21.50, bulkMin: 12 }
+        ],
+        segments: ["Interior Designers", "Design Galleries", "Hospitality Buyers", "Collector Retail"],
+        customers: [
+          "Soren Lindqvist", "Beatrice Conti", "Kenji Sato", "Margaux Lefevre", "Dorian Hayes",
+          "Ananya Patel", "Tomasz Nowak", "Coralie Beaumont", "Ezekiel Boateng", "Freja Holm",
+          "Rafael Mendoza", "Ingrid Solberg"
+        ],
+        seasonWeights: { Winter: 1.10, Spring: 1.02, Summer: 0.94, Fall: 1.25 },
+        trendFactor: 0.016
+      },
+      brioche: {
+        key: "brioche",
+        name: "Brioche & Crumb Bakehouse",
+        theme: "Neve Theme",
+        accent: "#f43f5e",
+        products: [
+          { id: "PROD-001", sku: "BCB-01", name: "Cultured Butter Brioche Loaf", cost: 3.10, retailPrice: 13.50, bulkPrice: 9.75, bulkMin: 12 },
+          { id: "PROD-002", sku: "BCB-02", name: "Morning Pastry Box (6-Count)", cost: 6.20, retailPrice: 26.00, bulkPrice: 19.00, bulkMin: 8 },
+          { id: "PROD-003", sku: "BCB-03", name: "Cardamom Morning Bun 4-Pack", cost: 4.10, retailPrice: 17.50, bulkPrice: 12.50, bulkMin: 10 },
+          { id: "PROD-004", sku: "BCB-04", name: "Sourdough Country Batard", cost: 2.75, retailPrice: 12.00, bulkPrice: 8.50, bulkMin: 15 },
+          { id: "PROD-005", sku: "BCB-05", name: "Almond Frangipane Tart Box", cost: 7.40, retailPrice: 30.00, bulkPrice: 22.00, bulkMin: 6 },
+          { id: "PROD-006", sku: "BCB-06", name: "Brunch Catering Pastry Platter", cost: 12.50, retailPrice: 48.00, bulkPrice: 36.00, bulkMin: 5 }
+        ],
+        segments: ["Brunch Cafes", "Hotel Catering", "Neighborhood Walk-Ins", "Weekend Pre-Orders"],
+        customers: [
+          "Camila Ortiz", "Hugo Bernard", "Aiko Mori", "Lukas Weber", "Zara Siddiqui",
+          "Milo Svensson", "Paloma Rivera", "Benoit Girard", "Neha Deshmukh", "Gael Moreau",
+          "Tamsin Reid", "Yusuf Ibrahim"
+        ],
+        seasonWeights: { Winter: 1.05, Spring: 1.14, Summer: 0.96, Fall: 1.22 },
+        trendFactor: 0.019
+      }
+    };
+
+    /**
+     * Deterministic pseudo-random helper so each preset generates consistent, realistic multi-month store data.
+     */
+    function createRng(seedStr) {
+      let h = 2166136261;
+      for (let i = 0; i < seedStr.length; i++) {
+        h ^= seedStr.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return () => {
+        h += 0x6d2b79f5;
+        let t = Math.imul(h ^ (h >>> 15), 1 | h);
+        t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function getSeasonName(monthNum) {
+      if (monthNum === 12 || monthNum === 1 || monthNum === 2) return "Winter";
+      if (monthNum >= 3 && monthNum <= 5) return "Spring";
+      if (monthNum >= 6 && monthNum <= 8) return "Summer";
+      return "Fall";
+    }
+
+    function daysInYearMonth(year, month1to12) {
+      return new Date(year, month1to12, 0).getDate();
+    }
+
+    /**
+     * Generates a realistic dataset of 360 transactions across Jan–Nov 2026 (with Nov running through Nov 22, 2026)
+     * for any chosen store preset, linked via relational PK/FKs and human-readable COA account names.
+     */
+    function generatePresetDataset(presetKey) {
+      const preset = BUSINESS_PRESETS[presetKey] || BUSINESS_PRESETS.northwind;
+      const rng = createRng("mf-studio-" + preset.key);
+
+      const coaMap = Object.fromEntries(STANDARD_COA.map((a) => [a.id, a]));
+      const customers = preset.customers.map((fullName, idx) => ({
+        id: "CUST-" + String(idx + 1).padStart(4, "0"),
+        name: fullName,
+        segment: preset.segments[idx % preset.segments.length]
+      }));
+
+      // Months 2026-01 through 2026-11 (2026-11 capped at day 22 to demonstrate partial trailing month normalization)
+      const months = [];
+      for (let m = 1; m <= 11; m++) {
+        const maxDay = m === 11 ? 22 : daysInYearMonth(2026, m);
+        months.push({
+          ym: "2026-" + String(m).padStart(2, "0"),
+          m,
+          maxDay,
+          season: getSeasonName(m)
+        });
+      }
+
+      const transactions = [];
+      let txSeq = 1;
+
+      months.forEach((mObj, mIdx) => {
+        const seasonMult = preset.seasonWeights[mObj.season] || 1;
+        const trendMult = 1 + preset.trendFactor * mIdx;
+        const ordersInMonth = Math.round(28 * seasonMult * trendMult);
+
+        for (let o = 0; o < ordersInMonth; o++) {
+          const prodIdx = Math.floor(rng() * preset.products.length);
+          // Slight product-specific growth or cooling bias
+          const prod = preset.products[prodIdx];
+          const cust = customers[Math.floor(rng() * customers.length)];
+          const day = Math.max(1, Math.min(mObj.maxDay, 1 + Math.floor(rng() * mObj.maxDay)));
+          const dateStr = `${mObj.ym}-${String(day).padStart(2, "0")}`;
+
+          const isBulk = rng() < 0.34;
+          const qty = isBulk
+            ? prod.bulkMin + Math.floor(rng() * 6)
+            : 1 + Math.floor(rng() * Math.max(2, prod.bulkMin - 2));
+
+          // Slight seasonal unit COGS variation (+/- 6%) for seasonal cost analysis
+          const seasonalCostFactor = 1 + (seasonMult - 1) * 0.25 + (rng() - 0.5) * 0.04;
+          const unitCost = Number((prod.cost * seasonalCostFactor).toFixed(2));
+          const unitPrice = isBulk ? prod.bulkPrice : prod.retailPrice;
+          const amount = Number((qty * unitPrice).toFixed(2));
+          const cogs = Number((qty * unitCost).toFixed(2));
+
+          const status = rng() < 0.14 ? "Refunded" : "Completed";
+          const debitId = "COA-1010";
+          const creditId = isBulk ? "COA-4010" : "COA-4000";
+
+          transactions.push({
+            txId: "TXN-" + String(txSeq++).padStart(6, "0"),
+            date: dateStr,
+            customerId: cust.id,
+            customerName: cust.name,
+            segment: cust.segment,
+            productId: prod.id,
+            sku: prod.sku,
+            productName: prod.name,
+            debitAccountId: debitId,
+            creditAccountId: creditId,
+            debitAccountName: coaMap[debitId].name,
+            creditAccountName: coaMap[creditId].name,
+            qty,
+            amount,
+            creditAmount: amount,
+            cogs,
+            status,
+            isBulk
+          });
+        }
+      });
+
+      return {
+        preset,
+        coa: STANDARD_COA,
+        products: preset.products,
+        customers,
+        transactions
+      };
+    }
+
+    /**
+     * Seasonal + Trend Ridge Regressor (pure JS).
+     */
+    function fitSeasonalRidge(seriesByMonth, alpha = 1.5) {
+      const n = seriesByMonth.length;
+      if (n === 0) return { predictStep: () => 0, slope: 0 };
+      if (n < 3) {
+        const avg = seriesByMonth.reduce((s, d) => s + (Number(d.y) || 0), 0) / n;
+        return { predictStep: () => Math.max(0, avg), slope: 0 };
+      }
+
+      const p = 4; // [1, t, sin(2*pi*m/12), cos(2*pi*m/12)]
+      const X = seriesByMonth.map((d, idx) => {
+        const m = Number(String(d.ym).split("-")[1]) || 1;
+        const angle = (2 * Math.PI * m) / 12;
+        return [1, idx, Math.sin(angle), Math.cos(angle)];
+      });
+      const y = seriesByMonth.map((d) => Number(d.y) || 0);
+
+      const A = Array.from({ length: p }, () => Array(p).fill(0));
+      const b = Array(p).fill(0);
+
+      for (let i = 0; i < n; i++) {
+        for (let r = 0; r < p; r++) {
+          b[r] += X[i][r] * y[i];
+          for (let c = 0; c < p; c++) {
+            A[r][c] += X[i][r] * X[i][c];
+          }
+        }
+      }
+
+      A[0][0] += 1e-6;
+      for (let r = 1; r < p; r++) A[r][r] += alpha;
+
+      const aug = A.map((row, i) => [...row, b[i]]);
+      for (let col = 0; col < p; col++) {
+        let pivot = col;
+        for (let row = col + 1; row < p; row++) {
+          if (Math.abs(aug[row][col]) > Math.abs(aug[pivot][col])) pivot = row;
+        }
+        [aug[col], aug[pivot]] = [aug[pivot], aug[col]];
+        const div = Math.abs(aug[col][col]) < 1e-12 ? 1e-12 : aug[col][col];
+        for (let k = col; k <= p; k++) aug[col][k] /= div;
+        for (let row = 0; row < p; row++) {
+          if (row !== col) {
+            const factor = aug[row][col];
+            for (let k = col; k <= p; k++) aug[row][k] -= factor * aug[col][k];
+          }
+        }
+      }
+
+      const w = aug.map((row) => row[p]);
+      return {
+        slope: w[1],
+        predictStep: (stepIdx, monthNum) => {
+          const angle = (2 * Math.PI * monthNum) / 12;
+          const pred = w[0] + w[1] * stepIdx + w[2] * Math.sin(angle) + w[3] * Math.cos(angle);
+          return Math.max(0, pred);
+        }
+      };
+    }
+
+    function buildProductMlForecasts(completedTxns, horizonMonths = 3) {
+      if (!Array.isArray(completedTxns) || !completedTxns.length) return [];
+
+      let maxDateStr = "";
+      completedTxns.forEach((t) => {
+        const d = String(t.date || "").slice(0, 10);
+        if (d > maxDateStr) maxDateStr = d;
+      });
+
+      const months = [
+        ...new Set(
+          completedTxns
+            .map((t) => String(t.date || "").slice(0, 7))
+            .filter((ym) => /^\d{4}-\d{2}$/.test(ym))
+        )
+      ].sort();
+      if (!months.length) return [];
+
+      const lastYm = months[months.length - 1];
+      const [lastYear, lastMonth] = lastYm.split("-").map(Number);
+
+      let trailingScale = 1.0;
+      if (maxDateStr.startsWith(lastYm)) {
+        const dayNum = Number(maxDateStr.split("-")[2]) || 1;
+        const dim = daysInYearMonth(lastYear, lastMonth);
+        if (dayNum > 0 && dayNum < dim - 2) {
+          trailingScale = dim / dayNum;
+        }
+      }
+
+      const futureMonths = [];
+      let cy = lastYear;
+      let cm = lastMonth;
+      for (let h = 1; h <= horizonMonths; h++) {
+        cm += 1;
+        if (cm > 12) {
+          cm = 1;
+          cy += 1;
+        }
+        futureMonths.push({
+          ym: `${cy}-${String(cm).padStart(2, "0")}`,
+          m: cm,
+          season: getSeasonName(cm),
+          step: months.length - 1 + h
+        });
+      }
+
+      const prodMap = {};
+      completedTxns.forEach((t) => {
+        const product = t.productName || t.productId || "Unknown Product";
+        const ym = String(t.date || "").slice(0, 7);
+        if (!/^\d{4}-\d{2}$/.test(ym)) return;
+
+        const mNum = Number(ym.split("-")[1]) || 1;
+        const season = getSeasonName(mNum);
+        const rev = Number(t.amount) || 0;
+        const cogs = Number(t.cogs) || 0;
+        const qty = Number(t.qty) || 0;
+
+        if (!prodMap[product]) {
+          prodMap[product] = {
+            byMonth: {},
+            bySeason: {
+              Winter: { cogs: 0, qty: 0, rev: 0 },
+              Spring: { cogs: 0, qty: 0, rev: 0 },
+              Summer: { cogs: 0, qty: 0, rev: 0 },
+              Fall: { cogs: 0, qty: 0, rev: 0 }
+            }
+          };
+        }
+
+        if (!prodMap[product].byMonth[ym]) {
+          prodMap[product].byMonth[ym] = { rev: 0, cogs: 0, qty: 0 };
+        }
+        prodMap[product].byMonth[ym].rev += rev;
+        prodMap[product].byMonth[ym].cogs += cogs;
+        prodMap[product].byMonth[ym].qty += qty;
+
+        prodMap[product].bySeason[season].cogs += cogs;
+        prodMap[product].bySeason[season].qty += qty;
+        prodMap[product].bySeason[season].rev += rev;
+      });
+
+      return Object.entries(prodMap).map(([product, info]) => {
+        const revSeries = months.map((ym, i) => {
+          const base = (info.byMonth[ym] && info.byMonth[ym].rev) || 0;
+          const scale = i === months.length - 1 ? trailingScale : 1.0;
+          return { ym, y: base * scale };
+        });
+
+        const cogsSeries = months.map((ym, i) => {
+          const base = (info.byMonth[ym] && info.byMonth[ym].cogs) || 0;
+          const scale = i === months.length - 1 ? trailingScale : 1.0;
+          return { ym, y: base * scale };
+        });
+
+        const revModel = fitSeasonalRidge(revSeries);
+        const cogsModel = fitSeasonalRidge(cogsSeries);
+
+        const trailWindow = revSeries.slice(-Math.min(3, revSeries.length));
+        const trailAvgRev = trailWindow.reduce((s, d) => s + d.y, 0) / Math.max(1, trailWindow.length);
+
+        const fwdRevs = futureMonths.map((fm) => revModel.predictStep(fm.step, fm.m));
+        const fwdCogs = futureMonths.map((fm) => cogsModel.predictStep(fm.step, fm.m));
+
+        const fwdAvgRev = fwdRevs.reduce((s, v) => s + v, 0) / horizonMonths;
+        const fwdAvgCogs = fwdCogs.reduce((s, v) => s + v, 0) / horizonMonths;
+
+        const revChangePct = trailAvgRev > 0 ? ((fwdAvgRev - trailAvgRev) / trailAvgRev) * 100 : 0;
+        const demandSignal = revChangePct > 5 ? "RISE" : revChangePct < -5 ? "FALL" : "STEADY";
+
+        const seasonRows = Object.entries(info.bySeason)
+          .filter(([, s]) => s.cogs > 0 || s.qty > 0)
+          .map(([season, s]) => ({
+            season,
+            totalCogs: s.cogs,
+            unitCogs: s.qty > 0 ? s.cogs / s.qty : 0
+          }))
+          .sort((a, b) => b.totalCogs - a.totalCogs);
+
+        const highestCogsSeason = seasonRows[0] || { season: "N/A", totalCogs: 0, unitCogs: 0 };
+        const lowestCogsSeason = seasonRows[seasonRows.length - 1] || { season: "N/A", totalCogs: 0, unitCogs: 0 };
+
+        const unitCogsMin = seasonRows.length ? Math.min(...seasonRows.map((r) => r.unitCogs)) : 0;
+        const unitCogsMax = seasonRows.length ? Math.max(...seasonRows.map((r) => r.unitCogs)) : 0;
+        const unitCogsVaries = unitCogsMax - unitCogsMin > 0.25;
+
+        return {
+          product,
+          demandSignal,
+          revChangePct: Number(revChangePct.toFixed(1)),
+          fwdAvgRev,
+          fwdAvgCogs,
+          highestCogsSeason: highestCogsSeason.season,
+          lowestCogsSeason: lowestCogsSeason.season,
+          unitCogsRange: unitCogsVaries
+            ? `$${unitCogsMin.toFixed(2)} – $${unitCogsMax.toFixed(2)}/u (Cost + Vol)`
+            : `~$${unitCogsMin.toFixed(2)}/u (Volume-driven)`
+        };
+      });
+    }
+
+    // =========================================================================
+    // APPLICATION STATE & INTERACTION HANDLERS
+    // =========================================================================
+    let DATASET = generatePresetDataset("northwind");
+    let FILTERED = [];
+    let charts = {};
+    let granularity = "month";
+    let journeyMode = "product";
+    let crossFilter = { type: null, value: null };
+    let accentHex = "#f59e0b";
+
+    const SWATCH_COLORS = ["#38bdf8", "#f59e0b", "#34d399", "#a78bfa", "#fb7185", "#2dd4bf"];
+    const fmtMoney = (n) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(n) || 0);
+
+    function showToast(msg) {
+      document.getElementById("status-toast-text").textContent = msg;
+      document.getElementById("status-toast").classList.remove("hidden");
+    }
+
+    function hideToast() {
+      document.getElementById("status-toast").classList.add("hidden");
+    }
+
+    function toggleInfo(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle("hidden");
+    }
+
+    function setAccent(hex) {
+      accentHex = hex;
+      document.documentElement.style.setProperty("--mf-accent", hex);
+      const box = document.getElementById("logo-box");
+      if (box && !localStorage.getItem("mf_studio_logo")) {
+        box.style.backgroundColor = hex;
+      }
+      renderCharts();
+      renderJourneySection();
+    }
+
+    function uploadLogo(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          localStorage.setItem("mf_studio_logo", ev.target.result);
+        } catch (_) {
+          // Ignore storage quota errors on large images
+        }
+        renderLogo(ev.target.result);
+        showToast("Custom brand logo updated and saved locally.");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderLogo(src) {
+      const box = document.getElementById("logo-box");
+      if (src && box) {
+        box.innerHTML = `<img src="${src}" alt="Brand Logo" class="w-full h-full object-contain bg-white p-0.5" />`;
+      }
+    }
+
+    function switchView(view) {
+      ["analytics", "coa", "ledger"].forEach((v) => {
+        document.getElementById("view-" + v).classList.toggle("hidden", v !== view);
+        const tab = document.getElementById("tab-" + v);
+        tab.className = v === view
+          ? "px-3 py-1 rounded-lg bg-amber-400 text-slate-950 cursor-pointer"
+          : "px-3 py-1 rounded-lg text-slate-300 hover:text-white cursor-pointer";
+      });
+      if (view === "coa") renderCoaTieOut();
+      if (view === "ledger") renderTable();
+    }
+
+    function setGranularity(g) {
+      granularity = g;
+      ["month", "week", "day"].forEach((k) => {
+        const el = document.getElementById("gran-" + k);
+        el.className = k === g
+          ? "px-2.5 py-1 rounded-md bg-white text-slate-950 cursor-pointer"
+          : "px-2.5 py-1 rounded-md text-slate-300 cursor-pointer";
+      });
+      renderCharts();
+    }
+
+    function setJourneyMode(mode) {
+      journeyMode = mode;
+      ["product", "customer"].forEach((m) => {
+        const el = document.getElementById("jmode-" + m);
+        el.className = m === mode
+          ? "px-2.5 py-1 rounded-md bg-white text-slate-950 cursor-pointer"
+          : "px-2.5 py-1 rounded-md text-slate-300 cursor-pointer";
+      });
+      renderJourneySection();
+    }
+
+    function populateFilterDropdowns() {
+      const pSel = document.getElementById("f-product");
+      pSel.innerHTML = `<option value="ALL">All Products</option>`;
+      DATASET.products.forEach((p) => {
+        pSel.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+      });
+
+      const segs = [...new Set(DATASET.customers.map((c) => c.segment).filter(Boolean))];
+      const sSel = document.getElementById("f-segment");
+      sSel.innerHTML = `<option value="ALL">All Segments</option>`;
+      segs.forEach((s) => {
+        sSel.innerHTML += `<option value="${s}">${s}</option>`;
+      });
+    }
+
+    function verifyForeignKeys() {
+      const prodIds = new Set(DATASET.products.map((p) => p.id));
+      const custIds = new Set(DATASET.customers.map((c) => c.id));
+      const coaIds = new Set(DATASET.coa.map((a) => a.id));
+
+      let mismatches = 0;
+      DATASET.transactions.forEach((t) => {
+        if (!prodIds.has(t.productId) || !custIds.has(t.customerId) || !coaIds.has(t.debitAccountId) || !coaIds.has(t.creditAccountId)) {
+          mismatches++;
+        }
+      });
+
+      const badge = document.getElementById("fk-badge");
+      if (mismatches === 0) {
+        badge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30";
+        badge.textContent = `100% FK Verified (${DATASET.transactions.length} txns)`;
+      } else {
+        badge.className = "text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30";
+        badge.textContent = `${mismatches} FK Warnings`;
+      }
+    }
+
+    function switchBusinessPreset(key) {
+      DATASET = generatePresetDataset(key);
+      document.getElementById("biz-title").textContent = `${DATASET.preset.name} — Executive BI`;
+      document.getElementById("biz-subtitle").textContent =
+        `${DATASET.preset.theme} • BYOB Google Sheets N:1 Model • Human-Readable COA & ML Forecasting`;
+      setAccent(DATASET.preset.accent);
+      populateFilterDropdowns();
+      verifyForeignKeys();
+      resetFilters();
+    }
+
+    function clearCrossFilter() {
+      crossFilter = { type: null, value: null };
+      document.getElementById("cross-filter-bar").classList.add("hidden");
+      applyFilters();
+    }
+
+    function setCrossFilter(type, value, label) {
+      if (crossFilter.type === type && crossFilter.value === value) {
+        clearCrossFilter();
+        return;
+      }
+      crossFilter = { type, value };
+      document.getElementById("cross-filter-label").textContent = `Active Cross-Filter: ${label}`;
+      document.getElementById("cross-filter-bar").classList.remove("hidden");
+      applyFilters();
+    }
+
+    function resetFilters() {
+      document.getElementById("f-from").value = "";
+      document.getElementById("f-to").value = "";
+      document.getElementById("f-product").value = "ALL";
+      document.getElementById("f-segment").value = "ALL";
+      document.getElementById("f-tier").value = "ALL";
+      document.getElementById("f-status").value = "ALL";
+      document.getElementById("f-search").value = "";
+      crossFilter = { type: null, value: null };
+      document.getElementById("cross-filter-bar").classList.add("hidden");
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const from = document.getElementById("f-from").value;
+      const to = document.getElementById("f-to").value;
+      const prod = document.getElementById("f-product").value;
+      const seg = document.getElementById("f-segment").value;
+      const tier = document.getElementById("f-tier").value;
+      const status = document.getElementById("f-status").value;
+      const q = document.getElementById("f-search").value.toLowerCase().trim();
+
+      FILTERED = DATASET.transactions.filter((t) => {
+        if (from && t.date < from) return false;
+        if (to && t.date > to) return false;
+        if (prod !== "ALL" && t.productId !== prod) return false;
+        if (seg !== "ALL" && t.segment !== seg) return false;
+        if (tier === "RETAIL" && t.isBulk) return false;
+        if (tier === "BULK" && !t.isBulk) return false;
+        if (status !== "ALL" && t.status !== status) return false;
+        if (crossFilter.type === "product" && t.productName !== crossFilter.value) return false;
+        if (crossFilter.type === "segment" && t.segment !== crossFilter.value) return false;
+        if (crossFilter.type === "customer" && t.customerName !== crossFilter.value) return false;
+        if (q && !(
+          String(t.txId).toLowerCase().includes(q) ||
+          String(t.customerName).toLowerCase().includes(q) ||
+          String(t.productName).toLowerCase().includes(q) ||
+          String(t.sku).toLowerCase().includes(q)
+        )) return false;
+        return true;
+      });
+
+      renderKPIs();
+      renderInsights();
+      renderJourneySection();
+      renderCharts();
+      renderTopCustomers();
+      renderMlForecasts();
+      renderTable();
+      if (!document.getElementById("view-coa").classList.contains("hidden")) renderCoaTieOut();
+    }
+
+    function renderKPIs() {
+      const completed = FILTERED.filter((t) => t.status !== "Refunded");
+      const refunded = FILTERED.filter((t) => t.status === "Refunded");
+
+      const rev = completed.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+      const cogs = completed.reduce((s, t) => s + (Number(t.cogs) || 0), 0);
+      const gp = rev - cogs;
+      const margin = rev > 0 ? (gp / rev) * 100 : 0;
+      const units = completed.reduce((s, t) => s + (Number(t.qty) || 0), 0);
+      const aov = completed.length ? rev / completed.length : 0;
+      const buyers = new Set(completed.map((t) => t.customerId)).size;
+      const refAmt = refunded.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+      const refRate = FILTERED.length ? (refunded.length / FILTERED.length) * 100 : 0;
+
+      document.getElementById("kpi-rev").textContent = fmtMoney(rev);
+      document.getElementById("kpi-orders").textContent = `${completed.length.toLocaleString()} completed orders`;
+      document.getElementById("kpi-gp").textContent = fmtMoney(gp);
+      document.getElementById("kpi-margin").textContent = `${margin.toFixed(1)}% gross margin`;
+      document.getElementById("kpi-cogs").textContent = fmtMoney(cogs);
+      document.getElementById("kpi-units").textContent = `${units.toLocaleString()} units sold`;
+      document.getElementById("kpi-aov").textContent = fmtMoney(aov);
+      document.getElementById("kpi-customers").textContent = `${buyers.toLocaleString()} active buyers`;
+      document.getElementById("kpi-refund").textContent = `${refRate.toFixed(1)}%`;
+      document.getElementById("kpi-refund-amt").textContent = `${fmtMoney(refAmt)} refunded`;
+    }
+
+    function renderInsights() {
+      const completed = FILTERED.filter((t) => t.status !== "Refunded");
+      const list = document.getElementById("insights-list");
+      if (!completed.length) {
+        list.innerHTML = `<li class="text-slate-400">No completed transactions match the current filter selection.</li>`;
+        return;
+      }
+
+      const byProd = {};
+      let bulkRev = 0;
+      let totalRev = 0;
+      completed.forEach((t) => {
+        totalRev += t.amount;
+        if (t.isBulk) bulkRev += t.amount;
+        if (!byProd[t.productName]) byProd[t.productName] = { rev: 0, gp: 0 };
+        byProd[t.productName].rev += t.amount;
+        byProd[t.productName].gp += (t.amount - t.cogs);
+      });
+
+      const topProd = Object.entries(byProd).sort((a, b) => b[1].rev - a[1].rev)[0];
+      const bestMarginProd = Object.entries(byProd)
+        .map(([name, d]) => ({ name, margin: d.rev > 0 ? (d.gp / d.rev) * 100 : 0 }))
+        .sort((a, b) => b.margin - a.margin)[0];
+
+      const bulkPct = totalRev > 0 ? ((bulkRev / totalRev) * 100).toFixed(1) : "0.0";
+      const forecasts = buildProductMlForecasts(completed, 3);
+      const risingCount = forecasts.filter((f) => f.demandSignal === "RISE").length;
+      const fallingCount = forecasts.filter((f) => f.demandSignal === "FALL").length;
+
+      const bullets = [
+        `<strong>Q1 Profit &amp; Top Driver:</strong> ${topProd[0]} leads completed sales at ${fmtMoney(topProd[1].rev)}, while ${bestMarginProd.name} leads gross margin at ${bestMarginProd.margin.toFixed(1)}%.`,
+        `<strong>Q2 Bulk Tier Impact:</strong> Bulk &amp; Wholesale Revenue drives ${bulkPct}% (${fmtMoney(bulkRev)}) of completed revenue without collapsing margins.`,
+        `<strong>Q3 Period Check:</strong> Partial trailing months are normalized to full-month pace so incomplete windows never create false drop alarms.`,
+        `<strong>Q4 ML Product Signals:</strong> ${risingCount} product(s) forecast to <strong>RISE</strong> and ${fallingCount} to <strong>FALL</strong> over the next 3 months.`
+      ];
+
+      list.innerHTML = bullets.map((b) => `<li class="bg-slate-950/60 border border-white/5 rounded-xl px-3.5 py-2.5">${b}</li>`).join("");
+    }
+
+    function renderJourneySection() {
+      const completed = FILTERED.filter((t) => t.status !== "Refunded");
+      const legendEl = document.getElementById("swatch-legend");
+      const matrixEl = document.getElementById("journey-matrix");
+
+      if (!completed.length) {
+        legendEl.innerHTML = "";
+        matrixEl.innerHTML = `<p class="text-slate-400">No completed records in selection to render timeline bars.</p>`;
+        return;
+      }
+
+      const months = [...new Set(completed.map((t) => t.date.slice(0, 7)))].sort();
+      const keyField = journeyMode === "product" ? "productName" : "customerName";
+      const filterType = journeyMode === "product" ? "product" : "customer";
+
+      const totalsByItem = {};
+      const itemMonthMap = {};
+      let maxCellVal = 1;
+
+      completed.forEach((t) => {
+        const label = t[keyField];
+        const ym = t.date.slice(0, 7);
+        totalsByItem[label] = (totalsByItem[label] || 0) + t.amount;
+        if (!itemMonthMap[label]) itemMonthMap[label] = {};
+        itemMonthMap[label][ym] = (itemMonthMap[label][ym] || 0) + t.amount;
+        if (itemMonthMap[label][ym] > maxCellVal) maxCellVal = itemMonthMap[label][ym];
+      });
+
+      const topItems = Object.entries(totalsByItem)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6);
+
+      // Clickable color swatch legend
+      legendEl.innerHTML = topItems.map(([label], idx) => {
+        const color = SWATCH_COLORS[idx % SWATCH_COLORS.length];
+        const isSelected = crossFilter.type === filterType && crossFilter.value === label;
+        return `
+          <button
+            type="button"
+            onclick="setCrossFilter('${filterType}', '${label.replace(/'/g, "\\'")}', '${journeyMode === "product" ? "Product" : "Customer"} = ${label.replace(/'/g, "\\'")}')"
+            class="inline-flex items-center gap-2 px-2.5 py-1 rounded-xl border text-[11px] font-semibold cursor-pointer transition ${
+              isSelected
+                ? "bg-white text-slate-950 border-white"
+                : "bg-slate-800/80 text-slate-200 border-white/10 hover:border-white/30"
+            }"
+          >
+            <span class="w-3 h-3 rounded-sm shrink-0" style="background-color: ${color}"></span>
+            <span class="truncate max-w-[180px]">${label}</span>
+          </button>
+        `;
+      }).join("");
+
+      // Timeline header + Gantt-style bars across months
+      const headerCells = months.map((m) => `<th class="py-1.5 px-1.5 text-center font-mono text-[10px] text-slate-400">${m}</th>`).join("");
+      const bodyRows = topItems.map(([label, total], idx) => {
+        const color = SWATCH_COLORS[idx % SWATCH_COLORS.length];
+        const cells = months.map((m) => {
+          const val = (itemMonthMap[label] && itemMonthMap[label][m]) || 0;
+          const pct = Math.max(8, Math.min(100, Math.round((val / maxCellVal) * 100)));
+          return `
+            <td class="py-1.5 px-1.5 min-w-[68px]" title="${label} (${m}): ${fmtMoney(val)}">
+              <div class="w-full h-4 rounded-md bg-slate-800/90 overflow-hidden flex items-center">
+                ${val > 0 ? `<div class="h-full rounded-md" style="width: ${pct}%; background-color: ${color};"></div>` : ""}
+              </div>
+            </td>
+          `;
+        }).join("");
+
+        return `
+          <tr class="border-t border-white/5 hover:bg-slate-800/40">
+            <td class="py-1.5 pr-3 font-medium text-white whitespace-nowrap max-w-[210px] truncate">${label}</td>
+            <td class="py-1.5 px-2 font-mono text-emerald-300 whitespace-nowrap text-right">${fmtMoney(total)}</td>
+            ${cells}
+          </tr>
+        `;
+      }).join("");
+
+      matrixEl.innerHTML = `
+        <table class="w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="py-1.5 pr-3 text-left text-[10px] uppercase text-slate-400">${journeyMode === "product" ? "Product" : "Customer"}</th>
+              <th class="py-1.5 px-2 text-right text-[10px] uppercase text-slate-400">Total</th>
+              ${headerCells}
+            </tr>
+          </thead>
+          <tbody>${bodyRows}</tbody>
+        </table>
+      `;
+    }
+
+    function bucketDate(dateStr) {
+      const s = String(dateStr || "");
+      if (granularity === "day") return s.slice(0, 10);
+      if (granularity === "week") {
+        const d = new Date(s + "T00:00:00");
+        if (isNaN(d)) return s.slice(0, 10);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        const mon = new Date(d.setDate(diff));
+        return mon.toISOString().slice(0, 10);
+      }
+      return s.slice(0, 7);
+    }
+
+    function upsertChart(id, config) {
+      if (charts[id]) charts[id].destroy();
+      const ctx = document.getElementById(id);
+      if (ctx) charts[id] = new Chart(ctx, config);
+    }
+
+    function renderCharts() {
+      const completed = FILTERED.filter((t) => t.status !== "Refunded");
+
+      // 1. Timeline Trend
+      const buckets = {};
+      completed.forEach((t) => {
+        const k = bucketDate(t.date);
+        if (!k) return;
+        if (!buckets[k]) buckets[k] = { rev: 0, cogs: 0 };
+        buckets[k].rev += t.amount;
+        buckets[k].cogs += t.cogs;
+      });
+      const keys = Object.keys(buckets).sort();
+
+      upsertChart("chart-timeline", {
+        type: "bar",
+        data: {
+          labels: keys,
+          datasets: [
+            { label: "Net Revenue", data: keys.map((k) => buckets[k].rev), backgroundColor: "#38bdf8", borderRadius: 4 },
+            { label: "COGS", data: keys.map((k) => buckets[k].cogs), backgroundColor: "#64748b", borderRadius: 4 },
+            {
+              label: "Gross Profit",
+              data: keys.map((k) => buckets[k].rev - buckets[k].cogs),
+              type: "line",
+              borderColor: accentHex,
+              backgroundColor: accentHex,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          plugins: { legend: { labels: { color: "#cbd5e1", boxWidth: 12 } } },
+          scales: { x: { ticks: { color: "#94a3b8" } }, y: { ticks: { color: "#94a3b8" } } }
+        }
+      });
+
+      // 2. Revenue by Product (Click to Cross-Filter)
+      const byProd = {};
+      completed.forEach((t) => {
+        byProd[t.productName] = (byProd[t.productName] || 0) + t.amount;
+      });
+      const pLabels = Object.keys(byProd).sort((a, b) => byProd[b] - byProd[a]);
+
+      upsertChart("chart-products", {
+        type: "bar",
+        data: {
+          labels: pLabels,
+          datasets: [{ label: "Net Revenue", data: pLabels.map((l) => byProd[l]), backgroundColor: accentHex, borderRadius: 4 }]
+        },
+        options: {
+          indexAxis: "y",
+          onClick: (_, els) => {
+            if (els.length) {
+              const chosen = pLabels[els[0].index];
+              setCrossFilter("product", chosen, "Product = " + chosen);
+            }
+          },
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { color: "#94a3b8" } }, y: { ticks: { color: "#cbd5e1", font: { size: 11 } } } }
+        }
+      });
+
+      // 3. Retail vs Bulk using human-readable revenue account names
+      let retail = 0;
+      let bulk = 0;
+      completed.forEach((t) => {
+        if (t.isBulk) bulk += t.amount;
+        else retail += t.amount;
+      });
+
+      upsertChart("chart-tier", {
+        type: "doughnut",
+        data: {
+          labels: ["Storefront Product Revenue", "Bulk & Wholesale Revenue"],
+          datasets: [{ data: [retail, bulk], backgroundColor: ["#38bdf8", accentHex], borderWidth: 0 }]
+        },
+        options: {
+          plugins: { legend: { labels: { color: "#cbd5e1", font: { size: 11 } } } }
+        }
+      });
+
+      // 4. Revenue by Segment (Click to Cross-Filter)
+      const bySeg = {};
+      completed.forEach((t) => {
+        bySeg[t.segment] = (bySeg[t.segment] || 0) + t.amount;
+      });
+      const sLabels = Object.keys(bySeg).sort((a, b) => bySeg[b] - bySeg[a]);
+
+      upsertChart("chart-segment", {
+        type: "bar",
+        data: {
+          labels: sLabels,
+          datasets: [{ label: "Net Revenue", data: sLabels.map((s) => bySeg[s]), backgroundColor: "#34d399", borderRadius: 4 }]
+        },
+        options: {
+          onClick: (_, els) => {
+            if (els.length) {
+              const chosen = sLabels[els[0].index];
+              setCrossFilter("segment", chosen, "Segment = " + chosen);
+            }
+          },
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { color: "#cbd5e1" } }, y: { ticks: { color: "#94a3b8" } } }
+        }
+      });
+    }
+
+    function renderTopCustomers() {
+      const byCust = {};
+      FILTERED.filter((t) => t.status !== "Refunded").forEach((t) => {
+        byCust[t.customerName] = (byCust[t.customerName] || 0) + t.amount;
+      });
+      const top = Object.entries(byCust).sort((a, b) => b[1] - a[1]).slice(0, 10);
+      document.getElementById("top-customers").innerHTML = top.length
+        ? top.map(([name, amt], i) => `
+            <button
+              type="button"
+              onclick="setCrossFilter('customer', '${name.replace(/'/g, "\\'")}', 'Customer = ${name.replace(/'/g, "\\'")}')"
+              class="w-full flex justify-between items-center py-1.5 px-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 text-left cursor-pointer"
+            >
+              <span class="text-slate-200 font-medium">${i + 1}. ${name}</span>
+              <span class="font-mono font-bold text-emerald-400">${fmtMoney(amt)}</span>
+            </button>
+          `).join("")
+        : `<p class="text-slate-500 italic">No customer records in current filter.</p>`;
+    }
+
+    function renderMlForecasts() {
+      const completed = FILTERED.filter((t) => t.status !== "Refunded");
+      const rows = buildProductMlForecasts(completed, 3);
+      const tbody = document.getElementById("ml-table-body");
+
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-4 text-center text-slate-400">No completed data available for ML forecast.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map((r) => {
+        const badgeStyle = r.demandSignal === "RISE"
+          ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/30"
+          : r.demandSignal === "FALL"
+            ? "bg-rose-500/20 text-rose-300 border border-rose-400/30"
+            : "bg-slate-700/60 text-slate-200 border border-white/10";
+        const deltaColor = r.revChangePct >= 0 ? "text-emerald-400" : "text-rose-400";
+
+        return `
+          <tr class="hover:bg-slate-800/50">
+            <td class="py-2 px-2 font-semibold text-white">${r.product}</td>
+            <td class="py-2 px-2"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeStyle}">${r.demandSignal}</span></td>
+            <td class="py-2 px-2 text-right font-mono font-bold ${deltaColor}">${r.revChangePct > 0 ? "+" : ""}${r.revChangePct}%</td>
+            <td class="py-2 px-2 text-right font-mono text-white">${fmtMoney(r.fwdAvgRev)}</td>
+            <td class="py-2 px-2 text-right font-mono text-amber-300">${fmtMoney(r.fwdAvgCogs)}</td>
+            <td class="py-2 px-2 text-amber-200 font-medium">${r.highestCogsSeason}</td>
+            <td class="py-2 px-2 text-sky-200">${r.lowestCogsSeason}</td>
+            <td class="py-2 px-2 text-slate-300">${r.unitCogsRange}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderCoaTieOut() {
+      const debits = FILTERED.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+      const credits = FILTERED.reduce((s, t) => s + (Number(t.creditAmount ?? t.amount) || 0), 0);
+      const variance = Math.abs(debits - credits);
+
+      document.getElementById("tie-debits").textContent = fmtMoney(debits);
+      document.getElementById("tie-credits").textContent = fmtMoney(credits);
+      document.getElementById("tie-var").textContent = fmtMoney(variance);
+
+      const pill = document.getElementById("tieout-pill");
+      if (variance < 0.01) {
+        pill.className = "px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
+        pill.textContent = "BALANCED (DEBITS = CREDITS)";
+      } else {
+        pill.className = "px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-400/30";
+        pill.textContent = `VARIANCE DETECTED: ${fmtMoney(variance)}`;
+      }
+
+      const roll = {};
+      DATASET.coa.forEach((a) => {
+        roll[a.id] = { ...a, deb: 0, cred: 0 };
+      });
+
+      FILTERED.forEach((t) => {
+        if (roll[t.debitAccountId]) roll[t.debitAccountId].deb += Number(t.amount) || 0;
+        if (roll[t.creditAccountId]) roll[t.creditAccountId].cred += Number(t.creditAmount ?? t.amount) || 0;
+      });
+
+      document.getElementById("coa-table-body").innerHTML = Object.values(roll).map((a) => {
+        const net = a.normalBalance === "Debit" ? (a.deb - a.cred) : (a.cred - a.deb);
+        return `
+          <tr class="hover:bg-slate-800/50">
+            <td class="py-2 px-2 font-semibold text-white">${a.name}</td>
+            <td class="py-2 px-2 font-mono text-amber-300 text-[11px]">${a.id}</td>
+            <td class="py-2 px-2 text-slate-300">${a.type}</td>
+            <td class="py-2 px-2 text-slate-400">${a.statement}</td>
+            <td class="py-2 px-2 text-right font-mono">${fmtMoney(a.deb)}</td>
+            <td class="py-2 px-2 text-right font-mono">${fmtMoney(a.cred)}</td>
+            <td class="py-2 px-2 text-right font-mono font-bold text-emerald-400">${fmtMoney(net)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderTable() {
+      document.getElementById("table-count").textContent = `(${FILTERED.length.toLocaleString()} matched • showing top 75)`;
+      const rows = FILTERED.slice(0, 75);
+      document.getElementById("tx-table-body").innerHTML = rows.map((t) => `
+        <tr class="hover:bg-slate-800/50">
+          <td class="py-2 px-2 font-mono text-slate-300">${t.txId}</td>
+          <td class="py-2 px-2 font-mono text-slate-400">${t.date}</td>
+          <td class="py-2 px-2 text-white font-medium">${t.customerName}</td>
+          <td class="py-2 px-2 text-slate-300">${t.productName}</td>
+          <td class="py-2 px-2 text-emerald-300 font-medium">${t.debitAccountName}</td>
+          <td class="py-2 px-2 text-amber-300 font-medium">${t.creditAccountName}</td>
+          <td class="py-2 px-2 text-right font-mono">${t.qty}</td>
+          <td class="py-2 px-2 text-right font-mono font-bold text-white">${fmtMoney(t.amount)}</td>
+          <td class="py-2 px-2 text-right font-mono text-slate-300">${fmtMoney(t.cogs)}</td>
+          <td class="py-2 px-2">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              t.status === "Refunded" ? "bg-rose-500/20 text-rose-300" : "bg-emerald-500/20 text-emerald-300"
+            }">
+              ${t.status}
+            </span>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function openDataModal() {
+      document.getElementById("modal-error").textContent = "";
+      document.getElementById("data-modal").classList.remove("hidden");
+    }
+
+    function closeDataModal() {
+      document.getElementById("data-modal").classList.add("hidden");
+    }
+
+    function parseCsvLine(line) {
+      const result = [];
+      let cur = "";
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          inQuotes = !inQuotes;
+        } else if (ch === "," && !inQuotes) {
+          result.push(cur.trim());
+          cur = "";
+        } else {
+          cur += ch;
+        }
+      }
+      result.push(cur.trim());
+      return result;
+    }
+
+    function applyCustomData() {
+      const rawText = document.getElementById("custom-data-input").value.trim();
+      const errEl = document.getElementById("modal-error");
+      if (!rawText) {
+        errEl.textContent = "Please paste JSON or CSV content first.";
+        return;
+      }
+
+      try {
+        const coaMap = Object.fromEntries(STANDARD_COA.map((a) => [a.id, a]));
+        if (rawText.startsWith("{")) {
+          const parsed = JSON.parse(rawText);
+          if (!Array.isArray(parsed.transactions) || !parsed.transactions.length) {
+            throw new Error("JSON must include a non-empty 'transactions' array.");
+          }
+          const normTx = parsed.transactions.map((t, idx) => {
+            const debId = t.debitAccountId || t["Debit_Account_ID (FK)"] || "COA-1010";
+            const credId = t.creditAccountId || t["Credit_Account_ID (FK)"] || "COA-4000";
+            const amt = Number(t.amount ?? t.Debit_Amount ?? 0) || 0;
+            return {
+              txId: t.txId || t["Transaction_ID (PK)"] || `TXN-${idx + 1}`,
+              date: String(t.date || t.Transaction_Date || "2026-01-01").slice(0, 10),
+              customerId: t.customerId || t["Customer_ID (FK)"] || "CUST-0001",
+              customerName: t.customerName || t.Full_Name || "Store Customer",
+              segment: t.segment || t.Segment || "Direct Subscribers",
+              productId: t.productId || t["Product_ID (FK)"] || "PROD-001",
+              sku: t.sku || t.SKU || "SKU-01",
+              productName: t.productName || t.Product_Name || "Custom Product",
+              debitAccountId: debId,
+              creditAccountId: credId,
+              debitAccountName: t.debitAccountName || (coaMap[debId] && coaMap[debId].name) || debId,
+              creditAccountName: t.creditAccountName || (coaMap[credId] && coaMap[credId].name) || credId,
+              qty: Number(t.qty ?? t.Quantity ?? 1) || 1,
+              amount: amt,
+              creditAmount: Number(t.creditAmount ?? t.Credit_Amount ?? amt) || amt,
+              cogs: Number(t.cogs ?? t.COGS_Amount ?? 0) || 0,
+              status: t.status || t.Order_Status || "Completed",
+              isBulk: credId === "COA-4010" || Boolean(t.isBulk)
+            };
+          });
+
+          DATASET = {
+            preset: {
+              key: "custom",
+              name: parsed.storeName || "Custom BYOB Store",
+              theme: "Custom JSON Dataset",
+              accent: accentHex
+            },
+            coa: Array.isArray(parsed.coa) && parsed.coa.length ? parsed.coa : STANDARD_COA,
+            products: Array.isArray(parsed.products) && parsed.products.length
+              ? parsed.products
+              : [...new Set(normTx.map((t) => t.productName))].map((name, i) => ({
+                  id: `PROD-${i + 1}`,
+                  name
+                })),
+            customers: Array.isArray(parsed.customers) && parsed.customers.length
+              ? parsed.customers
+              : [...new Set(normTx.map((t) => t.customerName))].map((name, i) => ({
+                  id: `CUST-${i + 1}`,
+                  name,
+                  segment: normTx.find((x) => x.customerName === name)?.segment || "Direct Subscribers"
+                })),
+            transactions: normTx
+          };
+        } else {
+          const lines = rawText.split(/\r?\n/).filter((l) => l.trim().length > 0);
+          if (lines.length < 2) throw new Error("CSV requires a header row and at least one data row.");
+          const headers = parseCsvLine(lines[0]);
+          const normTx = lines.slice(1).map((line, idx) => {
+            const cols = parseCsvLine(line);
+            const row = Object.fromEntries(headers.map((h, i) => [h, cols[i] ?? ""]));
+            const isBulk = String(row.Tier || row.isBulk || "").toLowerCase().includes("bulk");
+            const debId = row.Debit_Account_ID || "COA-1010";
+            const credId = row.Credit_Account_ID || (isBulk ? "COA-4010" : "COA-4000");
+            const amt = Number(row.Debit_Amount || row.Amount || 0) || 0;
+            return {
+              txId: row.Transaction_ID || `TXN-${idx + 1}`,
+              date: String(row.Transaction_Date || row.Date || "2026-01-01").slice(0, 10),
+              customerId: row.Customer_ID || `CUST-${idx + 1}`,
+              customerName: row.Customer_Name || row.Full_Name || "Store Customer",
+              segment: row.Segment || "Direct Subscribers",
+              productId: row.Product_ID || `PROD-${idx + 1}`,
+              sku: row.SKU || "SKU-01",
+              productName: row.Product_Name || row.Product || "Custom Product",
+              debitAccountId: debId,
+              creditAccountId: credId,
+              debitAccountName: (coaMap[debId] && coaMap[debId].name) || debId,
+              creditAccountName: (coaMap[credId] && coaMap[credId].name) || credId,
+              qty: Number(row.Quantity || row.Qty || 1) || 1,
+              amount: amt,
+              creditAmount: Number(row.Credit_Amount || amt) || amt,
+              cogs: Number(row.COGS_Amount || row.COGS || 0) || 0,
+              status: row.Order_Status || row.Status || "Completed",
+              isBulk
+            };
+          });
+
+          DATASET = {
+            preset: { key: "custom-csv", name: "Imported CSV Store", theme: "CSV Upload", accent: accentHex },
+            coa: STANDARD_COA,
+            products: [...new Set(normTx.map((t) => t.productName))].map((name, i) => ({ id: `PROD-${i + 1}`, name })),
+            customers: [...new Set(normTx.map((t) => t.customerName))].map((name, i) => ({
+              id: `CUST-${i + 1}`,
+              name,
+              segment: normTx.find((x) => x.customerName === name)?.segment || "Direct Subscribers"
+            })),
+            transactions: normTx
+          };
+        }
+
+        document.getElementById("biz-title").textContent = `${DATASET.preset.name} — Executive BI`;
+        document.getElementById("biz-subtitle").textContent = `${DATASET.preset.theme} • Active BYOB Dataset`;
+        populateFilterDropdowns();
+        verifyForeignKeys();
+        resetFilters();
+        closeDataModal();
+        showToast(`Loaded ${DATASET.transactions.length} transactions into ${DATASET.preset.name}.`);
+      } catch (err) {
+        errEl.textContent = err.message || "Unable to parse custom data.";
+      }
+    }
+
+    function exportFilteredCsv() {
+      const headers = [
+        "Transaction_ID",
+        "Date",
+        "Customer",
+        "Segment",
+        "Product",
+        "Debit_Account_Name",
+        "Credit_Account_Name",
+        "Qty",
+        "Amount",
+        "COGS",
+        "Status"
+      ];
+      const lines = [headers.join(",")];
+      FILTERED.forEach((t) => {
+        lines.push([
+          t.txId,
+          t.date,
+          `"${String(t.customerName).replace(/"/g, '""')}"`,
+          `"${String(t.segment).replace(/"/g, '""')}"`,
+          `"${String(t.productName).replace(/"/g, '""')}"`,
+          `"${String(t.debitAccountName).replace(/"/g, '""')}"`,
+          `"${String(t.creditAccountName).replace(/"/g, '""')}"`,
+          t.qty,
+          t.amount,
+          t.cogs,
+          t.status
+        ].join(","));
+      });
+
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${DATASET.preset.key || "mf_studio"}_filtered_ledger.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast(`Exported ${FILTERED.length} filtered rows to CSV.`);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedLogo = localStorage.getItem("mf_studio_logo");
+      if (savedLogo) renderLogo(savedLogo);
+      switchBusinessPreset("northwind");
+    });
+  </script>
+</body>
+</html>
