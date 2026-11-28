@@ -2449,6 +2449,18 @@
       syncCrmBadgeCount();
       updateNavTabStyles();
       renderCurrentTab();
+
+      const qName = (params.get('customerName') || '').trim();
+      const qEmail = (params.get('customerEmail') || '').trim();
+      const qBag = (params.get('bagItems') || '').trim();
+      const nameInput = document.getElementById('mf-contact-name');
+      const emailInput = document.getElementById('mf-contact-email');
+      const msgInput = document.getElementById('mf-contact-message');
+      if (nameInput && qName && !nameInput.value) nameInput.value = qName;
+      if (emailInput && qEmail && !emailInput.value) emailInput.value = qEmail;
+      if (msgInput && qBag && !msgInput.value) {
+        msgInput.value = `Interested in bag items: ${qBag}`;
+      }
     });
   </script>
 </body>

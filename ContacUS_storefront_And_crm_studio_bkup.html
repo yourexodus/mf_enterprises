@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MF Enterprises — Connected Storefront, Booking & CRM Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* Base typography and independent scrollable workspace layout */
+    :root {
+      --s100: #fef3c7;
+      --s300: #fcd34d;
+      --s500: #d97706;
+      --s700: #b45309;
+      --s900: #78350f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Dynamic 5-step business preset theme utility classes */
+    .bg-s100 { background-color: var(--s100); }
+    .bg-s300 { background-color: var(--s300); }
+    .bg-s500 { background-color: var(--s500); }
+    .bg-s700 { background-color: var(--s700); }
+    .bg-s900 { background-color: var(--s900); }
+
+    .text-s500 { color: var(--s500); }
+    .text-s700 { color: var(--s700); }
+    .text-s900 { color: var(--s900); }
+
+    .border-s300 { border-color: var(--s300); }
+    .border-s500 { border-color: var(--s500); }
+
+    .hover-bg-s700:hover { background-color: var(--s700); }
+    .hover-border-s500:hover { border-color: var(--s500); }
+
+    /* MF Customer Relations Matrix & Workspace styling */
+    .matrix-scroll-container {
+      scrollbar-width: thin;
+      scrollbar-color: #94a3b8 #e2e8f0;
+    }
+    .matrix-cell-available {
+      background-color: #e3ece6;
+      color: #2f4838;
+      border: 1px solid #d1dfd6;
+    }
+    .matrix-cell-available:hover {
+      background-color: #cfe0d5;
+      border-color: #15803d;
+    }
+    .matrix-cell-selected {
+      background-color: #15803d !important;
+      color: #ffffff !important;
+      border: 1px solid #14532d !important;
+      font-weight: 800;
+    }
+    .matrix-cell-booked {
+      background-color: #f6e2c4;
+      color: #b45309;
+      border: 1px solid #ebd0a6;
+      font-weight: 700;
+    }
+    .matrix-cell-booked:hover {
+      background-color: #efd4ad;
+      border-color: #d97706;
+    }
+
+    /* 4-Month Macro Weekday Calendar Tile Styling */
+    .macro-day-tile {
+      transition: all 0.15s ease;
+    }
+    .macro-day-available {
+      background-color: #ffffff;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+    .macro-day-available:hover {
+      border-color: #15803d;
+      background-color: #f8fafc;
+      transform: translateY(-1px);
+    }
+    .macro-day-booked {
+      background-color: #fffbeb;
+      border-color: #fcd34d;
+      color: #0f172a;
+    }
+    .macro-day-booked:hover {
+      border-color: #d97706;
+      background-color: #fef3c7;
+      transform: translateY(-1px);
+    }
+    .macro-day-past {
+      background-color: #f1f5f9;
+      border-color: #e2e8f0;
+      color: #94a3b8;
+    }
+    .macro-day-past:hover {
+      background-color: #e2e8f0;
+    }
+    .macro-day-selected {
+      background-color: #f59e0b !important;
+      border-color: #b45309 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 10px -2px rgba(217, 119, 6, 0.35);
+      transform: translateY(-1px);
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printable-report-area, #printable-report-area * {
+        visibility: visible;
+      }
+      #printable-report-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+
+    /* Custom subtle scrollbars */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-100 text-slate-900 antialiased">
+
+  <!-- Top Studio Header Bar (slate-900 dark chrome with MF Enterprises Growth Emblem & Active Business Switcher) -->
+  <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      
+      <!-- Brand Identity & Active Business Selector -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <!-- Dynamic Demo Company Brand Logo & Badge -->
+          <div id="header-company-logo-box" class="w-11 h-11 rounded-xl bg-s500 text-white flex flex-col items-center justify-center shadow-sm border border-white/20 shrink-0">
+            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/>
+            </svg>
+            <span class="text-[8px] font-black tracking-wider mt-0.5 leading-none">NR</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="header-company-badge-pill" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-s100 text-s900">
+                NR • Demo Storefront
+              </span>
+              <span id="header-company-tagline" class="hidden sm:inline-block text-[11px] text-slate-400 truncate max-w-[320px]">Small-Batch Pacific Northwest Specialty Coffee</span>
+            </div>
+            <h1 id="header-company-title" class="text-sm sm:text-base font-extrabold tracking-tight text-white leading-tight mt-0.5">
+              Northwind Roasters — Storefront, Booking &amp; CRM
+            </h1>
+          </div>
+        </div>
+
+        <!-- Business Preset Switcher -->
+        <div class="flex items-center gap-2 bg-slate-800/90 border border-slate-700 rounded-xl px-2.5 py-1.5">
+          <label for="business-preset-select" class="text-[11px] font-semibold text-slate-400 hidden sm:inline">
+            Active Brand:
+          </label>
+          <select id="business-preset-select" onchange="switchBusinessPreset(this.value)" class="bg-transparent text-xs sm:text-sm font-bold text-white focus:outline-none cursor-pointer pr-1">
+            <option value="northwind" class="bg-slate-900 text-white">Northwind Roasters</option>
+            <option value="ember" class="bg-slate-900 text-white">Ember &amp; Wax Candles</option>
+            <option value="heritage" class="bg-slate-900 text-white">Heritage Apparel</option>
+            <option value="valley" class="bg-slate-900 text-white">Valley Harvest Farm</option>
+            <option value="crafts" class="bg-slate-900 text-white">Cedar &amp; Clay Craft Co.</option>
+            <option value="hearthstone" class="bg-slate-900 text-white">Hearthstone Bakery</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Workspace Navigation Tabs -->
+      <nav aria-label="Studio Workspace Navigation" class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 lg:pb-0">
+        <button type="button" onclick="setActiveTab('storefront')" data-tab="storefront" class="nav-tab px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap">
+          1. Customer Storefront
+        </button>
+        <button type="button" onclick="setActiveTab('contact')" data-tab="contact" class="nav-tab px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap">
+          Contact &amp; Booking
+        </button>
+        <button type="button" onclick="setActiveTab('crm')" data-tab="crm" class="nav-tab inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap">
+          <span>CRM</span>
+          <span id="crm-nav-badge" class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[11px] font-extrabold leading-none">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Floating Notification Toast -->
+  <div id="studio-toast" role="status" aria-live="polite" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-slate-900 text-white border border-slate-700 rounded-2xl shadow-xl px-4 py-3 text-xs font-medium flex items-center gap-3">
+    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+    <span id="studio-toast-text">Action completed.</span>
+  </div>
+
+  <!-- Main Scrollable Studio Workspace -->
+  <main id="studio-main" class="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-5">
+    <!-- Dynamic Tab Content Injected Here -->
+  </main>
+
+  <!-- Contact Script Templates & Print Preview Modal -->
+  <div id="crm-detail-modal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-client-name">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Modal Header -->
+      <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="modal-record-id" class="text-[11px] font-mono text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded">MF WORKSPACE</span>
+            <span id="modal-source-badge" class="text-[11px] text-slate-300 bg-slate-800 px-2 py-0.5 rounded">Communication Scripts</span>
+          </div>
+          <h2 id="modal-client-name" class="text-lg font-extrabold text-white mt-1">Contact Script Templates</h2>
+        </div>
+        <button type="button" onclick="closeCrmModal()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-lg flex items-center justify-center transition" aria-label="Close modal">
+          ✕
+        </button>
+      </div>
+
+      <!-- Modal Scrollable Content -->
+      <div id="crm-modal-body" class="p-6 overflow-y-auto space-y-5 text-sm">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Studio Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800">MF Enterprises</span>
+        <span>•</span>
+        <span>Unified Storefront, 72-Hour Appointment Scheduling &amp; Customer Relations Studio</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button type="button" onclick="resetDemoData()" class="text-slate-500 hover:text-amber-700 font-semibold underline transition">
+          Reset Demo Data
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * =========================================================================
+     * 1. BUSINESS PRESETS & COMMUNICATION SCRIPT TEMPLATES
+     * =========================================================================
+     */
+    const BUSINESS_PRESETS = {
+      northwind: {
+        name: 'Northwind Roasters',
+        tagline: 'Small-Batch Pacific Northwest Specialty Coffee & Wholesale Supply',
+        badge: 'NR',
+        logoSvg: `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>`,
+        theme: { s100: '#fef3c7', s300: '#fcd34d', s500: '#d97706', s700: '#b45309', s900: '#78350f' },
+        products: [
+          { id: 'nw-1', sku: 'NW-101', name: 'Cascade Peak Espresso (5 lb)', category: 'Whole Bean', price: 68.00, unit: '5 lb bag', desc: 'Rich dark chocolate, toasted hazelnut, and caramel crema for commercial & office espresso bars.' },
+          { id: 'nw-2', sku: 'NW-102', name: 'Olympic Morning Blend (12 oz)', category: 'Retail Pack', price: 16.50, unit: '12 oz bag', desc: 'Balanced medium roast with bright citrus notes and smooth honey finish.' },
+          { id: 'nw-3', sku: 'NW-103', name: 'Cold Brew Concentrate Keg (2.5 Gal)', category: 'Tap Ready', price: 84.00, unit: '2.5 gal keg', desc: '18-hour cold-steeped organic single origin, ready for kegerator or pitcher service.' },
+          { id: 'nw-4', sku: 'NW-104', name: 'Co-Branded Office Counter Display', category: 'Wholesale Kit', price: 120.00, unit: 'Starter kit', desc: 'Includes 12 retail bags, custom QR reorder placard, and tasting cards.' }
+        ]
+      },
+      ember: {
+        name: 'Ember & Wax Candles',
+        tagline: 'Hand-Poured Botanical Soy Candles & Custom Event Apothecary',
+        badge: 'EW',
+        logoSvg: `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1.8 2.4 3 4.2 3 6a3 3 0 1 1-6 0c0-1.8 1.2-3.6 3-6Z"/><rect x="7" y="12" width="10" height="9" rx="2"/><line x1="7" y1="16" x2="17" y2="16"/></svg>`,
+        theme: { s100: '#ffe4e6', s300: '#fda4af', s500: '#e11d48', s700: '#be123c', s900: '#881337' },
+        products: [
+          { id: 'ew-1', sku: 'EW-201', name: 'Cedarwood & Smoked Vanilla (9 oz)', category: 'Signature Jar', price: 26.00, unit: '9 oz amber jar', desc: 'Warm Pacific cedar, Madagascar vanilla bean, and subtle hearth smoke with 55-hour burn.' },
+          { id: 'ew-2', sku: 'EW-202', name: 'Custom Event Apothecary Case (24 pc)', category: 'Bulk / Gifting', price: 360.00, unit: 'Case of 24', desc: 'Custom-labeled apothecary jars tailored for corporate summits, weddings, and client gifts.' },
+          { id: 'ew-3', sku: 'EW-203', name: 'Bergamot & White Tea Reed Diffuser', category: 'Boutique Home', price: 34.00, unit: '6 oz vessel', desc: 'Flameless continuous botanical fragrance crafted for hotel suites and reception lobbies.' }
+        ]
+      },
+      heritage: {
+        name: 'Heritage Apparel',
+        tagline: 'Heavyweight Workwear, Custom Embroidery & Team Outfitters',
+        badge: 'HA',
+        logoSvg: `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>`,
+        theme: { s100: '#e0f2fe', s300: '#7dd3fc', s500: '#0284c7', s700: '#0369a1', s900: '#0c4a6e' },
+        products: [
+          { id: 'ha-1', sku: 'HA-301', name: 'Cascade Heavyweight Chore Jacket', category: 'Outerwear', price: 94.00, unit: 'Single / Team', desc: '12 oz organic duck canvas with brass hardware and custom left-chest embroidery.' },
+          { id: 'ha-2', sku: 'HA-302', name: 'Field Crew Midweight Flannel', category: 'Shirting', price: 58.00, unit: 'Single / Team', desc: 'Brushed 8 oz cotton twill built for durability and year-round layering.' },
+          { id: 'ha-3', sku: 'HA-303', name: 'Custom Embroidered Team Pack (15 pc)', category: 'Bulk Outfitting', price: 690.00, unit: '15-piece bundle', desc: 'Includes digitized stitch setup, mixed sizing, and custom woven neck labels.' }
+        ]
+      },
+      valley: {
+        name: 'Valley Harvest Farm',
+        tagline: 'Regenerative Heirloom Produce, Orchard Fruit & Raw Honey',
+        badge: 'VH',
+        logoSvg: `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`,
+        theme: { s100: '#dcfce7', s300: '#86efac', s500: '#16a34a', s700: '#15803d', s900: '#14532d' },
+        products: [
+          { id: 'vh-1', sku: 'VH-401', name: 'Chef’s Weekly Heirloom Crate (25 lb)', category: 'Restaurant Drop', price: 78.00, unit: '25 lb crate', desc: 'Harvested at dawn: rainbow carrots, Chioggia beets, baby greens, and culinary herbs.' },
+          { id: 'vh-2', sku: 'vh-402', name: 'Raw Meadow Wildflower Honey (1 Gal)', category: 'Apiary Bulk', price: 64.00, unit: '1 gallon pail', desc: 'Unfiltered, cold-extracted Willamette Valley blossom honey for bakeries and kitchens.' },
+          { id: 'vh-3', sku: 'VH-403', name: 'Orchard Honeycrisp & Pear Reserve', category: 'Seasonal Fruit', price: 48.00, unit: '20 lb box', desc: 'Crisp mountain-grown apples and Bartlett pears packed for hospitality & retail.' }
+        ]
+      },
+      crafts: {
+        name: 'Cedar & Clay Craft Co.',
+        tagline: 'Hand-Thrown Stoneware, Turned Wood & Custom Studio Commissions',
+        badge: 'CC',
+        logoSvg: `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5"/><path d="M12 12v9"/><path d="M12 12L4 7.5"/></svg>`,
+        theme: {
+          s100: '#f3e8ff',
+          s300: '#d8b4fe',
+          s500: '#7e22ce',
+          s700: '#6b21a8',
+          s900: '#3b0764'
+        },
+        products: [
+          { id: 'CC-01', name: 'Speckled Stoneware Pour-Over Set', category: 'Ceramics', price: 64.00, desc: 'Wheel-thrown stoneware dripper and carafe' },
+          { id: 'CC-02', name: 'Black Walnut End-Grain Board', category: 'Woodwork', price: 85.00, desc: 'Hand-finished Missouri black walnut serving board' },
+          { id: 'CC-03', name: 'Matte Glaze Ceramic Mug Pair', category: 'Ceramics', price: 48.00, desc: 'Set of two 14oz ergonomic studio mugs' },
+          { id: 'CC-04', name: 'Custom Laser-Engraved Keepsake Box', category: 'Custom', price: 72.00, desc: 'Dovetail joinery box with personalized lid' }
+        ]
+      },
+      hearthstone: {
+        name: 'Hearthstone Bakery',
+        tagline: 'Naturally Leavened Sourdough, Viennoiserie & Corporate Catering',
+        badge: 'HB',
+        logoSvg: `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="m4 8 16-4"/><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"/></svg>`,
+        theme: { s100: '#ffedd5', s300: '#fdba74', s500: '#ea580c', s700: '#c2410c', s900: '#7c2d12' },
+        products: [
+          { id: 'hb-1', sku: 'HB-501', name: 'Executive Morning Pastry Platter', category: 'Catering', price: 85.00, unit: 'Serves 18–20', desc: 'Assorted cultured-butter croissants, seasonal fruit danishes, and morning buns.' },
+          { id: 'hb-2', sku: 'HB-502', name: 'Country Levain Sourdough Loaves (10 pk)', category: 'Wholesale Bread', price: 65.00, unit: '10 loaves', desc: '36-hour cold-fermented organic stone-milled wheat sourdough with blistered crust.' },
+          { id: 'hb-3', sku: 'HB-503', name: 'Artisan Boxed Lunch & Brioche Assortment', category: 'Event Drop', price: 160.00, unit: '12 boxed meals', desc: 'House-baked brioche sandwiches, seasonal greens, and brown-butter sea salt cookies.' }
+        ]
+      }
+    };
+
+    const CRM_SCRIPT_TEMPLATES = [
+      { id: 'TPL-01', category: 'Scheduling', title: 'Appointment Confirmation & Prep', body: 'Hi {{name}},\n\nThank you for scheduling a {{topic}} session with {{business}} on {{date}} at {{time}}. We have reserved your time slot and prepared your account notes.\n\nPlease reply if you have any files or questions ahead of our meeting.\n\nWarm regards,\n{{business}} Team' },
+      { id: 'TPL-02', category: 'Scheduling', title: '72-Hour Reminder & Agenda Check', body: 'Hello {{name}},\n\nThis is a friendly reminder of your upcoming {{topic}} appointment with {{business}} on {{date}} at {{time}}.\n\nWe look forward to connecting with you!' },
+      { id: 'TPL-03', category: 'Scheduling', title: 'Reschedule / Alternate Slot Offer', body: 'Hi {{name}},\n\nWe received your request regarding {{topic}}. If you would like to adjust your {{date}} ({{time}}) time slot, let us know what weekday morning or afternoon works best and we will update your schedule right away.\n\nBest,\n{{business}}' },
+      { id: 'TPL-04', category: 'Wholesale / Orders', title: 'Bulk Order & Quote Follow-Up', body: 'Hi {{name}},\n\nThank you for reaching out to {{business}} about {{topic}}. Based on your inquiry, we have prepared volume pricing and fulfillment lead times to review during our {{date}} at {{time}} consultation.\n\nBest regards,\n{{business}} Account Desk' },
+      { id: 'TPL-05', category: 'Onboarding', title: 'New Storefront Account Welcome', body: 'Welcome to {{business}}, {{name}}!\n\nWe are excited to kick off your onboarding during our {{date}} ({{time}}) session. Your customer profile is active and ready for recurring orders and priority support.\n\nSincerely,\n{{business}}' },
+      { id: 'TPL-06', category: 'Onboarding', title: 'Post-Onboarding 7-Day Check-In', body: 'Hi {{name}},\n\nChecking in following your recent {{topic}} setup with {{business}}. How is everything running so far? Let us know if you would like any adjustments to your schedule or order cadence.' },
+      { id: 'TPL-07', category: 'Support', title: 'Priority Support Resolution', body: 'Hi {{name}},\n\nThank you for bringing your {{topic}} request to our attention. We have updated your account and logged the resolution notes. Please reach out anytime if further assistance is needed.' },
+      { id: 'TPL-08', category: 'Retention', title: 'Quarterly Account & Lifecycle Review', body: 'Hello {{name}},\n\nAs a valued {{business}} partner, we would love to review your upcoming seasonal needs during our {{date}} at {{time}} session. Thank you for growing with us!' }
+    ];
+
+    /**
+     * =========================================================================
+     * 2. DATE, STORAGE & CUSTOMER SEED HELPERS
+     * =========================================================================
+     */
+    const STORAGE_KEY_CRM = 'mf_studio_crm_records_v4';
+    const STORAGE_KEY_CUSTOMERS = 'mf_studio_crm_customers_v4';
+
+    function formatIsoDate(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseIsoDate(isoStr) {
+      const parts = (isoStr || '').split('-').map(Number);
+      if (parts.length !== 3 || parts.some(isNaN)) return new Date(2026, 10, 30);
+      return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
+    function addDaysIso(isoStr, deltaDays) {
+      const dt = parseIsoDate(isoStr);
+      dt.setDate(dt.getDate() + deltaDays);
+      return formatIsoDate(dt);
+    }
+
+    function formatMatrixDate(isoStr) {
+      const dt = parseIsoDate(isoStr);
+      return `${dt.getMonth() + 1}/${dt.getDate()}/${dt.getFullYear()}`;
+    }
+
+    function formatReadableDate(isoStr) {
+      const dt = parseIsoDate(isoStr);
+      return dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function getSeedCustomers() {
+      return [
+        { id: 'CUST-101', presetKey: 'northwind', name: 'Elena Rostova', company: 'CedarWorks Studio', email: 'elena.rostova@cedarworks.io', phone: '(206) 555-0148', customerSince: '2025-03-14', totalOrders: 14, lifetimeValue: 2840.00, lifecycleStage: 'VIP / Repeat Tier' },
+        { id: 'CUST-102', presetKey: 'northwind', name: 'Marcus Vance', company: 'Harbor Bistro', email: 'mvance@harborbistro.com', phone: '(206) 555-0192', customerSince: '2025-08-22', totalOrders: 8, lifetimeValue: 1620.00, lifecycleStage: 'Active Account' },
+        { id: 'CUST-103', presetKey: 'northwind', name: 'Claire Lin', company: 'Puget Tech Labs', email: 'clin@pugettechlabs.com', phone: '(425) 555-0174', customerSince: '2026-01-10', totalOrders: 4, lifetimeValue: 910.00, lifecycleStage: 'Onboarding Complete' },
+        { id: 'CUST-201', presetKey: 'ember', name: 'Simone Sterling', company: 'Sterling Events Co.', email: 'simone@sterlingevents.co', phone: '(503) 555-0119', customerSince: '2025-05-04', totalOrders: 6, lifetimeValue: 2160.00, lifecycleStage: 'VIP / Repeat Tier' },
+        { id: 'CUST-202', presetKey: 'ember', name: 'Gavin Mercer', company: 'Willamette Boutique Hotel', email: 'gmercer@willamettehotel.com', phone: '(503) 555-0183', customerSince: '2026-02-18', totalOrders: 3, lifetimeValue: 1080.00, lifecycleStage: 'Active Account' },
+        { id: 'CUST-301', presetKey: 'heritage', name: 'Devon Brooks', company: 'Summit Trail Builders', email: 'dbrooks@summittrailbuilders.org', phone: '(360) 555-0165', customerSince: '2024-11-09', totalOrders: 11, lifetimeValue: 4920.00, lifecycleStage: 'VIP / Repeat Tier' },
+        { id: 'CUST-401', presetKey: 'valley', name: 'Chef Julianna Cho', company: 'Hearth & Root Kitchen', email: 'jcho@hearthandroot.com', phone: '(503) 555-0137', customerSince: '2025-04-12', totalOrders: 19, lifetimeValue: 3420.00, lifecycleStage: 'VIP / Repeat Tier' },
+        { id: 'CUST-501', presetKey: 'hearthstone', name: 'Liam O’Connor', company: 'Northstar Media Group', email: 'liam@northstarmedia.com', phone: '(206) 555-0151', customerSince: '2025-09-02', totalOrders: 12, lifetimeValue: 2490.00, lifecycleStage: 'Active Account' }
+      ];
+    }
+
+    function getSeedCrmRecords() {
+      return [
+        {
+          id: 'CRM-1042',
+          customerId: 'CUST-101',
+          business: 'Northwind Roasters',
+          presetKey: 'northwind',
+          name: 'Elena Rostova',
+          email: 'elena.rostova@cedarworks.io',
+          date: '2026-11-27',
+          time: '6:00 AM',
+          dateTime: '2026-11-27 6:00 AM',
+          topic: 'Product / Bulk Order',
+          message: 'Quarterly 40 lb Cascade Peak Espresso standing order + co-branded office placard refresh.',
+          followUpDate: '2026-12-04',
+          status: 'Scheduled',
+          source: 'MF Customer Workspace',
+          submittedAt: '2026-11-20T09:15:00Z',
+          lastReply: ''
+        },
+        {
+          id: 'CRM-1045',
+          customerId: 'CUST-102',
+          business: 'Northwind Roasters',
+          presetKey: 'northwind',
+          name: 'Marcus Vance',
+          email: 'mvance@harborbistro.com',
+          date: '2026-11-30',
+          time: '9:00 AM',
+          dateTime: '2026-11-30 9:00 AM',
+          topic: 'Consultation',
+          message: 'Interested in adding 2 Cold Brew Concentrate kegs per week for brunch service.',
+          followUpDate: '2026-12-07',
+          status: 'New',
+          source: 'In-Frame Contact Us',
+          submittedAt: '2026-11-26T14:22:00Z',
+          lastReply: ''
+        },
+        {
+          id: 'CRM-1048',
+          customerId: 'CUST-103',
+          business: 'Northwind Roasters',
+          presetKey: 'northwind',
+          name: 'Claire Lin',
+          email: 'clin@pugettechlabs.com',
+          date: '2026-12-02',
+          time: '5:30 AM',
+          dateTime: '2026-12-02 5:30 AM',
+          topic: 'Storefront Onboarding',
+          message: 'Early morning delivery window verification for Building B breakroom.',
+          followUpDate: '2026-12-10',
+          status: 'Confirmed',
+          source: 'MF Customer Workspace',
+          submittedAt: '2026-11-22T11:05:00Z',
+          lastReply: ''
+        },
+        {
+          id: 'CRM-1051',
+          customerId: 'CUST-101',
+          business: 'Northwind Roasters',
+          presetKey: 'northwind',
+          name: 'Elena Rostova',
+          email: 'elena.rostova@cedarworks.io',
+          date: '2027-01-14',
+          time: '10:30 AM',
+          dateTime: '2027-01-14 10:30 AM',
+          topic: 'Account Review',
+          message: 'Q1 2027 wholesale pricing tier & seasonal single-origin tasting.',
+          followUpDate: '2027-01-21',
+          status: 'Scheduled',
+          source: 'MF Customer Workspace',
+          submittedAt: '2026-11-24T16:40:00Z',
+          lastReply: ''
+        },
+        {
+          id: 'CRM-2011',
+          customerId: 'CUST-201',
+          business: 'Ember & Wax Candles',
+          presetKey: 'ember',
+          name: 'Simone Sterling',
+          email: 'simone@sterlingevents.co',
+          date: '2026-12-03',
+          time: '1:30 PM',
+          dateTime: '2026-12-03 1:30 PM',
+          topic: 'Product / Bulk Order',
+          message: 'Custom label proof approval for 4 cases of Cedarwood & Smoked Vanilla apothecary jars.',
+          followUpDate: '2026-12-09',
+          status: 'New',
+          source: 'In-Frame Contact Us',
+          submittedAt: '2026-11-26T10:12:00Z',
+          lastReply: ''
+        },
+        {
+          id: 'CRM-3015',
+          customerId: 'CUST-301',
+          business: 'Heritage Apparel',
+          presetKey: 'heritage',
+          name: 'Devon Brooks',
+          email: 'dbrooks@summittrailbuilders.org',
+          date: '2026-12-01',
+          time: '11:00 AM',
+          dateTime: '2026-12-01 11:00 AM',
+          topic: 'Product / Bulk Order',
+          message: 'Sizing matrix and left-chest embroidery thread proof for 30 Cascade Chore Jackets.',
+          followUpDate: '2026-12-08',
+          status: 'New',
+          source: 'In-Frame Contact Us',
+          submittedAt: '2026-11-25T15:30:00Z',
+          lastReply: ''
+        },
+        {
+          id: 'CRM-4018',
+          customerId: 'CUST-401',
+          business: 'Valley Harvest Farm',
+          presetKey: 'valley',
+          name: 'Chef Julianna Cho',
+          email: 'jcho@hearthandroot.com',
+          date: '2026-12-04',
+          time: '8:30 AM',
+          dateTime: '2026-12-04 8:30 AM',
+          topic: 'Consultation',
+          message: 'Winter root vegetable & wildflower honey standing restaurant allocation.',
+          followUpDate: '2026-12-11',
+          status: 'New',
+          source: 'In-Frame Contact Us',
+          submittedAt: '2026-11-26T08:45:00Z',
+          lastReply: ''
+        },
+        {
+          id: 'CRM-5022',
+          customerId: 'CUST-501',
+          business: 'Hearthstone Bakery',
+          presetKey: 'hearthstone',
+          name: 'Liam O’Connor',
+          email: 'liam@northstarmedia.com',
+          date: '2026-12-02',
+          time: '9:30 AM',
+          dateTime: '2026-12-02 9:30 AM',
+          topic: 'Product / Bulk Order',
+          message: 'Holiday town-hall catering order for 60 guests (pastries + boxed lunches).',
+          followUpDate: '2026-12-07',
+          status: 'New',
+          source: 'In-Frame Contact Us',
+          submittedAt: '2026-11-26T17:10:00Z',
+          lastReply: ''
+        }
+      ];
+    }
+
+    function mfReadClientRequests() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_CRM);
+        if (!raw) {
+          const seeded = getSeedCrmRecords();
+          localStorage.setItem(STORAGE_KEY_CRM, JSON.stringify(seeded));
+          return seeded;
+        }
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : getSeedCrmRecords();
+      } catch (e) {
+        return getSeedCrmRecords();
+      }
+    }
+
+    function mfWriteClientRequests(records) {
+      try {
+        localStorage.setItem(STORAGE_KEY_CRM, JSON.stringify(records));
+      } catch (e) {
+        // Safe fallback if storage is restricted
+      }
+    }
+
+    function mfReadCustomers() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_CUSTOMERS);
+        if (!raw) {
+          const seeded = getSeedCustomers();
+          localStorage.setItem(STORAGE_KEY_CUSTOMERS, JSON.stringify(seeded));
+          return seeded;
+        }
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : getSeedCustomers();
+      } catch (e) {
+        return getSeedCustomers();
+      }
+    }
+
+    function mfWriteCustomers(customers) {
+      try {
+        localStorage.setItem(STORAGE_KEY_CUSTOMERS, JSON.stringify(customers));
+      } catch (e) {
+        // Safe fallback
+      }
+    }
+
+    function resetDemoData() {
+      try {
+        localStorage.setItem(STORAGE_KEY_CRM, JSON.stringify(getSeedCrmRecords()));
+        localStorage.setItem(STORAGE_KEY_CUSTOMERS, JSON.stringify(getSeedCustomers()));
+      } catch (e) {
+        // Safe fallback
+      }
+      state.cart = [];
+      state.crmForm.editingRecordId = null;
+      state.crmForm.selectedCustomerId = '';
+      syncCrmBadgeCount();
+      renderCurrentTab();
+      showToast('Demo storefront, booking, and CRM data reset to defaults.');
+    }
+
+    /**
+     * =========================================================================
+     * 3. APPLICATION STATE & SLOT DEFINITIONS
+     * =========================================================================
+     */
+    const MATRIX_TIME_SLOTS = (() => {
+      const slots = [];
+      for (let h = 5; h <= 18; h++) {
+        for (let m = 0; m < 60; m += 15) {
+          if (h === 18 && m > 0) break;
+          const period = h >= 12 ? 'PM' : 'AM';
+          const hour12 = h % 12 === 0 ? 12 : h % 12;
+          const minStr = String(m).padStart(2, '0');
+          slots.push(`${hour12}:${minStr} ${period}`);
+        }
+      }
+      return slots;
+    })();
+
+    const BOOKING_TIME_SLOTS = [
+      '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
+      '11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
+      '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
+    ];
+
+    const state = {
+      activeTab: 'crm',
+      presetKey: 'northwind',
+      cart: [],
+      crmViewMode: '4month', // '4month' | 'matrix'
+      crmQuarterStartYear: 2026,
+      crmQuarterStartMonth: 10, // November 2026 (0-indexed)
+      crmSelectedDayIso: '2026-11-30',
+      crmMatrixStartDate: '2026-11-26',
+      crmFilterStatus: 'All',
+      crmSearchQuery: '',
+      crmForm: {
+        editingRecordId: null,
+        date: '2026-11-30',
+        time: '9:00 AM',
+        selectedCustomerId: '',
+        newCustomerName: '',
+        newCustomerEmail: '',
+        newCustomerPhone: '',
+        contactType: 'Consultation',
+        status: 'Scheduled',
+        notes: '',
+        followUpDate: '',
+        lifecycleUpdate: 'Keep current status'
+      }
+    };
+
+    let mfStorefrontCalendarDate = new Date(2026, 10, 1);
+    let mfStorefrontSelectedDate = '';
+
+    /**
+     * =========================================================================
+     * 4. THEME, NAVIGATION, TOAST & BADGE HELPERS
+     * =========================================================================
+     */
+    function applyPresetTheme(presetKey) {
+      const preset = BUSINESS_PRESETS[presetKey] || BUSINESS_PRESETS.northwind;
+      const root = document.documentElement;
+      root.style.setProperty('--s100', preset.theme.s100);
+      root.style.setProperty('--s300', preset.theme.s300);
+      root.style.setProperty('--s500', preset.theme.s500);
+      root.style.setProperty('--s700', preset.theme.s700);
+      root.style.setProperty('--s900', preset.theme.s900);
+    }
+
+    function updateHeaderBrandIdentity(presetKey) {
+      const preset = BUSINESS_PRESETS[presetKey] || BUSINESS_PRESETS.northwind;
+      const logoBox = document.getElementById('header-company-logo-box');
+      const badgePill = document.getElementById('header-company-badge-pill');
+      const taglineEl = document.getElementById('header-company-tagline');
+      const titleEl = document.getElementById('header-company-title');
+
+      if (logoBox) {
+        logoBox.innerHTML = `
+          ${preset.logoSvg}
+          <span class="text-[8px] font-black tracking-wider mt-0.5 leading-none">${preset.badge}</span>
+        `;
+      }
+      if (badgePill) {
+        badgePill.textContent = `${preset.badge} • Interactive Client Demo`;
+      }
+      if (taglineEl) {
+        taglineEl.textContent = preset.tagline;
+      }
+      if (titleEl) {
+        titleEl.textContent = `${preset.name} — Contact, Booking & CRM`;
+      }
+      document.title = `${preset.name} — Contact & Booking Demo`;
+    }
+
+    function switchBusinessPreset(presetKey) {
+      if (!BUSINESS_PRESETS[presetKey]) return;
+      state.presetKey = presetKey;
+      state.cart = [];
+      state.crmForm.editingRecordId = null;
+      state.crmForm.selectedCustomerId = '';
+      applyPresetTheme(presetKey);
+      updateHeaderBrandIdentity(presetKey);
+      syncCrmBadgeCount();
+      renderCurrentTab();
+      showToast(`Switched active brand to ${BUSINESS_PRESETS[presetKey].name}.`);
+    }
+
+    function setActiveTab(tabName) {
+      if (!['storefront', 'contact', 'crm'].includes(tabName)) return;
+      state.activeTab = tabName;
+      updateNavTabStyles();
+      renderCurrentTab();
+    }
+
+    function updateNavTabStyles() {
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        const isActive = btn.dataset.tab === state.activeTab;
+        if (isActive) {
+          btn.classList.add('bg-s500', 'text-white', 'shadow-xs');
+          btn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+        } else {
+          btn.classList.remove('bg-s500', 'text-white', 'shadow-xs');
+          btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+        }
+      });
+    }
+
+    function syncCrmBadgeCount() {
+      const badge = document.getElementById('crm-nav-badge');
+      if (!badge) return;
+      const newCount = mfReadClientRequests().filter(
+        r => r.presetKey === state.presetKey && (r.status || 'New') === 'New'
+      ).length;
+      badge.textContent = newCount;
+      badge.classList.toggle('hidden', newCount === 0);
+    }
+
+    let toastTimer = null;
+    function showToast(message) {
+      const toast = document.getElementById('studio-toast');
+      const text = document.getElementById('studio-toast-text');
+      if (!toast || !text) return;
+      text.textContent = message;
+      toast.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3600);
+    }
+
+    function openCrmRecordFromHandoff(recordId) {
+      const rec = mfReadClientRequests().find(r => r.id === recordId);
+      setActiveTab('crm');
+      if (rec) {
+        state.crmSelectedDayIso = rec.date;
+        state.crmForm.editingRecordId = rec.id;
+        state.crmForm.date = rec.date;
+        state.crmForm.time = rec.time;
+        state.crmForm.selectedCustomerId = rec.customerId || '';
+        state.crmForm.contactType = rec.topic || 'Consultation';
+        state.crmForm.status = rec.status || 'New';
+        state.crmForm.notes = rec.message || '';
+        state.crmForm.followUpDate = rec.followUpDate || '';
+        renderCurrentTab();
+      }
+    }
+
+    /**
+     * =========================================================================
+     * 5. TAB 1: CUSTOMER STOREFRONT & CART
+     * =========================================================================
+     */
+    function addProductToCart(productId) {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const product = preset.products.find(p => p.id === productId);
+      if (!product) return;
+
+      const existing = state.cart.find(item => item.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({ ...product, qty: 1 });
+      }
+      renderCurrentTab();
+      showToast(`Added ${product.name} to order inquiry.`);
+    }
+
+    function updateCartItemQty(productId, delta) {
+      const idx = state.cart.findIndex(item => item.id === productId);
+      if (idx === -1) return;
+      state.cart[idx].qty += delta;
+      if (state.cart[idx].qty <= 0) {
+        state.cart.splice(idx, 1);
+      }
+      renderCurrentTab();
+    }
+
+    function inquireCartViaContact() {
+      const summary = state.cart
+        .map(item => `${item.qty}x ${item.name} ($${(item.price * item.qty).toFixed(2)})`)
+        .join(', ');
+      const notesEl = document.getElementById('mf-contact-message');
+      const topicEl = document.getElementById('mf-contact-topic');
+      if (topicEl) topicEl.value = 'Product / Bulk Order';
+      if (notesEl) {
+        notesEl.value = `Storefront order inquiry: ${summary}`;
+      }
+      const contactSection = document.getElementById('storefront-contact-us');
+      if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
+      showToast('Order items prefilled into the scheduling form below.');
+    }
+
+    function renderStorefrontPage() {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const cartTotal = state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      return `
+        <div class="space-y-6">
+          <section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div class="flex items-start sm:items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-s500 text-white font-black text-xl flex flex-col items-center justify-center shadow-sm shrink-0">
+                ${preset.logoSvg}
+                <span class="text-[9px] font-black tracking-wider mt-0.5 leading-none">${preset.badge}</span>
+              </div>
+              <div>
+                <div class="inline-flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full bg-s100 text-s900 text-[11px] font-extrabold">
+                    Active Storefront Theme
+                  </span>
+                  <span class="text-xs text-slate-500">Live Catalog &amp; Scheduling</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1">${preset.name}</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-0.5">${preset.tagline}</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5">
+              <a href="#storefront-contact-us" class="px-4 py-2.5 rounded-xl bg-s500 hover-bg-s700 text-white text-xs font-extrabold shadow-xs transition">
+                Schedule Consultation ↓
+              </a>
+              <button type="button" onclick="setActiveTab('crm')" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold transition">
+                Open CRM Workspace →
+              </button>
+            </div>
+          </section>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              ${preset.products.map(p => `
+                <article class="bg-white border border-slate-200 hover-border-s500 rounded-2xl p-5 shadow-2xs flex flex-col justify-between transition">
+                  <div>
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="px-2.5 py-0.5 rounded-md bg-s100 text-s900 text-[10px] font-extrabold uppercase">
+                        ${p.category}
+                      </span>
+                      <span class="text-[11px] font-mono text-slate-400">${p.sku}</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900 mt-2.5">${p.name}</h3>
+                    <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${p.desc}</p>
+                  </div>
+
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <div>
+                      <span class="text-lg font-black text-slate-900">$${p.price.toFixed(2)}</span>
+                      <span class="text-[11px] text-slate-500 block">${p.unit}</span>
+                    </div>
+                    <button type="button" onclick="addProductToCart('${p.id}')" class="px-3.5 py-2 rounded-xl bg-s500 hover-bg-s700 text-white text-xs font-extrabold transition">
+                      + Add to Inquiry
+                    </button>
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+
+            <aside class="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="text-sm font-black text-slate-900">Order &amp; Quote Bag</h3>
+                <span class="px-2 py-0.5 rounded-full bg-s100 text-s900 text-[11px] font-extrabold">
+                  ${state.cart.reduce((n, i) => n + i.qty, 0)} items
+                </span>
+              </div>
+
+              ${state.cart.length > 0 ? `
+                <div class="mt-3 space-y-2.5">
+                  ${state.cart.map(item => `
+                    <div class="flex items-center justify-between gap-2 text-xs bg-slate-50 rounded-xl p-2.5 border border-slate-200">
+                      <div class="min-w-0">
+                        <div class="font-bold text-slate-900 truncate">${item.name}</div>
+                        <div class="text-slate-500">$${item.price.toFixed(2)} each</div>
+                      </div>
+                      <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="updateCartItemQty('${item.id}', -1)" class="w-6 h-6 rounded-lg border border-slate-300 bg-white font-bold">−</button>
+                        <span class="font-extrabold w-5 text-center">${item.qty}</span>
+                        <button type="button" onclick="updateCartItemQty('${item.id}', 1)" class="w-6 h-6 rounded-lg border border-slate-300 bg-white font-bold">+</button>
+                      </div>
+                    </div>
+                  `).join('')}
+
+                  <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-sm font-black">
+                    <span>Estimated Subtotal</span>
+                    <span class="text-s700">$${cartTotal.toFixed(2)}</span>
+                  </div>
+
+                  <button type="button" onclick="inquireCartViaContact()" class="w-full py-2.5 px-4 rounded-xl bg-s500 hover-bg-s700 text-white text-xs font-extrabold transition">
+                    Prefill Booking Form with Items ↓
+                  </button>
+                </div>
+              ` : `
+                <p class="mt-3 text-xs text-slate-500 leading-relaxed">
+                  Add catalog products to build a wholesale or custom order quote, then schedule a consultation below to route directly to CRM.
+                </p>
+              `}
+            </aside>
+          </div>
+
+          ${renderStorefrontContactSection(preset, false)}
+        </div>
+      `;
+    }
+
+    /**
+     * =========================================================================
+     * 6. TAB 2: CONTACT & 72-HOUR ADVANCE BOOKING SCHEDULER
+     * =========================================================================
+     */
+    function renderContactTabPage() {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      return renderStorefrontContactSection(preset, true);
+    }
+
+    function renderStorefrontContactSection(preset, isStandaloneTab = false) {
+      return `
+        <section id="storefront-contact-us" class="${isStandaloneTab ? '' : 'mt-6'} bg-white border border-slate-200 rounded-2xl shadow-2xs overflow-hidden">
+          <div class="bg-slate-900 text-white px-5 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-s500 text-white font-black text-base flex flex-col items-center justify-center shrink-0 shadow-xs">
+                ${preset.logoSvg}
+                <span class="text-[8px] font-black tracking-wider mt-0.5 leading-none">${preset.badge}</span>
+              </div>
+              <div>
+                <div class="inline-flex items-center gap-2">
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                    Let's Connect
+                  </span>
+                  <span class="text-[11px] text-slate-400">72-Hour Advance Weekday Scheduling</span>
+                </div>
+                <h2 class="text-lg sm:text-xl font-black text-white mt-0.5">Contact ${preset.name}</h2>
+              </div>
+            </div>
+
+            <button type="button" onclick="setActiveTab('crm')" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold transition">
+              <span>Open CRM Queue</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <div class="p-5 sm:p-6 bg-slate-50/70">
+            <p class="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed">
+              Select an available weekday (at least 72 hours out) and session slot below. Every submission routes immediately into <strong>${preset.name} — MF Customer Relations</strong>.
+            </p>
+
+            <div class="mt-5 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                  <button type="button" onclick="mfMoveStorefrontMonth(-1)" class="w-9 h-9 rounded-xl border border-slate-300 text-sm font-bold text-slate-700 hover:bg-slate-100 transition" aria-label="Previous month">‹</button>
+                  <h3 id="mf-storefront-month" class="font-black text-slate-900 text-base sm:text-lg" aria-live="polite"></h3>
+                  <button type="button" onclick="mfMoveStorefrontMonth(1)" class="w-9 h-9 rounded-xl border border-slate-300 text-sm font-bold text-slate-700 hover:bg-slate-100 transition" aria-label="Next month">›</button>
+                </div>
+
+                <div class="grid grid-cols-5 gap-2 text-center text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">
+                  <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div>
+                </div>
+                <div id="mf-storefront-days" class="grid grid-cols-5 gap-2"></div>
+
+                <div class="flex flex-wrap gap-4 mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-600">
+                  <span class="inline-flex items-center gap-1.5"><i class="w-3 h-3 rounded border border-slate-300 bg-white"></i> Available date</span>
+                  <span class="inline-flex items-center gap-1.5"><i class="w-3 h-3 rounded bg-slate-200"></i> Unavailable / within 72 hours</span>
+                  <span class="inline-flex items-center gap-1.5"><i class="w-3 h-3 rounded bg-amber-500"></i> Selected</span>
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs">
+                <div class="flex items-center justify-between">
+                  <h3 class="font-black text-slate-900 text-base">Request a Session</h3>
+                  <span class="px-2 py-0.5 rounded-md bg-s100 text-s900 text-[10px] font-extrabold">CRM Synced</span>
+                </div>
+                <p id="mf-storefront-selected-date" class="text-xs font-semibold text-s700 mt-1">
+                  Select an available weekday on the calendar.
+                </p>
+
+                <form onsubmit="mfSubmitStorefrontRequest(event)" class="mt-4 space-y-3" novalidate>
+                  <div>
+                    <label for="mf-contact-name" class="block text-xs font-bold text-slate-700 mb-1">Your name *</label>
+                    <input id="mf-contact-name" required maxlength="100" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="e.g., Jordan Vance" />
+                  </div>
+                  <div>
+                    <label for="mf-contact-email" class="block text-xs font-bold text-slate-700 mb-1">Email address *</label>
+                    <input id="mf-contact-email" type="email" required maxlength="160" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="you@example.com" />
+                  </div>
+                  <div>
+                    <label for="mf-contact-topic" class="block text-xs font-bold text-slate-700 mb-1">What would you like to discuss? *</label>
+                    <select id="mf-contact-topic" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+                      <option value="">Choose a session type</option>
+                      <option value="Consultation">Consultation</option>
+                      <option value="Storefront Onboarding">Storefront Onboarding</option>
+                      <option value="Product / Bulk Order">Product / Bulk Order</option>
+                      <option value="Account Review">Account Review</option>
+                      <option value="Customer Support">Customer Support</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="mf-contact-time" class="block text-xs font-bold text-slate-700 mb-1">Available session time *</label>
+                    <select id="mf-contact-time" required disabled class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs bg-slate-100">
+                      <option value="">Select a date first</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="mf-contact-message" class="block text-xs font-bold text-slate-700 mb-1">Additional notes (optional)</label>
+                    <textarea id="mf-contact-message" rows="2" maxlength="1200" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Tell us a little about what you need."></textarea>
+                  </div>
+
+                  <div id="mf-contact-error" class="hidden rounded-xl bg-rose-50 border border-rose-200 p-2.5 text-xs text-rose-800 font-semibold" role="alert"></div>
+
+                  <button id="mf-contact-submit" type="submit" disabled class="w-full rounded-xl bg-s500 hover-bg-s700 text-white font-extrabold text-xs px-5 py-3 shadow-xs transition disabled:opacity-40 disabled:cursor-not-allowed">
+                    Request Appointment &amp; Send to CRM
+                  </button>
+
+                  <div id="mf-contact-feedback" class="hidden rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-950" role="status" aria-live="polite"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function mfMoveStorefrontMonth(delta) {
+      mfStorefrontCalendarDate = new Date(
+        mfStorefrontCalendarDate.getFullYear(),
+        mfStorefrontCalendarDate.getMonth() + delta,
+        1
+      );
+      mfRenderStorefrontCalendar();
+    }
+
+    function mfRenderStorefrontCalendar() {
+      const monthLabel = document.getElementById('mf-storefront-month');
+      const grid = document.getElementById('mf-storefront-days');
+      if (!monthLabel || !grid) return;
+
+      const year = mfStorefrontCalendarDate.getFullYear();
+      const month = mfStorefrontCalendarDate.getMonth();
+      monthLabel.textContent = mfStorefrontCalendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      const minBookableIso = '2026-11-30';
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let firstWeekdayCol = null;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dow = new Date(year, month, d).getDay();
+        if (dow >= 1 && dow <= 5) {
+          firstWeekdayCol = dow - 1;
+          break;
+        }
+      }
+
+      const cells = [];
+      if (firstWeekdayCol !== null) {
+        for (let i = 0; i < firstWeekdayCol; i++) {
+          cells.push('<div class="h-11"></div>');
+        }
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dt = new Date(year, month, d);
+        const dow = dt.getDay();
+        if (dow === 0 || dow === 6) continue;
+
+        const iso = formatIsoDate(dt);
+        const isAvailable = iso >= minBookableIso;
+        const isSelected = mfStorefrontSelectedDate === iso;
+
+        if (!isAvailable) {
+          cells.push(`
+            <button type="button" disabled class="h-11 rounded-xl bg-slate-100 border border-slate-200 text-xs font-bold text-slate-400 cursor-not-allowed">
+              ${d}
+            </button>
+          `);
+        } else {
+          cells.push(`
+            <button
+              type="button"
+              onclick="mfSelectStorefrontDate('${iso}')"
+              class="h-11 rounded-xl border text-xs font-extrabold transition ${
+                isSelected
+                  ? 'bg-amber-500 border-amber-600 text-white shadow-xs'
+                  : 'bg-white border-slate-300 text-slate-900 hover:border-amber-500 hover:bg-amber-50'
+              }"
+            >
+              ${d}
+            </button>
+          `);
+        }
+      }
+
+      grid.innerHTML = cells.join('');
+    }
+
+    function mfSelectStorefrontDate(isoDate) {
+      mfStorefrontSelectedDate = isoDate;
+      const label = document.getElementById('mf-storefront-selected-date');
+      if (label) {
+        label.textContent = `Selected date: ${formatReadableDate(isoDate)}`;
+      }
+      mfRenderStorefrontCalendar();
+      mfSetStorefrontTimes();
+    }
+
+    function mfSetStorefrontTimes() {
+      const timeSelect = document.getElementById('mf-contact-time');
+      const submitBtn = document.getElementById('mf-contact-submit');
+      if (!timeSelect || !submitBtn) return;
+
+      if (!mfStorefrontSelectedDate) {
+        timeSelect.disabled = true;
+        timeSelect.classList.add('bg-slate-100');
+        timeSelect.innerHTML = '<option value="">Select a date first</option>';
+        submitBtn.disabled = true;
+        return;
+      }
+
+      const bookedTimes = new Set(
+        mfReadClientRequests()
+          .filter(r => r.presetKey === state.presetKey && r.date === mfStorefrontSelectedDate && r.status !== 'Cancelled')
+          .map(r => r.time)
+      );
+
+      const openSlots = BOOKING_TIME_SLOTS.filter(slot => !bookedTimes.has(slot));
+      timeSelect.disabled = false;
+      timeSelect.classList.remove('bg-slate-100');
+      timeSelect.innerHTML =
+        '<option value="">Choose an available time</option>' +
+        openSlots.map(slot => `<option value="${slot}">${slot}</option>`).join('');
+      submitBtn.disabled = false;
+    }
+
+    function mfSubmitStorefrontRequest(event) {
+      event.preventDefault();
+      const name = (document.getElementById('mf-contact-name')?.value || '').trim();
+      const email = (document.getElementById('mf-contact-email')?.value || '').trim();
+      const topic = document.getElementById('mf-contact-topic')?.value || '';
+      const time = document.getElementById('mf-contact-time')?.value || '';
+      const message = (document.getElementById('mf-contact-message')?.value || '').trim();
+      const errBox = document.getElementById('mf-contact-error');
+
+      const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      if (!name || !emailRegex.test(email) || !topic || !mfStorefrontSelectedDate || !time) {
+        if (errBox) {
+          errBox.textContent = 'Please complete your name, valid email address, session topic, weekday, and time slot.';
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+      if (errBox) errBox.classList.add('hidden');
+
+      const customers = mfReadCustomers();
+      let matchedCust = customers.find(
+        c => c.presetKey === state.presetKey && c.email.toLowerCase() === email.toLowerCase()
+      );
+      if (!matchedCust) {
+        matchedCust = {
+          id: 'CUST-' + Math.floor(1000 + Math.random() * 9000),
+          presetKey: state.presetKey,
+          name,
+          company: 'New Storefront Inquiry',
+          email,
+          phone: 'Not provided',
+          customerSince: formatIsoDate(new Date()),
+          totalOrders: 0,
+          lifetimeValue: 0,
+          lifecycleStage: 'New Lead'
+        };
+        customers.unshift(matchedCust);
+        mfWriteCustomers(customers);
+      }
+
+      const record = {
+        id: 'CRM-' + Math.floor(1000 + Math.random() * 9000),
+        customerId: matchedCust.id,
+        business: BUSINESS_PRESETS[state.presetKey].name,
+        presetKey: state.presetKey,
+        name,
+        email,
+        date: mfStorefrontSelectedDate,
+        time,
+        dateTime: `${mfStorefrontSelectedDate} ${time}`,
+        topic,
+        message,
+        followUpDate: '',
+        status: 'New',
+        source: 'In-Frame Contact Us',
+        submittedAt: new Date().toISOString(),
+        lastReply: ''
+      };
+
+      const items = mfReadClientRequests();
+      items.unshift(record);
+      mfWriteClientRequests(items);
+      syncCrmBadgeCount();
+
+      const feedback = document.getElementById('mf-contact-feedback');
+      if (feedback) {
+        feedback.classList.remove('hidden');
+        feedback.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span><strong>✓ Appointment Logged:</strong> Added to ${record.business} CRM (${formatReadableDate(record.date)} at ${record.time}).</span>
+            <button type="button" onclick="openCrmRecordFromHandoff('${record.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-[11px] shrink-0 transition">
+              View in CRM →
+            </button>
+          </div>
+        `;
+      }
+
+      event.target.reset();
+      mfStorefrontSelectedDate = '';
+      const label = document.getElementById('mf-storefront-selected-date');
+      if (label) label.textContent = 'Select an available weekday on the calendar.';
+      mfRenderStorefrontCalendar();
+      mfSetStorefrontTimes();
+      showToast(`Appointment ${record.id} synced to CRM.`);
+    }
+
+    /**
+     * =========================================================================
+     * 7. TAB 3: MF CUSTOMER RELATIONS WORKSPACE (2-TIER 4-MONTH + 15-MIN MATRIX)
+     * =========================================================================
+     */
+    function setCrmViewMode(mode) {
+      state.crmViewMode = mode;
+      if (mode === 'matrix' && state.crmSelectedDayIso) {
+        state.crmMatrixStartDate = addDaysIso(state.crmSelectedDayIso, -1);
+      }
+      renderCurrentTab();
+    }
+
+    function moveCrmFourMonths(deltaMonths) {
+      const dt = new Date(state.crmQuarterStartYear, state.crmQuarterStartMonth + deltaMonths, 1);
+      state.crmQuarterStartYear = dt.getFullYear();
+      state.crmQuarterStartMonth = dt.getMonth();
+      renderCurrentTab();
+    }
+
+    function resetCrmQuarterToDefault() {
+      state.crmQuarterStartYear = 2026;
+      state.crmQuarterStartMonth = 10; // Nov 2026 – Feb 2027
+      state.crmSelectedDayIso = '2026-11-30';
+      state.crmForm.date = '2026-11-30';
+      renderCurrentTab();
+    }
+
+    function selectCrmMacroDay(isoDate) {
+      state.crmSelectedDayIso = isoDate;
+      state.crmForm.editingRecordId = null;
+      state.crmForm.date = isoDate;
+      renderCurrentTab();
+    }
+
+    function drillDownToDayMatrix(isoDate) {
+      state.crmSelectedDayIso = isoDate;
+      state.crmForm.date = isoDate;
+      state.crmMatrixStartDate = addDaysIso(isoDate, -1);
+      state.crmViewMode = 'matrix';
+      renderCurrentTab();
+    }
+
+    function shiftCrmMatrixDates(deltaDays) {
+      state.crmMatrixStartDate = addDaysIso(state.crmMatrixStartDate, deltaDays);
+      renderCurrentTab();
+    }
+
+    function resetCrmMatrixToToday() {
+      state.crmMatrixStartDate = '2026-11-26';
+      renderCurrentTab();
+    }
+
+    function selectMatrixAvailableSlot(dateIso, timeSlot) {
+      state.crmSelectedDayIso = dateIso;
+      state.crmForm.editingRecordId = null;
+      state.crmForm.date = dateIso;
+      state.crmForm.time = timeSlot;
+      renderCurrentTab();
+    }
+
+    function selectMatrixBookedSlot(recordId) {
+      const records = mfReadClientRequests();
+      const rec = records.find(r => r.id === recordId);
+      if (!rec) return;
+
+      const customers = mfReadCustomers();
+      const matchedCustomer = customers.find(
+        c => c.id === rec.customerId || (c.presetKey === state.presetKey && c.email.toLowerCase() === (rec.email || '').toLowerCase())
+      );
+
+      state.crmSelectedDayIso = rec.date;
+      state.crmForm.editingRecordId = rec.id;
+      state.crmForm.date = rec.date;
+      state.crmForm.time = rec.time;
+      state.crmForm.selectedCustomerId = matchedCustomer ? matchedCustomer.id : '';
+      state.crmForm.contactType = rec.topic || 'Consultation';
+      state.crmForm.status = rec.status || 'Scheduled';
+      state.crmForm.notes = rec.message || '';
+      state.crmForm.followUpDate = rec.followUpDate || '';
+      renderCurrentTab();
+    }
+
+    function buildSingleMonthMacroCard(year, monthIndex, brandRecords) {
+      const monthDate = new Date(year, monthIndex, 1);
+      const monthTitle = monthDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+      const referenceTodayIso = '2026-11-27';
+
+      let firstWeekdayCol = null;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dow = new Date(year, monthIndex, d).getDay();
+        if (dow >= 1 && dow <= 5) {
+          firstWeekdayCol = dow - 1;
+          break;
+        }
+      }
+
+      const cells = [];
+      if (firstWeekdayCol !== null) {
+        for (let i = 0; i < firstWeekdayCol; i++) {
+          cells.push('<div class="h-16"></div>');
+        }
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dt = new Date(year, monthIndex, d);
+        const dow = dt.getDay();
+        if (dow === 0 || dow === 6) continue;
+
+        const iso = formatIsoDate(dt);
+        const dayBookings = brandRecords.filter(r => r.date === iso && r.status !== 'Cancelled');
+        const isSelected = state.crmSelectedDayIso === iso;
+        const isPast = iso < referenceTodayIso;
+
+        let tileClass = 'macro-day-available';
+        if (isSelected) {
+          tileClass = 'macro-day-selected';
+        } else if (dayBookings.length > 0) {
+          tileClass = 'macro-day-booked';
+        } else if (isPast) {
+          tileClass = 'macro-day-past';
+        }
+
+        const firstSlot = dayBookings[0];
+        const extraCount = dayBookings.length > 1 ? `+${dayBookings.length - 1} more` : '';
+
+        cells.push(`
+          <button
+            type="button"
+            onclick="selectCrmMacroDay('${iso}')"
+            ondblclick="drillDownToDayMatrix('${iso}')"
+            title="${dayBookings.length ? `${dayBookings.length} booked — click to select, double-click for 15-min slots` : 'Click to select, double-click for 15-min slots'}"
+            class="macro-day-tile ${tileClass} h-16 rounded-xl border px-1.5 py-1.5 flex flex-col items-center justify-between text-center cursor-pointer overflow-hidden"
+          >
+            <span class="text-xs font-extrabold leading-none ${isSelected ? 'text-white' : ''}">${d}</span>
+            ${firstSlot ? `
+              <span class="w-full truncate px-1 py-0.5 rounded text-[9px] font-extrabold leading-tight ${
+                isSelected ? 'bg-amber-800/60 text-white' : 'bg-[#f6e2c4] text-[#92400e]'
+              }">
+                ${firstSlot.time}
+              </span>
+            ` : `
+              <span class="text-[9px] leading-none opacity-0">.</span>
+            `}
+            ${extraCount ? `
+              <span class="text-[8px] font-bold leading-none ${isSelected ? 'text-amber-100' : 'text-amber-800'}">
+                ${extraCount}
+              </span>
+            ` : ''}
+          </button>
+        `);
+      }
+
+      return `
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-2xs flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-sm font-black text-slate-900 tracking-tight">${monthTitle}</h4>
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Mon–Fri</span>
+          </div>
+
+          <div class="grid grid-cols-5 gap-1.5 text-center text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">
+            <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div>
+          </div>
+
+          <div class="grid grid-cols-5 gap-1.5 flex-1">
+            ${cells.join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFourMonthMacroCalendar(brandRecords) {
+      const m0 = new Date(state.crmQuarterStartYear, state.crmQuarterStartMonth, 1);
+      const m1 = new Date(state.crmQuarterStartYear, state.crmQuarterStartMonth + 1, 1);
+      const m2 = new Date(state.crmQuarterStartYear, state.crmQuarterStartMonth + 2, 1);
+      const m3 = new Date(state.crmQuarterStartYear, state.crmQuarterStartMonth + 3, 1);
+
+      const rangeLabel = `${m0.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} – ${m3.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
+      const selectedDayBookings = brandRecords.filter(r => r.date === state.crmSelectedDayIso && r.status !== 'Cancelled');
+
+      return `
+        <div class="p-4 bg-slate-50/70 space-y-4">
+          <!-- 4-Month Window Navigation Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5">
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="moveCrmFourMonths(-4)" class="w-8 h-8 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm transition" title="Previous 4 Months">
+                ‹
+              </button>
+              <span class="text-xs sm:text-sm font-black text-slate-900 px-1">${rangeLabel}</span>
+              <button type="button" onclick="moveCrmFourMonths(4)" class="w-8 h-8 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm transition" title="Next 4 Months">
+                ›
+              </button>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-600">
+              <span class="inline-flex items-center gap-1.5"><i class="w-3 h-3 rounded border border-slate-300 bg-white"></i> Available date</span>
+              <span class="inline-flex items-center gap-1.5"><i class="w-3 h-3 rounded border border-amber-300 bg-amber-50"></i> Booked slots</span>
+              <span class="inline-flex items-center gap-1.5"><i class="w-3 h-3 rounded bg-slate-200"></i> Past / closed</span>
+              <span class="inline-flex items-center gap-1.5"><i class="w-3 h-3 rounded bg-amber-500"></i> Selected</span>
+            </div>
+          </div>
+
+          <!-- 2x2 Grid of 4 Consecutive Weekday Calendars -->
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            ${buildSingleMonthMacroCard(m0.getFullYear(), m0.getMonth(), brandRecords)}
+            ${buildSingleMonthMacroCard(m1.getFullYear(), m1.getMonth(), brandRecords)}
+            ${buildSingleMonthMacroCard(m2.getFullYear(), m2.getMonth(), brandRecords)}
+            ${buildSingleMonthMacroCard(m3.getFullYear(), m3.getMonth(), brandRecords)}
+          </div>
+
+          <!-- Selected Day Agenda & One-Click Drill-Down Bar -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-black text-slate-900">
+                  Selected Day: ${formatReadableDate(state.crmSelectedDayIso)}
+                </span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
+                  selectedDayBookings.length > 0 ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-900'
+                }">
+                  ${selectedDayBookings.length} booked ${selectedDayBookings.length === 1 ? 'slot' : 'slots'}
+                </span>
+              </div>
+              ${selectedDayBookings.length > 0 ? `
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  ${selectedDayBookings.map(b => `
+                    <button type="button" onclick="selectMatrixBookedSlot('${b.id}')" class="px-2.5 py-1 rounded-lg bg-[#f6e2c4] hover:bg-amber-200 border border-[#ebd0a6] text-[#92400e] text-[11px] font-bold transition">
+                      ${b.time} — ${b.name} (${b.topic})
+                    </button>
+                  `).join('')}
+                </div>
+              ` : `
+                <p class="text-[11px] text-slate-500 mt-1">
+                  All 15-minute weekday slots are open on this date. Use the right panel to book directly or drill down to inspect the time grid.
+                </p>
+              `}
+            </div>
+
+            <button
+              type="button"
+              onclick="drillDownToDayMatrix('${state.crmSelectedDayIso}')"
+              class="px-4 py-2.5 rounded-xl bg-[#15803d] hover:bg-[#166534] text-white text-xs font-extrabold shadow-xs transition whitespace-nowrap shrink-0"
+            >
+              Drill Down to 15-Min Slots →
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFifteenMinuteMatrix(brandRecords) {
+      const matrixDays = Array.from({ length: 8 }, (_, idx) => addDaysIso(state.crmMatrixStartDate, idx));
+
+      return `
+        <div>
+          <!-- Drill-Down Breadcrumb Strip -->
+          <div class="px-4 py-2 bg-emerald-50/80 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="setCrmViewMode('4month')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-extrabold text-[11px] transition">
+                ← Back to 4-Month Calendar
+              </button>
+              <span class="text-slate-600 font-medium">
+                Focused around <strong>${formatReadableDate(state.crmSelectedDayIso)}</strong>
+              </span>
+            </div>
+            <div class="flex items-center gap-3 text-[11px] text-slate-600">
+              <span class="inline-flex items-center gap-1"><i class="w-2.5 h-2.5 rounded bg-[#e3ece6] border border-[#d1dfd6]"></i> Available</span>
+              <span class="inline-flex items-center gap-1"><i class="w-2.5 h-2.5 rounded bg-[#f6e2c4] border border-[#ebd0a6]"></i> Booked</span>
+              <span class="inline-flex items-center gap-1"><i class="w-2.5 h-2.5 rounded bg-[#15803d]"></i> Selected</span>
+            </div>
+          </div>
+
+          <!-- Horizontal + Vertical Scrollable 15-Minute Appointment Matrix -->
+          <div class="matrix-scroll-container overflow-x-auto overflow-y-auto max-h-[500px]">
+            <table class="border-collapse w-max min-w-full text-xs">
+              <thead class="sticky top-0 z-20 bg-slate-100 border-b border-slate-300">
+                <tr>
+                  <th class="sticky left-0 z-30 bg-slate-100 border-r border-slate-300 px-3 py-2.5 text-left text-[11px] font-extrabold text-slate-600 uppercase tracking-wider min-w-[105px]">
+                    DATE
+                  </th>
+                  ${MATRIX_TIME_SLOTS.map(slot => `
+                    <th class="px-2 py-2.5 text-center text-[11px] font-bold text-slate-600 border-r border-slate-200 min-w-[92px] whitespace-nowrap">
+                      ${slot}
+                    </th>
+                  `).join('')}
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 bg-white">
+                ${matrixDays.map(dayIso => {
+                  const isFocusedRow = dayIso === state.crmSelectedDayIso;
+                  return `
+                    <tr class="${isFocusedRow ? 'bg-amber-50/40' : ''}">
+                      <td class="sticky left-0 z-10 ${isFocusedRow ? 'bg-amber-50 text-amber-950' : 'bg-white text-slate-900'} border-r border-slate-300 px-3 py-2 font-extrabold whitespace-nowrap">
+                        ${formatMatrixDate(dayIso)}
+                      </td>
+                      ${MATRIX_TIME_SLOTS.map(slot => {
+                        const bookedRec = brandRecords.find(
+                          r => r.date === dayIso && r.time === slot && r.status !== 'Cancelled'
+                        );
+                        const isSelected =
+                          !bookedRec &&
+                          state.crmForm.date === dayIso &&
+                          state.crmForm.time === slot;
+
+                        if (bookedRec) {
+                          return `
+                            <td class="p-1 border-r border-slate-200">
+                              <button
+                                type="button"
+                                onclick="selectMatrixBookedSlot('${bookedRec.id}')"
+                                title="Booked by ${bookedRec.name} (${bookedRec.topic}) — Click to load"
+                                class="matrix-cell-booked w-full py-1.5 px-2 rounded text-[11px] text-center transition whitespace-nowrap"
+                              >
+                                Booked
+                              </button>
+                            </td>
+                          `;
+                        }
+
+                        return `
+                          <td class="p-1 border-r border-slate-200">
+                            <button
+                              type="button"
+                              onclick="selectMatrixAvailableSlot('${dayIso}', '${slot}')"
+                              title="Select ${formatMatrixDate(dayIso)} at ${slot}"
+                              class="${isSelected ? 'matrix-cell-selected' : 'matrix-cell-available'} w-full py-1.5 px-2 rounded text-[11px] font-semibold text-center transition whitespace-nowrap"
+                            >
+                              ${slot}
+                            </button>
+                          </td>
+                        `;
+                      }).join('')}
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCustomerRelationsPage() {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const allRecords = mfReadClientRequests();
+      const brandRecords = allRecords.filter(r => r.presetKey === state.presetKey);
+      const brandCustomers = mfReadCustomers().filter(c => c.presetKey === state.presetKey);
+
+      const selectedCustomer = brandCustomers.find(c => c.id === state.crmForm.selectedCustomerId) || null;
+      const editingRecord = state.crmForm.editingRecordId
+        ? brandRecords.find(r => r.id === state.crmForm.editingRecordId)
+        : null;
+
+      const filteredRecords = brandRecords.filter(r => {
+        const matchesStatus = state.crmFilterStatus === 'All' || (r.status || 'New') === state.crmFilterStatus;
+        const q = state.crmSearchQuery.trim().toLowerCase();
+        const matchesQuery =
+          !q ||
+          (r.name || '').toLowerCase().includes(q) ||
+          (r.email || '').toLowerCase().includes(q) ||
+          (r.topic || '').toLowerCase().includes(q) ||
+          (r.id || '').toLowerCase().includes(q);
+        return matchesStatus && matchesQuery;
+      });
+
+      const statusBadgeClasses = {
+        New: 'bg-amber-100 text-amber-900 border-amber-300',
+        Scheduled: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+        Confirmed: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+        'In Progress': 'bg-sky-100 text-sky-900 border-sky-300',
+        Completed: 'bg-slate-200 text-slate-800 border-slate-300',
+        Cancelled: 'bg-rose-100 text-rose-900 border-rose-300'
+      };
+
+      const isMacroView = state.crmViewMode === '4month';
+
+      return `
+        <div class="space-y-4">
+          <!-- Top Company-Branded CUSTOMER RELATIONS Workspace Bar -->
+          <div class="bg-white border border-slate-200 rounded-xl px-5 py-3.5 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-s500 text-white flex flex-col items-center justify-center shadow-xs shrink-0">
+                ${preset.logoSvg}
+                <span class="text-[9px] font-black tracking-wider mt-0.5 leading-none">${preset.badge}</span>
+              </div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <h2 class="text-lg sm:text-xl font-black tracking-tight text-slate-900 uppercase leading-none">
+                    ${preset.name} CUSTOMER RELATIONS
+                  </h2>
+                  <span class="px-3 py-1 rounded-full bg-s100 text-s900 text-[11px] font-extrabold tracking-wide uppercase">
+                    ${preset.badge} CUSTOMER WORKSPACE
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">
+                  Customer scheduling • onboarding • service activity • account lifecycle
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="openPrintPreviewModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1d6ce0] hover:bg-[#1658ba] text-white text-xs font-bold shadow-2xs transition">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>Print Preview</span>
+              </button>
+              <button type="button" onclick="exportCrmCsv()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#15803d] hover:bg-[#166534] text-white text-xs font-bold shadow-2xs transition">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+                <span>Export Excel (.csv)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Split-Pane CRM Workspace (Left: 2-Tier 4-Month + 15-Min Matrix | Right: Entry & Profile) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+            
+            <!-- Left Pane (8 cols): 2-Tier Appointment Schedule -->
+            <div class="lg:col-span-8 bg-white border border-slate-300 rounded-xl shadow-2xs overflow-hidden">
+              <!-- Schedule Header & Segmented View Toggle -->
+              <div class="px-4 py-3 border-b border-slate-200 bg-slate-50/70 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-black text-slate-900 uppercase tracking-wide">APPOINTMENT SCHEDULE</span>
+                  <span class="text-xs text-slate-500">
+                    ${isMacroView ? 'Click any weekday to select, or double-click to drill down to 15-min slots' : 'Select a date and time to start an appointment record'}
+                  </span>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                  <!-- Segmented Mode Switcher: 4-Month Calendar vs 15-Min Slot Matrix -->
+                  <div class="inline-flex rounded-lg border border-slate-300 bg-slate-200/70 p-0.5 text-[11px] font-extrabold">
+                    <button
+                      type="button"
+                      onclick="setCrmViewMode('4month')"
+                      class="px-2.5 py-1 rounded-md transition ${isMacroView ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'}"
+                    >
+                      4-Month Calendar
+                    </button>
+                    <button
+                      type="button"
+                      onclick="setCrmViewMode('matrix')"
+                      class="px-2.5 py-1 rounded-md transition ${!isMacroView ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'}"
+                    >
+                      15-Min Slot Matrix
+                    </button>
+                  </div>
+
+                  <!-- Contextual Previous / Next / Today Controls -->
+                  ${isMacroView ? `
+                    <div class="flex items-center gap-1.5">
+                      <button type="button" onclick="moveCrmFourMonths(-4)" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+                        ‹ Prev 4 Mos
+                      </button>
+                      <button type="button" onclick="moveCrmFourMonths(4)" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+                        Next 4 Mos ›
+                      </button>
+                      <button type="button" onclick="resetCrmQuarterToDefault()" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+                        Today
+                      </button>
+                    </div>
+                  ` : `
+                    <div class="flex items-center gap-1.5">
+                      <button type="button" onclick="shiftCrmMatrixDates(-4)" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+                        ‹ Previous
+                      </button>
+                      <button type="button" onclick="shiftCrmMatrixDates(4)" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+                        Next ›
+                      </button>
+                      <button type="button" onclick="resetCrmMatrixToToday()" class="px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition">
+                        Today
+                      </button>
+                    </div>
+                  `}
+                </div>
+              </div>
+
+              <!-- Render Active Tier (Level 1: 4-Month Weekday Grid | Level 2: 15-Minute Matrix) -->
+              ${isMacroView ? renderFourMonthMacroCalendar(brandRecords) : renderFifteenMinuteMatrix(brandRecords)}
+            </div>
+
+            <!-- Right Pane (4 cols): Customer Appointment & Account Entry + Auto-Populated Profile -->
+            <div class="lg:col-span-4 space-y-4">
+              <div class="bg-white border border-slate-300 rounded-xl shadow-2xs overflow-hidden">
+                <div class="px-4 py-2.5 border-b border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-md bg-s500 text-white text-[10px] font-black flex items-center justify-center shrink-0">
+                      ${preset.badge}
+                    </span>
+                    <span class="text-xs font-black text-s900 uppercase tracking-wide">
+                      CUSTOMER APPOINTMENT &amp; ACCOUNT ENTRY
+                    </span>
+                  </div>
+                  ${editingRecord ? `
+                    <button type="button" onclick="clearCrmEntryForm()" class="text-[11px] font-bold text-amber-700 hover:underline">
+                      + New Entry
+                    </button>
+                  ` : ''}
+                </div>
+
+                <form onsubmit="saveCrmAppointmentAndActivity(event)" class="p-4 space-y-3" novalidate>
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">
+                      ${editingRecord ? `EDITING ${editingRecord.id}` : 'NEW APPOINTMENT / CUSTOMER CONTACT'}
+                    </span>
+                    <button type="button" onclick="openContactScriptTemplatesModal('${editingRecord ? editingRecord.id : ''}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 text-[11px] font-bold text-slate-800 shadow-2xs transition">
+                      <span>☰ Contact Script Templates</span>
+                    </button>
+                  </div>
+
+                  <!-- Appointment Date & Time Row -->
+                  <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label for="crm-entry-date" class="block text-[11px] font-bold text-slate-700 mb-1">Appointment Date</label>
+                      <input id="crm-entry-date" type="date" value="${state.crmForm.date}" onchange="updateCrmFormField('date', this.value)" required class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600" />
+                    </div>
+                    <div>
+                      <label for="crm-entry-time" class="block text-[11px] font-bold text-slate-700 mb-1">Appointment Time</label>
+                      <select id="crm-entry-time" onchange="updateCrmFormField('time', this.value)" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-medium text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                        ${MATRIX_TIME_SLOTS.map(slot => `
+                          <option value="${slot}" ${state.crmForm.time === slot ? 'selected' : ''}>${slot}</option>
+                        `).join('')}
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Select Customer -->
+                  <div>
+                    <label for="crm-entry-customer" class="block text-[11px] font-bold text-slate-700 mb-1">Select Customer</label>
+                    <select id="crm-entry-customer" onchange="updateCrmFormField('selectedCustomerId', this.value)" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                      <option value="">Choose a customer...</option>
+                      <option value="__NEW__" ${state.crmForm.selectedCustomerId === '__NEW__' ? 'selected' : ''}>+ New Customer (Create Profile)</option>
+                      ${brandCustomers.map(c => `
+                        <option value="${c.id}" ${state.crmForm.selectedCustomerId === c.id ? 'selected' : ''}>
+                          ${c.name} — ${c.company}
+                        </option>
+                      `).join('')}
+                    </select>
+                  </div>
+
+                  <!-- Inline New Customer Fields when "+ New Customer" is chosen -->
+                  ${state.crmForm.selectedCustomerId === '__NEW__' ? `
+                    <div class="p-3 rounded-lg bg-emerald-50/70 border border-emerald-200 space-y-2">
+                      <div class="text-[11px] font-extrabold text-emerald-900 uppercase">New Customer Details</div>
+                      <input type="text" placeholder="Full Name *" value="${state.crmForm.newCustomerName}" oninput="state.crmForm.newCustomerName = this.value" class="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs" />
+                      <div class="grid grid-cols-2 gap-2">
+                        <input type="email" placeholder="Email Address *" value="${state.crmForm.newCustomerEmail}" oninput="state.crmForm.newCustomerEmail = this.value" class="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs" />
+                        <input type="text" placeholder="Phone (optional)" value="${state.crmForm.newCustomerPhone}" oninput="state.crmForm.newCustomerPhone = this.value" class="w-full rounded border border-slate-300 bg-white px-2.5 py-1.5 text-xs" />
+                      </div>
+                    </div>
+                  ` : ''}
+
+                  <!-- Appointment / Contact Type & Status -->
+                  <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label for="crm-entry-type" class="block text-[11px] font-bold text-slate-700 mb-1">Appointment / Contact Type</label>
+                      <select id="crm-entry-type" onchange="updateCrmFormField('contactType', this.value)" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-medium text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                        ${['Consultation', 'Storefront Onboarding', 'Product / Bulk Order', 'Account Review', 'Customer Support'].map(t => `
+                          <option value="${t}" ${state.crmForm.contactType === t ? 'selected' : ''}>${t}</option>
+                        `).join('')}
+                      </select>
+                    </div>
+                    <div>
+                      <label for="crm-entry-status" class="block text-[11px] font-bold text-slate-700 mb-1">Status</label>
+                      <select id="crm-entry-status" onchange="updateCrmFormField('status', this.value)" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-medium text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                        ${['Scheduled', 'New', 'Confirmed', 'In Progress', 'Completed', 'Cancelled'].map(st => `
+                          <option value="${st}" ${state.crmForm.status === st ? 'selected' : ''}>${st}</option>
+                        `).join('')}
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Interaction Notes / Customer Request -->
+                  <div>
+                    <label for="crm-entry-notes" class="block text-[11px] font-bold text-slate-700 mb-1">Interaction Notes / Customer Request</label>
+                    <textarea id="crm-entry-notes" rows="3" oninput="state.crmForm.notes = this.value" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600" placeholder="Record discussion, customer needs, decisions, concerns, and next steps...">${state.crmForm.notes}</textarea>
+                  </div>
+
+                  <!-- Follow-up Date & Account / Lifecycle Update -->
+                  <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                      <label for="crm-entry-followup" class="block text-[11px] font-bold text-slate-700 mb-1">Follow-up Date</label>
+                      <input id="crm-entry-followup" type="date" value="${state.crmForm.followUpDate}" onchange="updateCrmFormField('followUpDate', this.value)" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600" />
+                    </div>
+                    <div>
+                      <label for="crm-entry-lifecycle" class="block text-[11px] font-bold text-slate-700 mb-1">Account / Lifecycle Update</label>
+                      <select id="crm-entry-lifecycle" onchange="updateCrmFormField('lifecycleUpdate', this.value)" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-medium text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600">
+                        ${['Keep current status', 'Active Account', 'Onboarding Complete', 'VIP / Repeat Tier', 'Renewal Due'].map(lc => `
+                          <option value="${lc}" ${state.crmForm.lifecycleUpdate === lc ? 'selected' : ''}>${lc}</option>
+                        `).join('')}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div id="crm-entry-error" class="hidden rounded-lg bg-rose-50 border border-rose-200 p-2 text-[11px] font-semibold text-rose-800" role="alert"></div>
+
+                  <button type="submit" class="w-full py-2.5 px-4 rounded-lg bg-s500 hover-bg-s700 text-white text-xs font-extrabold shadow-xs transition">
+                    ${editingRecord ? '✓ Update Appointment & Activity' : '+ Save Appointment & Activity'}
+                  </button>
+
+                  <p class="text-[11px] font-semibold text-s700">
+                    ${selectedCustomer ? `Active profile loaded for ${selectedCustomer.name}.` : 'Customer profile details populate when a customer is selected.'}
+                  </p>
+                </form>
+
+                <!-- SELECTED CUSTOMER PROFILE — AUTO-POPULATED -->
+                <div class="border-t border-slate-200 bg-slate-50/80 px-4 py-3.5">
+                  <div class="text-[11px] font-black text-slate-700 uppercase tracking-wider mb-2.5">
+                    SELECTED CUSTOMER PROFILE — AUTO-POPULATED
+                  </div>
+                  ${selectedCustomer ? `
+                    <div class="grid grid-cols-2 gap-y-2 gap-x-3 text-xs">
+                      <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Contact</span>
+                        <span class="font-bold text-slate-900">${selectedCustomer.name}</span>
+                        <span class="text-[11px] text-slate-500 block truncate">${selectedCustomer.email}</span>
+                        <span class="text-[11px] text-slate-500 block">${selectedCustomer.phone}</span>
+                      </div>
+                      <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Customer Since</span>
+                        <span class="font-bold text-slate-900">${selectedCustomer.customerSince}</span>
+                        <span class="mt-1 inline-block px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 text-[10px] font-extrabold">
+                          ${selectedCustomer.lifecycleStage}
+                        </span>
+                      </div>
+                      <div class="col-span-2 pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px]">
+                        <span class="text-slate-600">Storefront Orders: <strong>${selectedCustomer.totalOrders}</strong></span>
+                        <span class="text-slate-600">Lifetime Value: <strong class="text-emerald-800">$${selectedCustomer.lifetimeValue.toFixed(2)}</strong></span>
+                      </div>
+                    </div>
+                  ` : `
+                    <div class="grid grid-cols-2 gap-3 text-xs text-slate-400">
+                      <div>
+                        <span class="text-[10px] font-bold uppercase block">Contact</span>
+                        <span>—</span>
+                      </div>
+                      <div>
+                        <span class="text-[10px] font-bold uppercase block">Customer Since</span>
+                        <span>—</span>
+                      </div>
+                    </div>
+                  `}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Synchronized Storefront & CRM Activity Queue (Bottom Log) -->
+          <section class="bg-white border border-slate-200 rounded-xl shadow-2xs overflow-hidden">
+            <div class="px-5 py-3.5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-50/70">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs font-black text-slate-800 uppercase mr-2">ACTIVITY &amp; STOREFRONT INTAKE LOG:</span>
+                ${['All', 'New', 'Scheduled', 'Confirmed', 'In Progress', 'Completed'].map(st => `
+                  <button
+                    type="button"
+                    onclick="setCrmStatusFilter('${st}')"
+                    class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition ${
+                      state.crmFilterStatus === st
+                        ? 'bg-slate-900 text-white'
+                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
+                    }"
+                  >
+                    ${st}
+                  </button>
+                `).join('')}
+              </div>
+
+              <div class="w-full md:w-64">
+                <input
+                  id="crm-search-input"
+                  type="search"
+                  value="${state.crmSearchQuery}"
+                  oninput="handleCrmSearchInput(this.value)"
+                  placeholder="Search customer, topic, or ID..."
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                />
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+                    <th class="py-2.5 px-4">ID &amp; Source</th>
+                    <th class="py-2.5 px-4">Customer</th>
+                    <th class="py-2.5 px-4">Scheduled Date &amp; Time</th>
+                    <th class="py-2.5 px-4">Topic &amp; Notes</th>
+                    <th class="py-2.5 px-4">Status</th>
+                    <th class="py-2.5 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                  ${filteredRecords.length > 0 ? filteredRecords.map(rec => `
+                    <tr class="hover:bg-slate-50/90 transition">
+                      <td class="py-3 px-4 align-top whitespace-nowrap">
+                        <span class="font-mono font-bold text-slate-900 block">${rec.id}</span>
+                        <span class="inline-block mt-1 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-semibold">
+                          ${rec.source || 'In-Frame Contact Us'}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 align-top">
+                        <div class="font-extrabold text-slate-900">${rec.name}</div>
+                        <div class="text-slate-500">${rec.email}</div>
+                      </td>
+                      <td class="py-3 px-4 align-top whitespace-nowrap">
+                        <div class="font-bold text-slate-900">${formatReadableDate(rec.date)}</div>
+                        <div class="text-amber-700 font-semibold">${rec.time}</div>
+                      </td>
+                      <td class="py-3 px-4 align-top max-w-xs">
+                        <span class="inline-block px-2 py-0.5 rounded-md bg-s100 text-s900 font-bold text-[11px] mb-1">
+                          ${rec.topic}
+                        </span>
+                        <p class="text-slate-600 line-clamp-2">${rec.message || 'No additional notes provided.'}</p>
+                      </td>
+                      <td class="py-3 px-4 align-top whitespace-nowrap">
+                        <select
+                          aria-label="Update status for ${rec.name}"
+                          onchange="updateCrmRecordStatus('${rec.id}', this.value)"
+                          class="rounded-lg border px-2.5 py-1 text-[11px] font-bold cursor-pointer focus:outline-none ${statusBadgeClasses[rec.status] || statusBadgeClasses.New}"
+                        >
+                          ${['New', 'Scheduled', 'Confirmed', 'In Progress', 'Completed', 'Cancelled'].map(opt => `
+                            <option value="${opt}" ${rec.status === opt ? 'selected' : ''}>${opt}</option>
+                          `).join('')}
+                        </select>
+                      </td>
+                      <td class="py-3 px-4 align-top text-right whitespace-nowrap space-x-1.5">
+                        <button type="button" onclick="selectMatrixBookedSlot('${rec.id}')" class="px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 font-bold text-[11px] transition">
+                          Load Entry
+                        </button>
+                        <button type="button" onclick="openContactScriptTemplatesModal('${rec.id}')" class="px-2.5 py-1.5 rounded-lg bg-[#15803d] hover:bg-[#166534] text-white font-bold text-[11px] transition">
+                          Scripts &amp; Reply
+                        </button>
+                      </td>
+                    </tr>
+                  `).join('') : `
+                    <tr>
+                      <td colspan="6" class="py-8 text-center text-slate-500">
+                        No CRM appointments match the current filter.
+                      </td>
+                    </tr>
+                  `}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function updateCrmFormField(field, value) {
+      state.crmForm[field] = value;
+      if (field === 'date') {
+        state.crmSelectedDayIso = value;
+      }
+      renderCurrentTab();
+    }
+
+    function clearCrmEntryForm() {
+      state.crmForm.editingRecordId = null;
+      state.crmForm.selectedCustomerId = '';
+      state.crmForm.newCustomerName = '';
+      state.crmForm.newCustomerEmail = '';
+      state.crmForm.newCustomerPhone = '';
+      state.crmForm.notes = '';
+      state.crmForm.followUpDate = '';
+      state.crmForm.status = 'Scheduled';
+      renderCurrentTab();
+    }
+
+    function setCrmStatusFilter(status) {
+      state.crmFilterStatus = status;
+      renderCurrentTab();
+    }
+
+    function handleCrmSearchInput(query) {
+      state.crmSearchQuery = query;
+      renderCurrentTab();
+      const input = document.getElementById('crm-search-input');
+      if (input) {
+        input.focus();
+        input.setSelectionRange(query.length, query.length);
+      }
+    }
+
+    function updateCrmRecordStatus(recordId, newStatus) {
+      const records = mfReadClientRequests();
+      const idx = records.findIndex(r => r.id === recordId);
+      if (idx === -1) return;
+      records[idx].status = newStatus;
+      mfWriteClientRequests(records);
+      syncCrmBadgeCount();
+      renderCurrentTab();
+      showToast(`Updated ${recordId} status to ${newStatus}.`);
+    }
+
+    function saveCrmAppointmentAndActivity(event) {
+      event.preventDefault();
+      const errBox = document.getElementById('crm-entry-error');
+      const dateVal = state.crmForm.date;
+      const timeVal = state.crmForm.time;
+
+      if (!dateVal || !timeVal) {
+        if (errBox) {
+          errBox.textContent = 'Please select an Appointment Date and Time.';
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      const customers = mfReadCustomers();
+      let activeCustomer = null;
+
+      if (state.crmForm.selectedCustomerId === '__NEW__') {
+        const newName = state.crmForm.newCustomerName.trim();
+        const newEmail = state.crmForm.newCustomerEmail.trim();
+        const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+        if (!newName || !emailRegex.test(newEmail)) {
+          if (errBox) {
+            errBox.textContent = 'Please enter a valid Full Name and Email Address for the new customer.';
+            errBox.classList.remove('hidden');
+          }
+          return;
+        }
+        activeCustomer = {
+          id: 'CUST-' + Math.floor(1000 + Math.random() * 9000),
+          presetKey: state.presetKey,
+          name: newName,
+          company: 'Direct Account',
+          email: newEmail,
+          phone: state.crmForm.newCustomerPhone.trim() || 'Not provided',
+          customerSince: formatIsoDate(new Date()),
+          totalOrders: 0,
+          lifetimeValue: 0,
+          lifecycleStage: 'Active Account'
+        };
+        customers.unshift(activeCustomer);
+        mfWriteCustomers(customers);
+        state.crmForm.selectedCustomerId = activeCustomer.id;
+      } else {
+        activeCustomer = customers.find(c => c.id === state.crmForm.selectedCustomerId);
+      }
+
+      if (!activeCustomer) {
+        if (errBox) {
+          errBox.textContent = 'Please select an existing customer or choose "+ New Customer".';
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (state.crmForm.lifecycleUpdate && state.crmForm.lifecycleUpdate !== 'Keep current status') {
+        const custIdx = customers.findIndex(c => c.id === activeCustomer.id);
+        if (custIdx !== -1) {
+          customers[custIdx].lifecycleStage = state.crmForm.lifecycleUpdate;
+          mfWriteCustomers(customers);
+        }
+      }
+
+      if (errBox) errBox.classList.add('hidden');
+
+      const records = mfReadClientRequests();
+      if (state.crmForm.editingRecordId) {
+        const idx = records.findIndex(r => r.id === state.crmForm.editingRecordId);
+        if (idx !== -1) {
+          records[idx] = {
+            ...records[idx],
+            customerId: activeCustomer.id,
+            name: activeCustomer.name,
+            email: activeCustomer.email,
+            date: dateVal,
+            time: timeVal,
+            dateTime: `${dateVal} ${timeVal}`,
+            topic: state.crmForm.contactType,
+            status: state.crmForm.status,
+            message: state.crmForm.notes.trim(),
+            followUpDate: state.crmForm.followUpDate
+          };
+        }
+        mfWriteClientRequests(records);
+        syncCrmBadgeCount();
+        state.crmSelectedDayIso = dateVal;
+        renderCurrentTab();
+        showToast(`Updated appointment ${state.crmForm.editingRecordId}.`);
+        return;
+      }
+
+      const newRecord = {
+        id: 'CRM-' + Math.floor(1000 + Math.random() * 9000),
+        customerId: activeCustomer.id,
+        business: BUSINESS_PRESETS[state.presetKey].name,
+        presetKey: state.presetKey,
+        name: activeCustomer.name,
+        email: activeCustomer.email,
+        date: dateVal,
+        time: timeVal,
+        dateTime: `${dateVal} ${timeVal}`,
+        topic: state.crmForm.contactType,
+        message: state.crmForm.notes.trim(),
+        followUpDate: state.crmForm.followUpDate,
+        status: state.crmForm.status,
+        source: 'MF Customer Workspace',
+        submittedAt: new Date().toISOString(),
+        lastReply: ''
+      };
+
+      records.unshift(newRecord);
+      mfWriteClientRequests(records);
+      syncCrmBadgeCount();
+      state.crmSelectedDayIso = dateVal;
+      state.crmForm.notes = '';
+      renderCurrentTab();
+      showToast(`Saved appointment ${newRecord.id} for ${activeCustomer.name}.`);
+    }
+
+    /**
+     * =========================================================================
+     * 8. MODAL HELPERS (SCRIPT TEMPLATES, EXPORT & PRINT)
+     * =========================================================================
+     */
+    function interpolateTemplate(templateText, rec) {
+      return templateText
+        .replace(/\{\{name\}\}/g, rec.name || 'Valued Customer')
+        .replace(/\{\{business\}\}/g, rec.business || BUSINESS_PRESETS[state.presetKey].name)
+        .replace(/\{\{topic\}\}/g, rec.topic || 'Consultation')
+        .replace(/\{\{date\}\}/g, formatReadableDate(rec.date || '2026-11-30'))
+        .replace(/\{\{time\}\}/g, rec.time || '9:00 AM');
+    }
+
+    function openContactScriptTemplatesModal(recordId) {
+      const modal = document.getElementById('crm-detail-modal');
+      const body = document.getElementById('crm-modal-body');
+      const titleEl = document.getElementById('modal-client-name');
+      const idEl = document.getElementById('modal-record-id');
+      const sourceEl = document.getElementById('modal-source-badge');
+      if (!modal || !body) return;
+
+      const records = mfReadClientRequests();
+      const targetRec = records.find(r => r.id === recordId) || {
+        id: 'DRAFT-SCRIPT',
+        name: 'Valued Customer',
+        business: BUSINESS_PRESETS[state.presetKey].name,
+        topic: state.crmForm.contactType || 'Consultation',
+        date: state.crmForm.date || '2026-11-30',
+        time: state.crmForm.time || '9:00 AM'
+      };
+
+      if (idEl) idEl.textContent = targetRec.id;
+      if (sourceEl) sourceEl.textContent = 'Communication Script Templates';
+      if (titleEl) titleEl.textContent = `Outreach & Follow-Up Scripts — ${targetRec.name}`;
+
+      const initialDraft = interpolateTemplate(CRM_SCRIPT_TEMPLATES[0].body, targetRec);
+
+      body.innerHTML = `
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            ${CRM_SCRIPT_TEMPLATES.map((tpl, idx) => `
+              <button
+                type="button"
+                onclick="selectScriptTemplateInModal(${idx}, '${targetRec.id}')"
+                class="text-left p-3 rounded-xl border border-slate-200 hover:border-emerald-600 hover:bg-emerald-50/50 transition"
+              >
+                <span class="text-[10px] font-extrabold uppercase text-emerald-800">${tpl.category}</span>
+                <div class="text-xs font-extrabold text-slate-900 mt-0.5">${tpl.title}</div>
+              </button>
+            `).join('')}
+          </div>
+
+          <div>
+            <label for="crm-reply-textarea" class="block text-xs font-extrabold text-slate-800 mb-1.5">
+              Personalized Message Draft (Editable)
+            </label>
+            <textarea id="crm-reply-textarea" rows="6" class="w-full rounded-xl border border-slate-300 p-3 text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-emerald-600">${initialDraft}</textarea>
+          </div>
+
+          <div id="crm-modal-feedback" class="hidden rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-semibold text-emerald-900"></div>
+
+          <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-slate-100">
+            <button type="button" onclick="copyCrmDraftToClipboard()" class="px-4 py-2 rounded-xl border border-slate-300 hover:bg-slate-100 text-xs font-extrabold text-slate-800 transition">
+              Copy to Clipboard
+            </button>
+            ${targetRec.id !== 'DRAFT-SCRIPT' ? `
+              <button type="button" onclick="sendCrmTemplateReply('${targetRec.id}')" class="px-4 py-2 rounded-xl bg-[#15803d] hover:bg-[#166534] text-white text-xs font-extrabold transition">
+                Log Reply &amp; Confirm Appointment
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function selectScriptTemplateInModal(tplIdx, recordId) {
+      const tpl = CRM_SCRIPT_TEMPLATES[tplIdx];
+      const textarea = document.getElementById('crm-reply-textarea');
+      if (!tpl || !textarea) return;
+
+      const targetRec = mfReadClientRequests().find(r => r.id === recordId) || {
+        name: 'Valued Customer',
+        business: BUSINESS_PRESETS[state.presetKey].name,
+        topic: state.crmForm.contactType || 'Consultation',
+        date: state.crmForm.date || '2026-11-30',
+        time: state.crmForm.time || '9:00 AM'
+      };
+      textarea.value = interpolateTemplate(tpl.body, targetRec);
+    }
+
+    function copyCrmDraftToClipboard() {
+      const textarea = document.getElementById('crm-reply-textarea');
+      const feedback = document.getElementById('crm-modal-feedback');
+      if (!textarea) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textarea.value).catch(() => {});
+      }
+      if (feedback) {
+        feedback.textContent = '✓ Script draft copied to clipboard.';
+        feedback.classList.remove('hidden');
+      }
+    }
+
+    function sendCrmTemplateReply(recordId) {
+      const textarea = document.getElementById('crm-reply-textarea');
+      const feedback = document.getElementById('crm-modal-feedback');
+      const records = mfReadClientRequests();
+      const idx = records.findIndex(r => r.id === recordId);
+      if (idx === -1) return;
+
+      records[idx].status = 'Confirmed';
+      records[idx].lastReply = textarea ? textarea.value.trim() : 'Confirmed via template.';
+      mfWriteClientRequests(records);
+      syncCrmBadgeCount();
+      renderCurrentTab();
+
+      if (feedback) {
+        feedback.textContent = `✓ Reply logged and appointment ${recordId} marked as Confirmed.`;
+        feedback.classList.remove('hidden');
+      }
+    }
+
+    function openPrintPreviewModal() {
+      const modal = document.getElementById('crm-detail-modal');
+      const body = document.getElementById('crm-modal-body');
+      const titleEl = document.getElementById('modal-client-name');
+      const idEl = document.getElementById('modal-record-id');
+      const sourceEl = document.getElementById('modal-source-badge');
+      if (!modal || !body) return;
+
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const records = mfReadClientRequests().filter(r => r.presetKey === state.presetKey);
+
+      if (idEl) idEl.textContent = 'PRINT REPORT';
+      if (sourceEl) sourceEl.textContent = preset.name;
+      if (titleEl) titleEl.textContent = `${preset.name} — Customer Schedule & Activity Report`;
+
+      body.innerHTML = `
+        <div id="printable-report-area" class="space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+            <div>
+              <h3 class="text-base font-black text-slate-900">${preset.name} — MF Customer Relations</h3>
+              <p class="text-xs text-slate-500">Generated on ${new Date().toLocaleDateString('en-US')} • ${records.length} active records</p>
+            </div>
+            <button type="button" onclick="window.print()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold transition">
+              Print Report
+            </button>
+          </div>
+
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-300 text-[11px] font-extrabold uppercase text-slate-600">
+                <th class="py-2 pr-2">ID</th>
+                <th class="py-2 pr-2">Customer</th>
+                <th class="py-2 pr-2">Date &amp; Time</th>
+                <th class="py-2 pr-2">Topic</th>
+                <th class="py-2">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              ${records.map(r => `
+                <tr>
+                  <td class="py-2 pr-2 font-mono font-bold">${r.id}</td>
+                  <td class="py-2 pr-2 font-bold">${r.name}</td>
+                  <td class="py-2 pr-2">${formatReadableDate(r.date)} (${r.time})</td>
+                  <td class="py-2 pr-2">${r.topic}</td>
+                  <td class="py-2 font-bold">${r.status}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function exportCrmCsv() {
+      const preset = BUSINESS_PRESETS[state.presetKey];
+      const records = mfReadClientRequests().filter(r => r.presetKey === state.presetKey);
+      const headers = ['ID', 'Business', 'Customer Name', 'Email', 'Date', 'Time', 'Topic', 'Status', 'Notes'];
+      const rows = records.map(r => [
+        r.id,
+        r.business,
+        r.name,
+        r.email,
+        r.date,
+        r.time,
+        r.topic,
+        r.status,
+        (r.message || '').replace(/"/g, '""')
+      ]);
+
+      const csvContent =
+        headers.join(',') +
+        '\n' +
+        rows.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${preset.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-crm-schedule.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast(`Exported ${records.length} CRM records to CSV.`);
+    }
+
+    function closeCrmModal() {
+      const modal = document.getElementById('crm-detail-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    /**
+     * =========================================================================
+     * 9. MAIN ROUTER & INITIALIZATION
+     * =========================================================================
+     */
+    function renderCurrentTab() {
+      const main = document.getElementById('studio-main');
+      if (!main) return;
+
+      if (state.activeTab === 'storefront') {
+        main.innerHTML = renderStorefrontPage();
+        mfRenderStorefrontCalendar();
+        mfSetStorefrontTimes();
+      } else if (state.activeTab === 'contact') {
+        main.innerHTML = renderContactTabPage();
+        mfRenderStorefrontCalendar();
+        mfSetStorefrontTimes();
+      } else {
+        main.innerHTML = renderCustomerRelationsPage();
+      }
+      syncCrmBadgeCount();
+    }
+
+    const INDEX_TO_CONTACT_PRESET_MAP = {
+      roasters: 'northwind',
+      northwind: 'northwind',
+      candles: 'ember',
+      ember: 'ember',
+      apparel: 'heritage',
+      heritage: 'heritage',
+      farm: 'valley',
+      valley: 'valley',
+      crafts: 'crafts',
+      bakery: 'hearthstone',
+      hearthstone: 'hearthstone'
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const rawCompany = (params.get('company') || '').toLowerCase().trim();
+      const mappedPresetKey = INDEX_TO_CONTACT_PRESET_MAP[rawCompany];
+      const presetSelect = document.getElementById('business-preset-select');
+
+      if (mappedPresetKey && BUSINESS_PRESETS[mappedPresetKey]) {
+        state.presetKey = mappedPresetKey;
+        state.activeTab = 'contact';
+
+        if (presetSelect) {
+          presetSelect.value = mappedPresetKey;
+          Array.from(presetSelect.options).forEach(opt => {
+            if (opt.value !== mappedPresetKey) {
+              opt.remove();
+            }
+          });
+        }
+      }
+
+      applyPresetTheme(state.presetKey);
+      updateHeaderBrandIdentity(state.presetKey);
+      syncCrmBadgeCount();
+      updateNavTabStyles();
+      renderCurrentTab();
+    });
+  </script>
+</body>
+</html>

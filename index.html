@@ -1309,6 +1309,7 @@
 
     // Switch Business Preset & WordPress Template
     function switchBusinessPreset(key) {
+      state.storefrontContactFrameOpen = false;
       const preset = BUSINESS_PRESETS[key];
       if (!preset) return;
       state.presetKey = key;
@@ -1361,6 +1362,7 @@
     }
 
     function setActiveTab(tab) {
+      state.storefrontContactFrameOpen = false;
       state.activeTab = tab;
       document.querySelectorAll('.nav-tab').forEach(btn => {
         if (btn.dataset.tab === tab) {
@@ -1831,9 +1833,47 @@
       const tax = subtotal * preset.taxRate;
       const total = subtotal + tax;
 
+      const contactStudioUrl = buildContactStudioUrl(preset);
+      const contactFrameSection = state.storefrontContactFrameOpen
+        ? `
+          <div id="storefront-contact-frame-panel" class="mb-6 rounded-2xl border border-slate-300 bg-white shadow-sm overflow-hidden">
+            <div class="bg-slate-900 text-white px-4 py-2.5 flex items-center justify-between gap-3 border-b border-slate-800">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+                <span class="text-xs font-bold truncate">Contact &amp; Booking Studio — ${preset.name}</span>
+              </div>
+              <button
+                type="button"
+                onclick="closeStorefrontContactFrame()"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition shrink-0"
+              >
+                <span aria-hidden="true">←</span>
+                <span>Back to Storefront</span>
+              </button>
+            </div>
+            <iframe
+              id="mf-storefront-contact-iframe"
+              src="${contactStudioUrl}"
+              title="Contact ${preset.name} Studio Frame"
+              class="w-full h-[760px] border-0 bg-white block"
+            ></iframe>
+          </div>
+        `
+        : `
+          <div class="flex justify-end mb-3">
+            <button
+              type="button"
+              onclick="openStorefrontContactFrame()"
+              class="inline-flex items-center gap-2 rounded-lg border border-s500 bg-s500 px-4 py-2 text-xs font-bold text-white hover-bg-s700 shadow-xs transition"
+            >
+              Contact ${preset.name} <span aria-hidden="true">◫</span>
+            </button>
+          </div>
+        `;
+
       return `
         ${renderPageHeaderBanner('Customer Storefront', preset.tagline)}
-        <div class="flex justify-end mb-3"><a href="ContacUS_storefront_And_crm_studio.html?company=${encodeURIComponent(state.presetKey)}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-lg border border-s500 bg-s500 px-4 py-2 text-xs font-bold text-white hover-bg-s700 shadow-xs transition">Contact ${preset.name} <span aria-hidden="true">↗</span></a></div>
+        ${contactFrameSection}
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div class="lg:col-span-8">
             ${renderStorefrontHeroAndGrid(preset, state.templateOverride)}
@@ -1878,6 +1918,38 @@
         <!-- Storefront Contact Us: visitor requests are stored for this business and appear in its CRM -->
         ${renderStorefrontContactSection(preset)}
       `;
+    }
+
+
+    function buildContactStudioUrl(preset) {
+      const params = new URLSearchParams();
+      params.set('company', state.presetKey || 'roasters');
+      if (preset && preset.name) params.set('businessName', preset.name);
+
+      const custName = (document.getElementById('checkout-customer-name')?.value || '').trim();
+      const custEmail = (document.getElementById('checkout-customer-email')?.value || '').trim();
+      if (custName) params.set('customerName', custName);
+      if (custEmail) params.set('customerEmail', custEmail);
+
+      const items = (state.cart || []).map(item => {
+        const prod = (state.products || []).find(p => p.sku === item.sku);
+        return prod ? `${item.qty}x ${prod.name}` : `${item.qty}x ${item.sku}`;
+      });
+      if (items.length) params.set('bagItems', items.join(', '));
+
+      return `ContacUS_storefront_And_crm_studio.html?${params.toString()}`;
+    }
+
+    function openStorefrontContactFrame() {
+      state.storefrontContactFrameOpen = true;
+      renderCurrentTab();
+      const panel = document.getElementById('storefront-contact-frame-panel');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function closeStorefrontContactFrame() {
+      state.storefrontContactFrameOpen = false;
+      renderCurrentTab();
     }
 
     function mfClientRequestKey() { return 'mf_client_crm_requests_' + state.presetKey; }
