@@ -160,23 +160,22 @@
       <!-- Brand Identity & Active Business Selector -->
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <!-- MF Enterprises Growth Emblem SVG -->
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-sm border border-amber-400/40 shrink-0">
+          <!-- Dynamic Demo Company Brand Logo & Badge -->
+          <div id="header-company-logo-box" class="w-11 h-11 rounded-xl bg-s500 text-white flex flex-col items-center justify-center shadow-sm border border-white/20 shrink-0">
             <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3 17l6-6 4 4 8-8" />
-              <path d="M17 7h4v4" />
-              <path d="M3 21h18" />
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/>
             </svg>
+            <span class="text-[8px] font-black tracking-wider mt-0.5 leading-none">NR</span>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
-                MF Enterprises Studio
+              <span id="header-company-badge-pill" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-s100 text-s900">
+                NR • Demo Storefront
               </span>
-              <span class="hidden sm:inline-block text-[11px] text-slate-400">Connected Suite</span>
+              <span id="header-company-tagline" class="hidden sm:inline-block text-[11px] text-slate-400 truncate max-w-[320px]">Small-Batch Pacific Northwest Specialty Coffee</span>
             </div>
-            <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-white leading-tight mt-0.5">
-              Storefront, Booking &amp; CRM
+            <h1 id="header-company-title" class="text-sm sm:text-base font-extrabold tracking-tight text-white leading-tight mt-0.5">
+              Northwind Roasters — Storefront, Booking &amp; CRM
             </h1>
           </div>
         </div>
@@ -191,6 +190,7 @@
             <option value="ember" class="bg-slate-900 text-white">Ember &amp; Wax Candles</option>
             <option value="heritage" class="bg-slate-900 text-white">Heritage Apparel</option>
             <option value="valley" class="bg-slate-900 text-white">Valley Harvest Farm</option>
+            <option value="crafts" class="bg-slate-900 text-white">Cedar &amp; Clay Craft Co.</option>
             <option value="hearthstone" class="bg-slate-900 text-white">Hearthstone Bakery</option>
           </select>
         </div>
@@ -317,6 +317,25 @@
           { id: 'vh-1', sku: 'VH-401', name: 'Chef’s Weekly Heirloom Crate (25 lb)', category: 'Restaurant Drop', price: 78.00, unit: '25 lb crate', desc: 'Harvested at dawn: rainbow carrots, Chioggia beets, baby greens, and culinary herbs.' },
           { id: 'vh-2', sku: 'vh-402', name: 'Raw Meadow Wildflower Honey (1 Gal)', category: 'Apiary Bulk', price: 64.00, unit: '1 gallon pail', desc: 'Unfiltered, cold-extracted Willamette Valley blossom honey for bakeries and kitchens.' },
           { id: 'vh-3', sku: 'VH-403', name: 'Orchard Honeycrisp & Pear Reserve', category: 'Seasonal Fruit', price: 48.00, unit: '20 lb box', desc: 'Crisp mountain-grown apples and Bartlett pears packed for hospitality & retail.' }
+        ]
+      },
+      crafts: {
+        name: 'Cedar & Clay Craft Co.',
+        tagline: 'Hand-Thrown Stoneware, Turned Wood & Custom Studio Commissions',
+        badge: 'CC',
+        logoSvg: `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5"/><path d="M12 12v9"/><path d="M12 12L4 7.5"/></svg>`,
+        theme: {
+          s100: '#f3e8ff',
+          s300: '#d8b4fe',
+          s500: '#7e22ce',
+          s700: '#6b21a8',
+          s900: '#3b0764'
+        },
+        products: [
+          { id: 'CC-01', name: 'Speckled Stoneware Pour-Over Set', category: 'Ceramics', price: 64.00, desc: 'Wheel-thrown stoneware dripper and carafe' },
+          { id: 'CC-02', name: 'Black Walnut End-Grain Board', category: 'Woodwork', price: 85.00, desc: 'Hand-finished Missouri black walnut serving board' },
+          { id: 'CC-03', name: 'Matte Glaze Ceramic Mug Pair', category: 'Ceramics', price: 48.00, desc: 'Set of two 14oz ergonomic studio mugs' },
+          { id: 'CC-04', name: 'Custom Laser-Engraved Keepsake Box', category: 'Custom', price: 72.00, desc: 'Dovetail joinery box with personalized lid' }
         ]
       },
       hearthstone: {
@@ -674,6 +693,31 @@
       root.style.setProperty('--s900', preset.theme.s900);
     }
 
+    function updateHeaderBrandIdentity(presetKey) {
+      const preset = BUSINESS_PRESETS[presetKey] || BUSINESS_PRESETS.northwind;
+      const logoBox = document.getElementById('header-company-logo-box');
+      const badgePill = document.getElementById('header-company-badge-pill');
+      const taglineEl = document.getElementById('header-company-tagline');
+      const titleEl = document.getElementById('header-company-title');
+
+      if (logoBox) {
+        logoBox.innerHTML = `
+          ${preset.logoSvg}
+          <span class="text-[8px] font-black tracking-wider mt-0.5 leading-none">${preset.badge}</span>
+        `;
+      }
+      if (badgePill) {
+        badgePill.textContent = `${preset.badge} • Interactive Client Demo`;
+      }
+      if (taglineEl) {
+        taglineEl.textContent = preset.tagline;
+      }
+      if (titleEl) {
+        titleEl.textContent = `${preset.name} — Contact, Booking & CRM`;
+      }
+      document.title = `${preset.name} — Contact & Booking Demo`;
+    }
+
     function switchBusinessPreset(presetKey) {
       if (!BUSINESS_PRESETS[presetKey]) return;
       state.presetKey = presetKey;
@@ -681,6 +725,7 @@
       state.crmForm.editingRecordId = null;
       state.crmForm.selectedCustomerId = '';
       applyPresetTheme(presetKey);
+      updateHeaderBrandIdentity(presetKey);
       syncCrmBadgeCount();
       renderCurrentTab();
       showToast(`Switched active brand to ${BUSINESS_PRESETS[presetKey].name}.`);
@@ -2365,8 +2410,43 @@
       syncCrmBadgeCount();
     }
 
+    const INDEX_TO_CONTACT_PRESET_MAP = {
+      roasters: 'northwind',
+      northwind: 'northwind',
+      candles: 'ember',
+      ember: 'ember',
+      apparel: 'heritage',
+      heritage: 'heritage',
+      farm: 'valley',
+      valley: 'valley',
+      crafts: 'crafts',
+      bakery: 'hearthstone',
+      hearthstone: 'hearthstone'
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const rawCompany = (params.get('company') || '').toLowerCase().trim();
+      const mappedPresetKey = INDEX_TO_CONTACT_PRESET_MAP[rawCompany];
+      const presetSelect = document.getElementById('business-preset-select');
+
+      if (mappedPresetKey && BUSINESS_PRESETS[mappedPresetKey]) {
+        state.presetKey = mappedPresetKey;
+        state.activeTab = 'contact';
+
+        if (presetSelect) {
+          presetSelect.value = mappedPresetKey;
+          Array.from(presetSelect.options).forEach(opt => {
+            if (opt.value !== mappedPresetKey) {
+              opt.remove();
+            }
+          });
+        }
+      }
+
       applyPresetTheme(state.presetKey);
+      updateHeaderBrandIdentity(state.presetKey);
+      syncCrmBadgeCount();
       updateNavTabStyles();
       renderCurrentTab();
     });
